@@ -218,7 +218,7 @@
 
 .page1-next-btn {
     position: absolute;
-    left: 0
+    left: 0;
     top: 91.256158%;
     width: 100%;
     height: 8.743842%;
@@ -275,6 +275,7 @@
     height: auto;
     display: block;
 }
+
 
 .page2 {
     position: relative;

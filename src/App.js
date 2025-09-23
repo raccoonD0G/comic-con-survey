@@ -101,7 +101,7 @@ export default function App() {
     const [gender, setGender] = useState(null);
     const ageStopCount = AGE_STOPS.length;
     const canAdvanceFromPage1 = email.trim().length > 0;
-    const canAdvanceFromPage2 = ageInteracted;
+    const canAdvanceFromPage2 = ageInteracted && gender !== null;
     const handleAgeChange = useCallback((event) => {
         setAgeIndex(Number(event.target.value));
         setAgeInteracted(true);
@@ -338,7 +338,7 @@ export default function App() {
                                 title={
                                     canAdvanceFromPage2
                                         ? "다음 페이지로 이동"
-                                        : "연령대를 선택하면 다음으로 이동할 수 있습니다"
+                                        : "연령대와 성별을 선택하면 다음으로 이동할 수 있습니다"
                                 }
                                 disabled={!canAdvanceFromPage2}
                             >
