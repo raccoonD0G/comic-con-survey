@@ -443,6 +443,7 @@
     width: 81.7109%;
     height: 100%;
     display: block;
+    pointer-events: none;
 }
 
 .page2 .page-nav {

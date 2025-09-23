@@ -293,7 +293,11 @@ export default function App() {
                                         onClick={() => handleGenderSelect(option.id)}
                                         aria-pressed={isSelected}
                                         aria-label={`${option.label} 선택`}
-                                        title={isSelected ? `${option.label} 선택됨` : `${option.label} 선택`}
+                                        title={
+                                            isSelected
+                                                ? `${option.label} 선택됨`
+                                                : `${option.label} 선택`
+                                        }
                                     >
                                         <img
                                             src={isSelected ? "/on_toggle.png" : "/off_toggle.png"}
