@@ -284,6 +284,15 @@
     display: block;
     padding: 0;
 }
+.page2-basic-info {
+    position: absolute;
+    left: 4.8%;
+    top: 15.640394%;
+    width: 66.133333%;
+    height: auto;
+    max-width: none;
+    display: block;
+}
 
 .page2-age-title {
     position: absolute;
@@ -488,11 +497,88 @@
 }
 
 .page3 {
-    align-items: center;
-    justify-content: center;
-    gap: 24px;
-    color: #fff;
-    text-align: center;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: block;
+    padding: 0;
+}
+.page3-q1-title {
+    position: absolute;
+    left: 7.733333%;
+    top: 12.184874%;
+    width: 15.2%;
+    height: auto;
+    max-width: none;
+    display: block;
+}
+.page3-q1-text {
+    position: absolute;
+    left: 8%;
+    top: 20.935961%;
+    width: 77.866667%;
+    height: auto;
+    max-width: none;
+    display: block;
+}
+.page3-q1-options {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+.page3-q1-option {
+    position: absolute;
+    left: 6.133333%;
+    width: 86.133333%;
+    height: 10.098522%;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    display: block;
+    cursor: pointer;
+}
+.page3-q1-option:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+}
+.page3-q1-option:disabled {
+    cursor: default;
+}
+.page3-q1-toggle {
+    position: absolute;
+    left: 0;
+    top: 21.95122%;
+    width: 7.430341%;
+    height: 29.268293%;
+    max-width: none;
+    display: block;
+    pointer-events: none;
+}
+.page3-q1-label {
+    position: absolute;
+    left: 14.241486%;
+    top: 0;
+    width: 85.758514%;
+    height: 73.170732%;
+    max-width: none;
+    display: block;
+    pointer-events: none;
+}
+.page3-before-btn {
+    position: absolute;
+    left: 5.333333%;
+    top: 86.82266%;
+    width: 22.133333%;
+    height: 3.325123%;
+    display: block;
+}
+.page3-before-btn-img {
+    width: 100%;
+    height: 100%;
+    display: block;
 }
 
 .arrow-button,

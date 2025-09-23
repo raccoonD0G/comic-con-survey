@@ -66,6 +66,37 @@ const GENDER_OPTIONS = [
         topPercent: 68.596059,
     },
 ];
+const Q1_TITLE_SOURCES = ["/q1_title_image.png"];
+const Q1_TEXT_SOURCES = ["/q1_text_image.png"];
+const Q1_OPTIONS = [
+    {
+        id: "absolutelyAmazing",
+        label: "Absolutely amazing",
+        imageSources: ["/absolutely_amazing_image.png"],
+    },
+    {
+        id: "superFun",
+        label: "Super fun",
+        imageSources: ["/super_fun_image.png"],
+    },
+    {
+        id: "itWasOkay",
+        label: "It was okay",
+        imageSources: ["/it_was_okay_image.png"],
+    },
+    {
+        id: "couldBeBetter",
+        label: "Could be better",
+        imageSources: ["/could_be_better_image.png"],
+    },
+    {
+        id: "notMyThing",
+        label: "Not my thing",
+        imageSources: ["/not_my_thing_image.png"],
+    },
+];
+const Q1_OPTION_BASE_TOP_PERCENT = (265 / 812) * 100;
+const Q1_OPTION_STEP_PERCENT = (82 / 812) * 100;
 
 function ImgWithFallback({ sources = [], alt, ...imgProps }) {
     const [activeIndex, setActiveIndex] = useState(0);
@@ -109,8 +140,11 @@ export default function App() {
     const [ageIndex, setAgeIndex] = useState(0);
     const [ageInteracted, setAgeInteracted] = useState(false);
     const [gender, setGender] = useState(null);
+    const [q1Answer, setQ1Answer] = useState(null);
     const genderOptionCount = GENDER_OPTIONS.length;
     const genderOptionRefs = useRef([]);
+    const q1OptionCount = Q1_OPTIONS.length;
+    const q1OptionRefs = useRef([]);
     const focusGenderOption = useCallback(
         (index) => {
             const target = genderOptionRefs.current[index];
@@ -119,6 +153,15 @@ export default function App() {
             }
         },
         [genderOptionRefs]
+    );
+    const focusQ1Option = useCallback(
+        (index) => {
+            const target = q1OptionRefs.current[index];
+            if (target) {
+                target.focus();
+            }
+        },
+        [q1OptionRefs]
     );
     const handleGenderKeyDown = useCallback(
         (event, optionIndex) => {
@@ -150,6 +193,36 @@ export default function App() {
         },
         [focusGenderOption, genderOptionCount]
     );
+    const handleQ1KeyDown = useCallback(
+        (event, optionIndex) => {
+            if (q1OptionCount <= 0) {
+                return;
+            }
+
+            if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+                event.preventDefault();
+                const nextIndex = (optionIndex + 1) % q1OptionCount;
+                setQ1Answer(Q1_OPTIONS[nextIndex].id);
+                focusQ1Option(nextIndex);
+            } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+                event.preventDefault();
+                const previousIndex =
+                    (optionIndex - 1 + q1OptionCount) % q1OptionCount;
+                setQ1Answer(Q1_OPTIONS[previousIndex].id);
+                focusQ1Option(previousIndex);
+            } else if (event.key === "Home") {
+                event.preventDefault();
+                setQ1Answer(Q1_OPTIONS[0].id);
+                focusQ1Option(0);
+            } else if (event.key === "End") {
+                event.preventDefault();
+                const lastIndex = q1OptionCount - 1;
+                setQ1Answer(Q1_OPTIONS[lastIndex].id);
+                focusQ1Option(lastIndex);
+            }
+        },
+        [focusQ1Option, q1OptionCount]
+    );
     const ageStopCount = AGE_STOPS.length;
     const canAdvanceFromPage1 = email.trim().length > 0;
     const canAdvanceFromPage2 = ageInteracted && gender !== null;
@@ -163,6 +236,9 @@ export default function App() {
     useEffect(() => {
         genderOptionRefs.current = genderOptionRefs.current.slice(0, genderOptionCount);
     }, [genderOptionCount]);
+    useEffect(() => {
+        q1OptionRefs.current = q1OptionRefs.current.slice(0, q1OptionCount);
+    }, [q1OptionCount]);
     const selectedAgeStop = AGE_STOPS[ageIndex] ?? null;
     const ageHandlePosition = useMemo(() => {
         if (ageStopCount <= 1) {
@@ -292,6 +368,11 @@ export default function App() {
                     }}
                 >
                     <div className="page page2">
+                        <ImgWithFallback
+                            className="page2-basic-info"
+                            sources={BASIC_INFO_SOURCES}
+                            alt="기본 정보"
+                        />
                         <ImgWithFallback
                             className="page2-age-title"
                             sources={AGE_TEXT_SOURCES}
@@ -445,19 +526,79 @@ export default function App() {
                     }}
                 >
                     <div className="page page3">
-                        <h1>PAGE 3</h1>
-                        <p>다음 단계가 준비 중입니다.</p>
-                        <div className="page-nav">
-                            <button
-                                className="img-btn before-btn"
-                                type="button"
-                                onClick={() => setPage(2)}
-                                aria-label="이전 페이지"
-                                title="이전 페이지로 돌아가기"
-                            >
-                                <ImgWithFallback sources={BEFORE_BUTTON_SOURCES} alt="이전" />
-                            </button>
+                        <ImgWithFallback
+                            className="page3-q1-title"
+                            sources={Q1_TITLE_SOURCES}
+                            alt="질문 1 제목"
+                        />
+                        <ImgWithFallback
+                            className="page3-q1-text"
+                            sources={Q1_TEXT_SOURCES}
+                            alt="질문 1 안내"
+                        />
+                        <div
+                            className="page3-q1-options"
+                            role="radiogroup"
+                            aria-label="행사 만족도 선택"
+                        >
+                            {Q1_OPTIONS.map((option, index) => {
+                                const isSelected = q1Answer === option.id;
+                                const toggleSources = isSelected
+                                    ? ON_TOGGLE_SOURCES
+                                    : OFF_TOGGLE_SOURCES;
+                                const isTabStop =
+                                    q1Answer === null ? index === 0 : isSelected;
+                                const topPercent =
+                                    Q1_OPTION_BASE_TOP_PERCENT +
+                                    Q1_OPTION_STEP_PERCENT * index;
+
+                                return (
+                                    <button
+                                        key={option.id}
+                                        type="button"
+                                        className="page3-q1-option"
+                                        style={{ top: `${topPercent}%` }}
+                                        onClick={() => setQ1Answer(option.id)}
+                                        onKeyDown={(event) =>
+                                            handleQ1KeyDown(event, index)
+                                        }
+                                        role="radio"
+                                        aria-checked={isSelected}
+                                        tabIndex={isTabStop ? 0 : -1}
+                                        ref={(element) => {
+                                            q1OptionRefs.current[index] = element;
+                                        }}
+                                    >
+                                        <span className="sr-only">{option.label}</span>
+                                        <ImgWithFallback
+                                            className="page3-q1-toggle"
+                                            sources={toggleSources}
+                                            alt=""
+                                            aria-hidden="true"
+                                        />
+                                        <ImgWithFallback
+                                            className="page3-q1-label"
+                                            sources={option.imageSources}
+                                            alt=""
+                                            aria-hidden="true"
+                                        />
+                                    </button>
+                                );
+                            })}
                         </div>
+                        <button
+                            className="img-btn page3-before-btn"
+                            type="button"
+                            onClick={() => setPage(2)}
+                            aria-label="이전 페이지"
+                            title="이전 페이지로 돌아가기"
+                        >
+                            <ImgWithFallback
+                                className="page3-before-btn-img"
+                                sources={BEFORE_BUTTON_SOURCES}
+                                alt="이전"
+                            />
+                        </button>
                     </div>
                 </div>
             </div>
