@@ -2,13 +2,13 @@
 import React, { useCallback, useEffect, useMemo, useState, useRef } from "react";
 import "./App.css";
 
-const BASIC_INFO_SOURCES = ["/basic_Information.png", "/basic_information.png"];
+const BASIC_INFO_SOURCES = ["/basic_Information_image.png", "/basic_Information_image.png"];
 const BEFORE_BUTTON_SOURCES = ["/before.png", "/before_button.png"];
 const NEXT_ON_BUTTON_SOURCES = ["/next_on_button.png", "/next.png"];
 const NEXT_OFF_BUTTON_SOURCES = ["/next_off_button.png", "/next.png"];
-const EMAIL_IMAGE_SOURCES = ["/email_image.png", "/email-image.png"];
+const EMAIL_IMAGE_SOURCES = ["/email_text_image.png", "/email_text_image.png"];
 const EMAIL_TEXT_BOX_SOURCES = ["/email_text_box.png", "/emil_text_box.png"];
-const AGE_TEXT_SOURCES = ["/age_text_image.png", "/age_text.png"];
+const AGE_TEXT_SOURCES = ["/age_text_image.png", "/age_text_image.png"];
 const SCROLL_LINE_SOURCES = ["/scroll_line_image.png", "/scroll_line.png"];
 const SCROLL_HANDLE_SOURCES = ["/scroll_handle_image.png", "/scroll_handle.png"];
 const SCROLL_STOP_POINT_SOURCES = [
