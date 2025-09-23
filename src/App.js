@@ -66,6 +66,7 @@ const GENDER_OPTIONS = [
         topPercent: 68.596059,
     },
 ];
+<<<<<<< Updated upstream
 const OFF_TOGGLE_SOURCES = ["/off_toggle.png"];
 const ON_TOGGLE_SOURCES = ["/on_toggle.png"];
 const GENDER_OPTIONS = [
@@ -106,6 +107,8 @@ const GENDER_OPTIONS = [
     },
 ];
 const GENDER_TEXT_SOURCES = ["/gender_text_image.png"];
+=======
+>>>>>>> Stashed changes
 
 function ImgWithFallback({ sources = [], alt, ...imgProps }) {
     const [activeIndex, setActiveIndex] = useState(0);
