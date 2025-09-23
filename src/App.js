@@ -491,14 +491,15 @@ export default function App() {
     const bg1 = useMemo(() => process.env.PUBLIC_URL + "/background1.png", []); // 페이지1 배경
     const bg2 = useMemo(() => process.env.PUBLIC_URL + "/background2.png", []);
     const bg3 = useMemo(() => process.env.PUBLIC_URL + "/background3.png", []);
+    const bg4 = useMemo(() => process.env.PUBLIC_URL + "/background4.png", []);
 
     // 배경 프리로드(전환 시 깜빡임 방지)
     useEffect(() => {
-        [bg0, bg1, bg2, bg3].forEach((src) => {
+        [bg0, bg1, bg2, bg3, bg4].forEach((src) => {
             const img = new Image();
             img.src = src;
         });
-    }, [bg0, bg1, bg2, bg3]);
+    }, [bg0, bg1, bg2, bg3, bg4]);
 
     const bgUrl = useMemo(() => {
         if (page === 0) {
@@ -508,10 +509,10 @@ export default function App() {
             return bg2;
         }
         if (page === 5) {
-            return bg3;
+            return bg4;
         }
         return bg1;
-    }, [bg0, bg1, bg2, bg3, page]);
+    }, [bg0, bg1, bg2, bg3, bg4, page]);
     const page0StateClass = expanded ? "is-expanded" : "is-collapsed";
 
     // ----- PAGE 1 (임시) -----
