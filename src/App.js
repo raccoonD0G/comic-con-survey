@@ -64,6 +64,24 @@ const GENDER_OPTIONS = [
         topPercent: 68.596059,
     },
 ];
+const GENDER_OPTIONS = [
+    {
+        id: "male",
+        label: "남성",
+        imageSources: ["/male_image.png"],
+    },
+    {
+        id: "female",
+        label: "여성",
+        imageSources: ["/female_image.png"],
+    },
+    {
+        id: "other",
+        label: "기타",
+        imageSources: ["/other_image.png"],
+    },
+];
+const GENDER_TEXT_SOURCES = ["/gender_text_image.png"];
 
 function ImgWithFallback({ sources = [], alt, ...imgProps }) {
     const [activeIndex, setActiveIndex] = useState(0);
@@ -161,6 +179,7 @@ export default function App() {
     useEffect(() => {
         genderOptionRefs.current = genderOptionRefs.current.slice(0, genderOptionCount);
     }, [genderOptionCount]);
+
     const selectedAgeStop = AGE_STOPS[ageIndex] ?? null;
     const ageHandlePosition = useMemo(() => {
         if (ageStopCount <= 1) {
@@ -171,6 +190,9 @@ export default function App() {
         return `calc(${AGE_TRACK_LEFT_PERCENT}% + ${offsetPercent}%)`;
     }, [ageIndex, ageStopCount]);
     const ageValueText = selectedAgeStop ? `${selectedAgeStop.label}` : undefined;
+    const genderValueText = gender
+        ? GENDER_OPTIONS.find((option) => option.id === gender)?.label
+        : undefined;
 
     // public/ 경로
     const bg0 = useMemo(() => process.env.PUBLIC_URL + "/background0.png", []);
