@@ -116,8 +116,8 @@ export default function App() {
     });
 
     // public/ 경로
-    const bg0 = useMemo(() => process.env.PUBLIC_URL + "/bg.png", []);
-    const bg1 = useMemo(() => process.env.PUBLIC_URL + "/bg_page1.png", []); // 페이지1 배경
+    const bg0 = useMemo(() => process.env.PUBLIC_URL + "/background0.png", []);
+    const bg1 = useMemo(() => process.env.PUBLIC_URL + "/background1.png", []); // 페이지1 배경
 
     // 배경 프리로드(전환 시 깜빡임 방지)
     useEffect(() => {
@@ -418,14 +418,14 @@ export default function App() {
                             <img
                                 ref={topImgRef}
                                 className="text-img top"
-                                src="/EntryText0.png"
+                                src="/entry_text_image0.png"
                                 alt="EntryText0"
                                 onLoad={updateStackMetrics}
                             />
                             <img
                                 ref={bottomImgRef}
                                 className="text-img bottom"
-                                src="/EntryText1.png"
+                                src="/entry_text_image1.png"
                                 alt="EntryText1"
                                 onLoad={updateStackMetrics}
                             />
@@ -436,7 +436,7 @@ export default function App() {
                     {/* 2) 화살표 버튼 */}
                     {!expanded && (
                         <button className="arrow-button" onClick={() => setExpanded(true)} aria-label="더 보기">
-                            <img src="/Arrow.png" alt="펼치기" />
+                            <img src="/arrow_button.png" alt="펼치기" />
                         </button>
                     )}
 
@@ -448,17 +448,17 @@ export default function App() {
                         aria-label="I AGREE"
                         title={agreed ? "동의됨" : "동의하기"}
                     >
-                        <img src={agreed ? "/I_AGREE_on.png" : "/I_AGREE_off.png"} alt="I AGREE" />
+                        <img src={agreed ? "/i_agree_on_button.png" : "/i_agree_off_button.png"} alt="I AGREE" />
                     </button>
 
                     {/* 4) START 버튼 */}
                     {agreed ? (
                         <button className="img-btn start-btn" onClick={() => setPage(1)} aria-label="START" title="시작하기">
-                            <img src="/START_on.png" alt="START" />
+                            <img src="/start_on_button.png" alt="START" />
                         </button>
                     ) : (
                         <button className="img-btn start-btn" aria-label="START" title="동의가 필요합니다" disabled>
-                            <img src="/START_off.png" alt="START 비활성" />
+                                <img src="/start_off_button.png" alt="START 비활성" />
                         </button>
                     )}
                 </div>
