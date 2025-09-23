@@ -133,49 +133,43 @@
 }
 
 .page1 {
+    position: relative;
     width: 100%;
     height: 100%;
-    align-items: stretch;
-    justify-content: flex-start;
-    padding: 22.4% 6.4% 8.533%;
-    gap: 10.667%;
-    box-sizing: border-box;
+    display: block;
+    padding: 0;
 }
 
 .page1-basic-info {
-    width: 62.4%;
+    position: absolute;
+    left: 4.8%;
+    top: 15.6404%;
+    width: 66.1333%;
     max-width: none;
     height: auto;
-    align-self: flex-start;
-}
-
-.page1-email-area {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    gap: 5.333%;
-    margin-top: 0;
-    margin-bottom: 0;
 }
 
 .page1-email-image {
-    width: 13.067%;
+    position: absolute;
+    left: 42.9333%;
+    top: 29.3103%;
+    width: 13.6%;
     max-width: none;
     height: auto;
 }
 
 .page1-email-input {
-    position: relative;
-    display: inline-flex;
-    justify-content: center;
-    width: 85.333%;
+    position: absolute;
+    left: 7.7333%;
+    top: 45.8128%;
+    width: 85.3333%;
+    height: 6.8966%;
+    display: block;
 }
 
-.page1-email-input img {
+.page1-email-input-bg {
     width: 100%;
-    height: auto;
+    height: 100%;
     display: block;
 }
 
@@ -204,6 +198,49 @@
     outline: none;
     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.9);
     border-radius: 999px;
+}
+
+.page1-before-btn {
+    position: absolute;
+    left: 5.3333%;
+    top: 86.8227%;
+    width: 22.1333%;
+    height: 3.3251%;
+    display: block;
+    margin: 0;
+}
+
+.page1-before-btn-img {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.page1-next-btn {
+    position: absolute;
+    left: 0;
+    top: 91.2562%;
+    width: 100%;
+    height: 8.7438%;
+    display: block;
+    margin: 0;
+}
+
+.page1-next-btn-img {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.page1-next-text {
+    position: absolute;
+    left: 42.1333%;
+    top: 91.9951%;
+    width: 15.4667%;
+    max-width: none;
+    height: auto;
+    pointer-events: none;
+    z-index: 1;
 }
 
 .page-nav {
