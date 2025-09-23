@@ -434,11 +434,21 @@ export default function App() {
                     </div>
 
                     {/* 2) 화살표 버튼 */}
-                    {!expanded && (
-                        <button className="arrow-button" onClick={() => setExpanded(true)} aria-label="더 보기">
-                            <img src="/arrow_button.png" alt="펼치기" />
-                        </button>
-                    )}
+                    <button
+                        className={`arrow-button${expanded ? " is-hidden" : ""}`}
+                        type="button"
+                        onClick={() => {
+                            if (!expanded) {
+                                setExpanded(true);
+                            }
+                        }}
+                        aria-label="더 보기"
+                        title="더 많은 정보 보기"
+                        disabled={expanded}
+                        aria-hidden={expanded}
+                    >
+                        <img src="/arrow_button.png" alt="펼치기" />
+                    </button>
 
                     {/* 3) I AGREE 버튼 */}
                     <button
