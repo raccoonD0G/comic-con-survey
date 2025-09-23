@@ -287,40 +287,35 @@
 
 .page2-age-title {
     position: absolute;
-    left: 7.7333%;
-    top: 20.197%;
-    width: 56%;
-}
-
-.page2-age-title img {
-    display: block;
-    width: 100%;
+    left: 8%;
+    top: 28.078818%;
+    width: 10.133333%;
     height: auto;
-}
-
-.page2-age-slider {
-    position: absolute;
-    left: 7.4667%;
-    top: 33.9901%;
-    width: 90.4%;
-    height: calc(37 / 812 * 100%);
+    max-width: none;
+    display: block;
 }
 
 .page2-age-line {
     position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
+    left: 7.466667%;
+    top: 33.990148%;
+    width: 90.4%;
+    height: auto;
+    max-width: none;
     display: block;
+    pointer-events: none;
 }
 
 .page2-age-handle {
     position: absolute;
-    top: 50%;
-    width: clamp(48px, 12vw, 72px);
-    transform: translate(-50%, -50%);
+    top: 33.251232%;
+    width: 4.8%;
+    height: auto;
+    max-width: none;
+    transform: translate(-50%, 0);
     transition: left 220ms ease;
     pointer-events: none;
+    z-index: 2;
 }
 
 .page2-age-handle.is-idle {
@@ -329,23 +324,23 @@
 
 .page2-age-range {
     position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 100%;
-    height: calc(120 / 812 * 100%);
+    left: 7.466667%;
+    top: 33.990148%;
+    width: 90.4%;
+    height: 4.55665%;
     margin: 0;
     appearance: none;
     -webkit-appearance: none;
     background: none;
     cursor: pointer;
     touch-action: pan-y;
+    z-index: 1;
 }
 
 .page2-age-range:focus-visible {
     outline: 2px solid rgba(255, 255, 255, 0.85);
     outline-offset: 6px;
-    border-radius: 999px;
+    border-radius: 12px;
 }
 
 .page2-age-range::-webkit-slider-thumb {
@@ -372,62 +367,99 @@
     border: none;
 }
 
-.page2-age-value {
-    position: absolute;
-    left: 7.4667%;
-    top: 28.083%;
-    font-size: clamp(18px, 4vw, 22px);
-    font-weight: 600;
-    color: #fff;
-}
-
 .page2-gender-title {
     position: absolute;
-    left: 7.7333%;
-    top: 45.073%;
-    width: 56%;
-}
-
-.page2-gender-title img {
-    display: block;
-    width: 100%;
+    left: 8%;
+    top: 48.522167%;
+    width: 18.666667%;
     height: auto;
+    max-width: none;
+    display: block;
 }
 
 .page2-gender-option {
     position: absolute;
-    left: 6.9333%;
-    width: 90.4%;
-    height: calc(44 / 812 * 100%);
-}
-
-.page2-gender-option-male {
-    top: 53.8177%;
-}
-
-.page2-gender-option-female {
-    top: 61.2069%;
-}
-
-.page2-gender-option-other {
-    top: 68.5961%;
-}
-
-.page2-gender-toggle-btn {
-    position: absolute;
-    left: 0;
-    top: 22.7273%;
-    width: calc(24 / 375 * 100%);
-    aspect-ratio: 1 / 1;
-    padding: 0;
-    border: none;
+    left: 6.933333%;
+    width: 85.066667%;
+    height: 5.418719%;
     background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    display: block;
     cursor: pointer;
 }
 
-.page2-gender-toggle-btn img {
-    width: 100%;
+.page2-gender-option:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+}
+
+.page2-gender-option:disabled {
+    cursor: default;
+}
+
+.page2-gender-toggle {
+    position: absolute;
+    left: 0;
+    top: 22.727273%;
+    width: 7.523511%;
     height: auto;
+    max-width: none;
+    display: block;
+    pointer-events: none;
+}
+
+.page2-gender-label {
+    position: absolute;
+    left: 13.166144%;
+    top: 0;
+    width: 86.833856%;
+    height: auto;
+    max-width: none;
+    display: block;
+    pointer-events: none;
+}
+
+.page2-before-btn {
+    position: absolute;
+    left: 5.333333%;
+    top: 86.82266%;
+    width: 22.133333%;
+    height: 3.325123%;
+    display: block;
+}
+
+.page2-before-btn-img {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.page2-next-btn {
+    position: absolute;
+    left: 0;
+    top: 91.256158%;
+    width: 100%;
+    height: 8.743842%;
+    display: block;
+}
+
+.page2-next-btn-img {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.page2-next-text {
+    position: absolute;
+    left: 42.133333%;
+    top: 8.450704%;
+    width: 15.466667%;
+    height: 42.253521%;
+    max-width: none;
+    pointer-events: none;
+    z-index: 1;
     display: block;
 }
 
