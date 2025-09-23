@@ -15,8 +15,8 @@ const SCROLL_LINE_SOURCES = ["/scroll_line_image.png", "/scroll_line.png"];
 const SCROLL_HANDLE_SOURCES = ["/scroll_handle_image.png", "/scroll_handle.png"];
 const AGE_TRACK_LEFT_PERCENT = 7.466667;
 const AGE_TRACK_WIDTH_PERCENT = 90.4;
-const AGE_TRACK_START_OFFSET_PERCENT = (16 / 339) * AGE_TRACK_WIDTH_PERCENT;
-const AGE_TRACK_END_OFFSET_PERCENT = (26 / 339) * AGE_TRACK_WIDTH_PERCENT;
+const AGE_TRACK_START_OFFSET_PERCENT = (25 / 339) * AGE_TRACK_WIDTH_PERCENT;
+const AGE_TRACK_END_OFFSET_PERCENT = (25 / 339) * AGE_TRACK_WIDTH_PERCENT;
 const AGE_HANDLE_TOP_PERCENT = 33.251232;
 const AGE_STOPS = [
     {
@@ -66,49 +66,6 @@ const GENDER_OPTIONS = [
         topPercent: 68.596059,
     },
 ];
-<<<<<<< Updated upstream
-const OFF_TOGGLE_SOURCES = ["/off_toggle.png"];
-const ON_TOGGLE_SOURCES = ["/on_toggle.png"];
-const GENDER_OPTIONS = [
-    {
-        id: "male",
-        label: "남성",
-        imageSources: ["/male_image.png"],
-        topPercent: 53.817734,
-    },
-    {
-        id: "female",
-        label: "여성",
-        imageSources: ["/female_image.png"],
-        topPercent: 61.206897,
-    },
-    {
-        id: "other",
-        label: "기타",
-        imageSources: ["/other_image.png"],
-        topPercent: 68.596059,
-    },
-];
-const GENDER_OPTIONS = [
-    {
-        id: "male",
-        label: "남성",
-        imageSources: ["/male_image.png"],
-    },
-    {
-        id: "female",
-        label: "여성",
-        imageSources: ["/female_image.png"],
-    },
-    {
-        id: "other",
-        label: "기타",
-        imageSources: ["/other_image.png"],
-    },
-];
-const GENDER_TEXT_SOURCES = ["/gender_text_image.png"];
-=======
->>>>>>> Stashed changes
 
 function ImgWithFallback({ sources = [], alt, ...imgProps }) {
     const [activeIndex, setActiveIndex] = useState(0);
