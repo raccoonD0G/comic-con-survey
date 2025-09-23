@@ -1,5 +1,5 @@
 // App.js
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "./App.css";
 
 const BASIC_INFO_SOURCES = ["/basic_Information_image.png", "/basic_Information_image.png"];
@@ -10,42 +10,60 @@ const NEXT_TEXT_SOURCES = ["/next_text_image.png"];
 const EMAIL_IMAGE_SOURCES = ["/email_text_image.png", "/email_text_image.png"];
 const EMAIL_TEXT_BOX_SOURCES = ["/email_text_box.png", "/emil_text_box.png"];
 const AGE_TEXT_SOURCES = ["/age_text_image.png", "/age_text_image.png"];
+const GENDER_TEXT_SOURCES = ["/gender_text_image.png", "/gender_text_image.png"];
 const SCROLL_LINE_SOURCES = ["/scroll_line_image.png", "/scroll_line.png"];
 const SCROLL_HANDLE_SOURCES = ["/scroll_handle_image.png", "/scroll_handle.png"];
-const SCROLL_STOP_POINT_SOURCES = [
-    "/scroll_stop_point_image.png",
-    "/scroll_stop_point.png",
-];
+const AGE_TRACK_LEFT_PERCENT = 7.466667;
+const AGE_TRACK_WIDTH_PERCENT = 90.4;
+const AGE_TRACK_START_OFFSET_PERCENT = (16 / 339) * AGE_TRACK_WIDTH_PERCENT;
+const AGE_TRACK_END_OFFSET_PERCENT = (26 / 339) * AGE_TRACK_WIDTH_PERCENT;
+const AGE_HANDLE_TOP_PERCENT = 33.251232;
 const AGE_STOPS = [
     {
         id: "10s",
         label: "10대",
-        textSources: ["/10s_text_image.png"],
     },
     {
         id: "20s",
         label: "20대",
-        textSources: ["/20s_text_image.png", "/30s_text_image.png"],
     },
     {
         id: "30s",
         label: "30대",
-        textSources: ["/30s_text_image.png"],
     },
     {
         id: "40s",
         label: "40대",
-        textSources: ["/40s_text_image.png"],
     },
     {
         id: "50s",
         label: "50대",
-        textSources: ["/50s_text_image.png"],
     },
     {
         id: "60s",
         label: "60대 이상",
-        textSources: ["/60_text_image.png", "/60s_text_image.png"],
+    },
+];
+const OFF_TOGGLE_SOURCES = ["/off_toggle.png"];
+const ON_TOGGLE_SOURCES = ["/on_toggle.png"];
+const GENDER_OPTIONS = [
+    {
+        id: "male",
+        label: "남성",
+        imageSources: ["/male_image.png"],
+        topPercent: 53.817734,
+    },
+    {
+        id: "female",
+        label: "여성",
+        imageSources: ["/female_image.png"],
+        topPercent: 61.206897,
+    },
+    {
+        id: "other",
+        label: "기타",
+        imageSources: ["/other_image.png"],
+        topPercent: 68.596059,
     },
 ];
 
@@ -90,9 +108,51 @@ export default function App() {
     const [email, setEmail] = useState("");
     const [ageIndex, setAgeIndex] = useState(0);
     const [ageInteracted, setAgeInteracted] = useState(false);
+    const [gender, setGender] = useState(null);
+    const genderOptionCount = GENDER_OPTIONS.length;
+    const genderOptionRefs = useRef([]);
+    const focusGenderOption = useCallback(
+        (index) => {
+            const target = genderOptionRefs.current[index];
+            if (target) {
+                target.focus();
+            }
+        },
+        [genderOptionRefs]
+    );
+    const handleGenderKeyDown = useCallback(
+        (event, optionIndex) => {
+            if (genderOptionCount <= 0) {
+                return;
+            }
+
+            if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+                event.preventDefault();
+                const nextIndex = (optionIndex + 1) % genderOptionCount;
+                setGender(GENDER_OPTIONS[nextIndex].id);
+                focusGenderOption(nextIndex);
+            } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+                event.preventDefault();
+                const previousIndex =
+                    (optionIndex - 1 + genderOptionCount) % genderOptionCount;
+                setGender(GENDER_OPTIONS[previousIndex].id);
+                focusGenderOption(previousIndex);
+            } else if (event.key === "Home") {
+                event.preventDefault();
+                setGender(GENDER_OPTIONS[0].id);
+                focusGenderOption(0);
+            } else if (event.key === "End") {
+                event.preventDefault();
+                const lastIndex = genderOptionCount - 1;
+                setGender(GENDER_OPTIONS[lastIndex].id);
+                focusGenderOption(lastIndex);
+            }
+        },
+        [focusGenderOption, genderOptionCount]
+    );
     const ageStopCount = AGE_STOPS.length;
     const canAdvanceFromPage1 = email.trim().length > 0;
-    const canAdvanceFromPage2 = ageInteracted;
+    const canAdvanceFromPage2 = ageInteracted && gender !== null;
     const handleAgeChange = useCallback((event) => {
         setAgeIndex(Number(event.target.value));
         setAgeInteracted(true);
@@ -100,13 +160,23 @@ export default function App() {
     const markAgeInteracted = useCallback(() => {
         setAgeInteracted(true);
     }, []);
+    useEffect(() => {
+        genderOptionRefs.current = genderOptionRefs.current.slice(0, genderOptionCount);
+    }, [genderOptionCount]);
     const selectedAgeStop = AGE_STOPS[ageIndex] ?? null;
     const ageHandlePosition = useMemo(() => {
         if (ageStopCount <= 1) {
-            return "0%";
+            return `calc(${AGE_TRACK_LEFT_PERCENT}% + ${AGE_TRACK_START_OFFSET_PERCENT}%)`;
         }
 
-        return `${(ageIndex / (ageStopCount - 1)) * 100}%`;
+        const effectiveTrackPercent =
+            AGE_TRACK_WIDTH_PERCENT -
+            AGE_TRACK_START_OFFSET_PERCENT -
+            AGE_TRACK_END_OFFSET_PERCENT;
+        const offsetPercent =
+            AGE_TRACK_START_OFFSET_PERCENT +
+            (ageIndex / (ageStopCount - 1)) * effectiveTrackPercent;
+        return `calc(${AGE_TRACK_LEFT_PERCENT}% + ${offsetPercent}%)`;
     }, [ageIndex, ageStopCount]);
     const ageValueText = selectedAgeStop ? `${selectedAgeStop.label}` : undefined;
 
@@ -219,107 +289,143 @@ export default function App() {
                     }}
                 >
                     <div className="page page2">
+                        <ImgWithFallback
+                            className="page2-age-title"
+                            sources={AGE_TEXT_SOURCES}
+                            alt="연령대 질문"
+                        />
+                        <ImgWithFallback
+                            className="page2-age-line"
+                            sources={SCROLL_LINE_SOURCES}
+                            alt=""
+                            aria-hidden="true"
+                        />
+                        <ImgWithFallback
+                            className={`page2-age-handle${ageInteracted ? "" : " is-idle"}`}
+                            sources={SCROLL_HANDLE_SOURCES}
+                            alt=""
+                            aria-hidden="true"
+                            style={{ left: ageHandlePosition, top: `${AGE_HANDLE_TOP_PERCENT}%` }}
+                        />
+                        <input
+                            className="page2-age-range"
+                            type="range"
+                            min="0"
+                            max={ageStopCount - 1}
+                            step="1"
+                            value={ageIndex}
+                            onChange={handleAgeChange}
+                            onPointerDown={markAgeInteracted}
+                            onKeyDown={markAgeInteracted}
+                            aria-label="연령대 선택"
+                            aria-valuemin={0}
+                            aria-valuemax={ageStopCount - 1}
+                            aria-valuenow={ageIndex}
+                            aria-valuetext={ageValueText}
+                        />
+                        <div className="sr-only" aria-live="polite">
+                            {ageInteracted && selectedAgeStop
+                                ? `선택된 연령대: ${selectedAgeStop.label}`
+                                : "연령대를 선택하세요"}
+                        </div>
+                        <ImgWithFallback
+                            className="page2-gender-title"
+                            sources={GENDER_TEXT_SOURCES}
+                            alt="성별 질문"
+                        />
                         <div
-                            className="page2-age-area"
-                            style={{ "--age-stop-count": ageStopCount }}
+                            className="page2-gender-group"
+                            role="radiogroup"
+                            aria-label="성별 선택"
+                            aria-required="true"
                         >
-                            <div className="page2-age-title">
-                                <ImgWithFallback
-                                    sources={AGE_TEXT_SOURCES}
-                                    alt="연령대 질문"
-                                />
-                            </div>
-                            <div className="page2-age-slider">
-                                <div className="page2-age-track">
-                                    <ImgWithFallback
-                                        className="page2-age-line"
-                                        sources={SCROLL_LINE_SOURCES}
-                                        alt=""
-                                        aria-hidden="true"
-                                    />
-                                    <div className="page2-age-stop-row" aria-hidden="true">
-                                        {AGE_STOPS.map((stop) => (
-                                            <span key={stop.id} className="page2-age-stop">
-                                                <ImgWithFallback
-                                                    className="page2-age-stop-point"
-                                                    sources={SCROLL_STOP_POINT_SOURCES}
-                                                    alt=""
-                                                    aria-hidden="true"
-                                                />
-                                            </span>
-                                        ))}
-                                    </div>
-                                    <ImgWithFallback
-                                        className={`page2-age-handle${ageInteracted ? "" : " is-idle"}`}
-                                        sources={SCROLL_HANDLE_SOURCES}
-                                        alt=""
-                                        aria-hidden="true"
-                                        style={{ left: ageHandlePosition }}
-                                    />
-                                    <input
-                                        className="page2-age-range"
-                                        type="range"
-                                        min="0"
-                                        max={ageStopCount - 1}
-                                        step="1"
-                                        value={ageIndex}
-                                        onChange={handleAgeChange}
-                                        onPointerDown={markAgeInteracted}
-                                        onKeyDown={markAgeInteracted}
-                                        aria-label="연령대 선택"
-                                        aria-valuemin={0}
-                                        aria-valuemax={ageStopCount - 1}
-                                        aria-valuenow={ageIndex}
-                                        aria-valuetext={ageValueText}
-                                    />
-                                </div>
-                            </div>
-                            <div className="page2-age-label-row" aria-hidden="true">
-                                {AGE_STOPS.map((stop) => (
-                                    <ImgWithFallback
-                                        key={stop.id}
-                                        sources={stop.textSources}
-                                        alt=""
-                                    />
-                                ))}
-                            </div>
+                            {GENDER_OPTIONS.map((option, index) => {
+                                const isSelected = gender === option.id;
+                                const toggleSources = isSelected
+                                    ? ON_TOGGLE_SOURCES
+                                    : OFF_TOGGLE_SOURCES;
+                                const isTabStop =
+                                    gender === null ? index === 0 : isSelected;
+
+                                return (
+                                    <button
+                                        key={option.id}
+                                        type="button"
+                                        className="page2-gender-option"
+                                        style={{ top: `${option.topPercent}%` }}
+                                        onClick={() => setGender(option.id)}
+                                        onKeyDown={(event) =>
+                                            handleGenderKeyDown(event, index)
+                                        }
+                                        role="radio"
+                                        aria-checked={isSelected}
+                                        tabIndex={isTabStop ? 0 : -1}
+                                        ref={(element) => {
+                                            genderOptionRefs.current[index] = element;
+                                        }}
+                                    >
+                                        <span className="sr-only">{option.label}</span>
+                                        <ImgWithFallback
+                                            className="page2-gender-toggle"
+                                            sources={toggleSources}
+                                            alt=""
+                                            aria-hidden="true"
+                                        />
+                                        <ImgWithFallback
+                                            className="page2-gender-label"
+                                            sources={option.imageSources}
+                                            alt=""
+                                            aria-hidden="true"
+                                        />
+                                    </button>
+                                );
+                            })}
                         </div>
-                        <div className="page-nav">
-                            <button
-                                className="img-btn before-btn"
-                                type="button"
-                                onClick={() => setPage(1)}
-                                aria-label="이전 페이지"
-                                title="이전 페이지로 돌아가기"
-                            >
-                                <ImgWithFallback sources={BEFORE_BUTTON_SOURCES} alt="이전" />
-                            </button>
-                            <button
-                                className="img-btn next-btn"
-                                type="button"
-                                onClick={() => {
-                                    if (canAdvanceFromPage2) {
-                                        setPage(3);
-                                    }
-                                }}
-                                aria-label="다음 페이지"
-                                title={
-                                    canAdvanceFromPage2
-                                        ? "다음 페이지로 이동"
-                                        : "연령대를 선택하면 다음으로 이동할 수 있습니다"
+                        <button
+                            className="img-btn page2-before-btn"
+                            type="button"
+                            onClick={() => setPage(1)}
+                            aria-label="이전 페이지"
+                            title="이전 페이지로 돌아가기"
+                        >
+                            <ImgWithFallback
+                                className="page2-before-btn-img"
+                                sources={BEFORE_BUTTON_SOURCES}
+                                alt="이전"
+                            />
+                        </button>
+                        <button
+                            className="img-btn page2-next-btn"
+                            type="button"
+                            onClick={() => {
+                                if (canAdvanceFromPage2) {
+                                    setPage(3);
                                 }
-                                disabled={!canAdvanceFromPage2}
-                            >
-                                <ImgWithFallback
-                                    sources={
-                                        canAdvanceFromPage2
-                                            ? NEXT_ON_BUTTON_SOURCES
-                                            : NEXT_OFF_BUTTON_SOURCES
-                                    }
-                                    alt="다음"
-                                />
-                            </button>
-                        </div>
+                            }}
+                            aria-label="다음 페이지"
+                            title={
+                                canAdvanceFromPage2
+                                    ? "다음 페이지로 이동"
+                                    : "연령대와 성별을 선택하면 다음으로 이동할 수 있습니다"
+                            }
+                            disabled={!canAdvanceFromPage2}
+                        >
+                            <ImgWithFallback
+                                className="page2-next-btn-img"
+                                sources={
+                                    canAdvanceFromPage2
+                                        ? NEXT_ON_BUTTON_SOURCES
+                                        : NEXT_OFF_BUTTON_SOURCES
+                                }
+                                alt="다음"
+                            />
+                            <ImgWithFallback
+                                className="page2-next-text"
+                                sources={NEXT_TEXT_SOURCES}
+                                alt=""
+                                aria-hidden="true"
+                            />
+                        </button>
                     </div>
                 </div>
             </div>
