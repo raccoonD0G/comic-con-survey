@@ -196,13 +196,13 @@ export default function App() {
                                 }
                                 alt="다음"
                             />
+                            <ImgWithFallback
+                                className="page1-next-text"
+                                sources={NEXT_TEXT_SOURCES}
+                                alt=""
+                                aria-hidden="true"
+                            />
                         </button>
-                        <ImgWithFallback
-                            className="page1-next-text"
-                            sources={NEXT_TEXT_SOURCES}
-                            alt=""
-                            aria-hidden="true"
-                        />
                     </div>
                 </div>
             </div>
