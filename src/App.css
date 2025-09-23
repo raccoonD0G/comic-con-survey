@@ -9,10 +9,10 @@
 
 /* “핸드폰 비율(9:16)” 무대 */
 .phone-stage {
-    /* 9:16 고정 비율 + 가능한 크게, 화면에 맞춤 */
-    aspect-ratio: 9 / 16;
-    width: min(100vw, calc(100vh * 9 / 16));
-    height: min(100vh, calc(100vw * 16 / 9));
+    /* 디자인 해상도(375x812)에 맞춘 고정 비율 */
+    aspect-ratio: 375 / 812;
+    width: min(100vw, calc(100vh * 375 / 812));
+    height: min(100vh, calc(100vw * 812 / 375));
     /* 배경 이미지는 JS에서 설정 */
     background-position: center;
     background-repeat: no-repeat;
@@ -35,74 +35,167 @@
 }
 
 .page0 {
-    justify-content: flex-end;
-    padding-top: 0;
-    padding-bottom: 40px;
-}
-
-.page1 {
+    position: relative;
     width: 100%;
     height: 100%;
-    align-items: flex-start;
-    justify-content: flex-start;
-    padding: clamp(24px, 5vh, 48px) clamp(20px, 6vw, 40px);
-    gap: clamp(24px, 6vh, 48px);
+    display: block;
+    padding: 0;
 }
 
-.page1-basic-info {
-    width: min(78%, 360px);
-    max-width: 100%;
+.page0-entry-img {
+    position: absolute;
+    left: 5.0667%;
+    width: 89.6%;
+    max-width: none;
     height: auto;
-    align-self: flex-start;
+    transition: top 600ms ease;
 }
 
-.page1-email-area {
+.page0-entry-img-bottom {
+    left: 3.2%;
+    width: 93.3333%;
+}
+
+.page0.is-collapsed .page0-entry-img-top {
+    top: 72.3005%;
+}
+
+.page0.is-expanded .page0-entry-img-top {
+    top: 63.5468%;
+}
+
+.page0.is-collapsed .page0-entry-img-bottom {
+    top: 81.2805%;
+}
+
+.page0.is-expanded .page0-entry-img-bottom {
+    top: 72.6601%;
+}
+
+.page0-entry-fade {
+    position: absolute;
+    left: 3.2%;
+    width: 93.3333%;
+    height: 9.4828%;
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0),
+        rgba(0, 0, 0, 0.85)
+    );
+    opacity: 1;
+    transition: top 600ms ease, opacity 600ms ease;
+    pointer-events: none;
+}
+
+.page0.is-collapsed .page0-entry-fade {
+    top: 81.2805%;
+}
+
+.page0.is-expanded .page0-entry-fade {
+    top: 72.6601%;
+    opacity: 0;
+}
+
+.page0 .arrow-button,
+.page0 .img-btn {
+    position: absolute;
+    margin: 0;
+}
+
+.page0 .arrow-button {
+    left: 47.7333%;
+    top: 83.2512%;
+    width: 4%;
+    transition: opacity 220ms ease;
+}
+
+.page0 .arrow-button img {
     width: 100%;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: clamp(16px, 5vh, 32px);
-    margin-top: clamp(32px, 12vh, 80px);
-    margin-bottom: clamp(24px, 10vh, 64px);
-}
-
-.page1-email-image {
-    width: min(70%, 340px);
-    max-width: 340px;
     height: auto;
 }
 
-.page1-email-input {
-    position: relative;
-    display: inline-flex;
-    justify-content: center;
-    width: min(82%, 380px);
+.page0 .agree-btn {
+    left: 39.2%;
+    top: 85.3448%;
+    width: 21.6%;
 }
 
-.page1-email-input img {
+.page0 .start-btn {
+    left: 35.4667%;
+    top: 89.0394%;
+    width: 30.1333%;
+}
+
+.page0 .img-btn img {
     width: 100%;
     height: auto;
     display: block;
 }
 
+.page1 {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: block;
+    padding: 0;
+}
+
+.page1-basic-info,
+.page1-email-image,
+.page1-email-input,
+.page1-before-btn,
+.page1-next-btn,
+.page1-next-text {
+    position: absolute;
+}
+
+.page1-basic-info,
+.page1-email-image,
+.page1-email-input-bg,
+.page1-next-text {
+    width: 100%;
+    height: auto;
+    display: block;
+    max-width: none;
+}
+
+.page1-basic-info {
+    left: 4.8%;
+    top: 15.6404%;
+    width: 66.1333%;
+}
+
+.page1-email-image {
+    left: 42.9333%;
+    top: 29.3103%;
+    width: 13.6%;
+}
+
+.page1-email-input {
+    left: 7.7333%;
+    top: 45.8128%;
+    width: 85.3333%;
+    display: block;
+}
+
+.page1-email-input-bg {
+    width: 100%;
+}
+
 .page1-email-input input {
     position: absolute;
-    top: 0;
-    bottom: 0;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
-    width: 72%;
-    height: 42%;
-    margin: auto;
+    transform: translate(-50%, -50%);
+    width: 78%;
+    height: 50%;
     background: transparent;
     border: none;
     color: #1f2937;
-    font-size: clamp(16px, 3.6vw, 20px);
+    font-size: clamp(16px, 3.5vw, 18px);
     font-family: inherit;
     font-weight: 500;
-    padding: 0 clamp(12px, 3vw, 18px);
+    padding: 0 4%;
     text-align: left;
 }
 
@@ -116,12 +209,43 @@
     border-radius: 999px;
 }
 
+.page1-before-btn {
+    left: 5.3333%;
+    top: 86.8227%;
+    width: 22.1333%;
+}
+
+.page1-next-btn {
+    left: 0;
+    top: 91.2562%;
+    width: 100%;
+}
+
+.page1-next-btn img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.page1-before-btn img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.page1-next-text {
+    left: 42.1333%;
+    top: 91.9951%;
+    width: 15.4667%;
+    pointer-events: none;
+}
+
 .page-nav {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: clamp(12px, 3vh, 20px);
+    gap: 5.333%;
     margin-top: auto;
 }
 
@@ -129,14 +253,18 @@
     margin-top: 0;
 }
 
+.page-nav .before-btn {
+    width: 22.4%;
+}
+
 .page-nav .before-btn img {
     display: block;
     height: auto;
-    max-width: min(45%, 200px);
+    width: 100%;
 }
 
 .page-nav .next-btn {
-    width: 100%;
+    align-self: stretch;
 }
 
 .page-nav .next-btn img {
@@ -296,45 +424,6 @@
     text-align: center;
 }
 
-/* EntryText 스택 */
-.text-stack {
-    position: relative;
-    width: min(85%, 420px);
-    max-width: 420px;
-    overflow: hidden;
-    transition: height 600ms ease;
-}
-
-.text-stack[data-stack-ready="false"] {
-    max-height: clamp(120px, 72vw, 220px);
-}
-
-.stack-inner {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    transition: transform 600ms ease;
-}
-
-.text-img {
-    display: block;
-    width: 100%;
-}
-
-.fade-mask {
-    position: absolute;
-    inset: auto 0 0;
-    height: 55%;
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.85));
-    opacity: 1;
-    transition: opacity 600ms ease;
-    pointer-events: none;
-}
-
-.text-stack.expanded .fade-mask {
-    opacity: 0;
-}
-
 .arrow-button,
 .img-btn {
     margin-top: 12px;
@@ -342,6 +431,16 @@
     border: none;
     cursor: pointer;
     padding: 0;
+}
+
+.arrow-button {
+    transition: opacity 220ms ease;
+}
+
+.arrow-button.is-hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
 }
 
 .img-btn:disabled {

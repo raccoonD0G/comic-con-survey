@@ -1,11 +1,12 @@
 // App.js
-import React, { useCallback, useEffect, useMemo, useState, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import "./App.css";
 
 const BASIC_INFO_SOURCES = ["/basic_Information_image.png", "/basic_Information_image.png"];
 const BEFORE_BUTTON_SOURCES = ["/before.png", "/before_button.png"];
 const NEXT_ON_BUTTON_SOURCES = ["/next_on_button.png", "/next.png"];
 const NEXT_OFF_BUTTON_SOURCES = ["/next_off_button.png", "/next.png"];
+const NEXT_TEXT_SOURCES = ["/next_text_image.png", "/next_text_image.png"];
 const EMAIL_IMAGE_SOURCES = ["/email_text_image.png", "/email_text_image.png"];
 const EMAIL_TEXT_BOX_SOURCES = ["/email_text_box.png", "/emil_text_box.png"];
 const AGE_TEXT_SOURCES = ["/age_text_image.png", "/age_text_image.png"];
@@ -108,12 +109,6 @@ export default function App() {
         return `${(ageIndex / (ageStopCount - 1)) * 100}%`;
     }, [ageIndex, ageStopCount]);
     const ageValueText = selectedAgeStop ? `${selectedAgeStop.label}` : undefined;
-    const topImgRef = useRef(null);
-    const bottomImgRef = useRef(null);
-    const [stackMetrics, setStackMetrics] = useState({
-        collapsed: null,
-        expanded: null,
-    });
 
     // public/ 경로
     const bg0 = useMemo(() => process.env.PUBLIC_URL + "/background0.png", []);
@@ -128,50 +123,7 @@ export default function App() {
     }, [bg0, bg1]);
 
     const bgUrl = page === 0 ? bg0 : bg1;
-    const collapsedRatio = 0.5;
-
-    const updateStackMetrics = useCallback(() => {
-        const topEl = topImgRef.current;
-        const bottomEl = bottomImgRef.current;
-
-        if (!topEl || !bottomEl) {
-            return;
-        }
-
-        const topHeight = topEl.getBoundingClientRect().height;
-        const bottomHeight = bottomEl.getBoundingClientRect().height;
-
-        if (!topHeight || !bottomHeight) {
-            return;
-        }
-
-        const expandedHeight = topHeight + bottomHeight;
-        const collapsedHeight = topHeight + bottomHeight * collapsedRatio;
-        setStackMetrics((prev) => {
-            if (
-                prev.collapsed === collapsedHeight &&
-                prev.expanded === expandedHeight
-            ) {
-                return prev;
-            }
-
-            return {
-                collapsed: collapsedHeight,
-                expanded: expandedHeight,
-            };
-        });
-    }, [collapsedRatio]);
-
-    useEffect(() => {
-        updateStackMetrics();
-
-        window.addEventListener("resize", updateStackMetrics);
-        return () => window.removeEventListener("resize", updateStackMetrics);
-    }, [updateStackMetrics]);
-
-    const hasStackMetrics = stackMetrics.collapsed !== null && stackMetrics.expanded !== null;
-    const stackHeight = expanded ? stackMetrics.expanded : stackMetrics.collapsed;
-    const stackStyles = hasStackMetrics ? { height: `${stackHeight}px` } : undefined;
+    const page0StateClass = expanded ? "is-expanded" : "is-collapsed";
 
     // ----- PAGE 1 (임시) -----
     if (page === 1) {
@@ -189,63 +141,66 @@ export default function App() {
                             sources={BASIC_INFO_SOURCES}
                             alt="기본 정보"
                         />
-                        <div className="page1-email-area">
+                        <ImgWithFallback
+                            className="page1-email-image"
+                            sources={EMAIL_IMAGE_SOURCES}
+                            alt="이메일 안내"
+                        />
+                        <label className="page1-email-input">
+                            <span className="sr-only">이메일 주소 입력</span>
                             <ImgWithFallback
-                                className="page1-email-image"
-                                sources={EMAIL_IMAGE_SOURCES}
-                                alt="이메일 안내"
+                                className="page1-email-input-bg"
+                                sources={EMAIL_TEXT_BOX_SOURCES}
+                                alt=""
+                                aria-hidden="true"
                             />
-                            <label className="page1-email-input">
-                                <span className="sr-only">이메일 주소 입력</span>
-                                <ImgWithFallback
-                                    sources={EMAIL_TEXT_BOX_SOURCES}
-                                    alt=""
-                                    aria-hidden="true"
-                                />
-                                <input
-                                    type="email"
-                                    value={email}
-                                    onChange={(event) => setEmail(event.target.value)}
-                                    placeholder="이메일을 입력하세요"
-                                    autoComplete="email"
-                                />
-                            </label>
-                        </div>
-                        <div className="page-nav">
-                            <button
-                                className="img-btn before-btn"
-                                type="button"
-                                onClick={() => setPage(0)}
-                                aria-label="이전 페이지"
-                                title="이전 페이지로 돌아가기"
-                            >
-                                <ImgWithFallback
-                                    sources={BEFORE_BUTTON_SOURCES}
-                                    alt="이전"
-                                />
-                            </button>
-                            <button
-                                className="img-btn next-btn"
-                                type="button"
-                                onClick={() => setPage(2)}
-                                aria-label="다음 페이지"
-                                title={
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={(event) => setEmail(event.target.value)}
+                                placeholder="이메일을 입력하세요"
+                                autoComplete="email"
+                            />
+                        </label>
+                        <button
+                            className="img-btn page1-before-btn"
+                            type="button"
+                            onClick={() => setPage(0)}
+                            aria-label="이전 페이지"
+                            title="이전 페이지로 돌아가기"
+                        >
+                            <ImgWithFallback
+                                sources={BEFORE_BUTTON_SOURCES}
+                                alt="이전"
+                            />
+                        </button>
+                        <button
+                            className="img-btn page1-next-btn"
+                            type="button"
+                            onClick={() => setPage(2)}
+                            aria-label="다음 페이지"
+                            title={
+                                canAdvanceFromPage1
+                                    ? "다음 페이지로 이동"
+                                    : "이메일을 입력하면 다음 페이지로 이동할 수 있습니다"
+                            }
+                            disabled={!canAdvanceFromPage1}
+                        >
+                            <ImgWithFallback
+                                sources={
                                     canAdvanceFromPage1
-                                        ? "다음 페이지로 이동"
-                                        : "이메일을 입력하면 다음 페이지로 이동할 수 있습니다"
-                                    }
-                                disabled={!canAdvanceFromPage1}
-                            >
-                                <ImgWithFallback
-                                    sources={
-                                        canAdvanceFromPage1
-                                            ? NEXT_ON_BUTTON_SOURCES
-                                            : NEXT_OFF_BUTTON_SOURCES
-                                    }
-                                    alt="다음"
-                                />
-                            </button>
-                        </div>
+                                        ? NEXT_ON_BUTTON_SOURCES
+                                        : NEXT_OFF_BUTTON_SOURCES
+                                }
+                                alt="다음"
+                            />
+                        </button>
+                        <ImgWithFallback
+                            className="page1-next-text"
+                            sources={NEXT_TEXT_SOURCES}
+                            alt=""
+                            aria-hidden="true"
+                        />
                     </div>
                 </div>
             </div>
@@ -407,38 +362,36 @@ export default function App() {
                     backgroundImage: `url(${bgUrl})`,
                 }}
             >
-                <div className="page page0">
-                    {/* 1) EntryText 스택 */}
-                    <div
-                        className={`text-stack ${expanded ? "expanded" : "collapsed"}`}
-                        style={stackStyles}
-                        data-stack-ready={hasStackMetrics ? "true" : "false"}
-                    >
-                        <div className="stack-inner">
-                            <img
-                                ref={topImgRef}
-                                className="text-img top"
-                                src="/entry_text_image0.png"
-                                alt="EntryText0"
-                                onLoad={updateStackMetrics}
-                            />
-                            <img
-                                ref={bottomImgRef}
-                                className="text-img bottom"
-                                src="/entry_text_image1.png"
-                                alt="EntryText1"
-                                onLoad={updateStackMetrics}
-                            />
-                        </div>
-                        <div className="fade-mask" aria-hidden="true" />
-                    </div>
+                <div className={`page page0 ${page0StateClass}`}>
+                    {/* 1) EntryText 이미지 */}
+                    <img
+                        className="page0-entry-img page0-entry-img-top"
+                        src="/entry_text_image0.png"
+                        alt="EntryText0"
+                    />
+                    <img
+                        className="page0-entry-img page0-entry-img-bottom"
+                        src="/entry_text_image1.png"
+                        alt="EntryText1"
+                    />
+                    <div className="page0-entry-fade" aria-hidden="true" />
 
                     {/* 2) 화살표 버튼 */}
-                    {!expanded && (
-                        <button className="arrow-button" onClick={() => setExpanded(true)} aria-label="더 보기">
-                            <img src="/arrow_button.png" alt="펼치기" />
-                        </button>
-                    )}
+                    <button
+                        className={`arrow-button${expanded ? " is-hidden" : ""}`}
+                        type="button"
+                        onClick={() => {
+                            if (!expanded) {
+                                setExpanded(true);
+                            }
+                        }}
+                        aria-label="더 보기"
+                        title="더 많은 정보 보기"
+                        disabled={expanded}
+                        aria-hidden={expanded}
+                    >
+                        <img src="/arrow_button.png" alt="펼치기" />
+                    </button>
 
                     {/* 3) I AGREE 버튼 */}
                     <button
@@ -453,12 +406,22 @@ export default function App() {
 
                     {/* 4) START 버튼 */}
                     {agreed ? (
-                        <button className="img-btn start-btn" onClick={() => setPage(1)} aria-label="START" title="시작하기">
+                        <button
+                            className="img-btn start-btn"
+                            onClick={() => setPage(1)}
+                            aria-label="START"
+                            title="시작하기"
+                        >
                             <img src="/start_on_button.png" alt="START" />
                         </button>
                     ) : (
-                        <button className="img-btn start-btn" aria-label="START" title="동의가 필요합니다" disabled>
-                                <img src="/start_off_button.png" alt="START 비활성" />
+                        <button
+                            className="img-btn start-btn"
+                            aria-label="START"
+                            title="동의가 필요합니다"
+                            disabled
+                        >
+                            <img src="/start_off_button.png" alt="START 비활성" />
                         </button>
                     )}
                 </div>
