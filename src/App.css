@@ -1,0 +1,71 @@
+/* 뷰포트 전체(레터박스 배경 색) */
+.app-root {
+    width: 100vw;
+    height: 100vh;
+    background: #000; /* 검정 레터박스 */
+    display: grid;
+    place-items: center; /* 중앙 정렬 */
+}
+
+/* “핸드폰 비율(9:16)” 무대 */
+.phone-stage {
+    /* 9:16 고정 비율 + 가능한 크게, 화면에 맞춤 */
+    aspect-ratio: 9 / 16;
+    width: min(100vw, calc(100vh * 9 / 16));
+    height: min(100vh, calc(100vw * 16 / 9));
+    /* 배경 이미지는 JS에서 설정 */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    /* 내부 페이지를 레이아웃하기 위한 컨테이너 */
+    display: flex;
+    flex-direction: column;
+}
+
+/* 실제 페이지 콘텐츠는 phone-stage 안에서 배치 */
+.page {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 40px;
+    box-sizing: border-box;
+}
+
+/* 이하 기존 스타일 유지 */
+.text-stack {
+    position: relative;
+    width: 400px;
+    overflow: hidden;
+}
+
+.stack-inner img {
+    display: block;
+    width: 100%;
+}
+
+.fade-mask {
+    position: absolute;
+    bottom: 0;
+    height: 50%;
+    width: 100%;
+    background: linear-gradient(to bottom, transparent, black);
+}
+
+.arrow-button,
+.img-btn {
+    margin-top: 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+    .img-btn img {
+        display: block;
+    }
+
+/* 선택: 배경 전환시 부드럽게 페이드 하고 싶다면 */
+.phone-stage {
+    position: relative;
+}
