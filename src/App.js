@@ -97,6 +97,67 @@ const Q1_OPTIONS = [
 ];
 const Q1_OPTION_BASE_TOP_PERCENT = (265 / 812) * 100;
 const Q1_OPTION_STEP_PERCENT = (82 / 812) * 100;
+const Q2_TITLE_SOURCES = ["/q2_title_image.png"];
+const Q2_TEXT_SOURCES = ["/q2_text_image.png"];
+const Q2_OPTIONS = [
+    {
+        id: "interactivity",
+        label: "The interactivity",
+        imageSources: ["/the_interactivity_image.png"],
+        top: 268,
+        height: 100,
+        toggleTop: 30,
+        labelTop: 30,
+        labelHeight: 84,
+    },
+    {
+        id: "awesomeGraphics",
+        label: "The awesome graphics",
+        imageSources: ["/the_awesome_graphics_image.png"],
+        top: 368,
+        height: 76,
+        toggleTop: 18,
+        labelTop: 0,
+        labelHeight: 60,
+    },
+    {
+        id: "funStorytelling",
+        label: "The fun storytelling",
+        imageSources: ["/the_fun_storytelling_image.png"],
+        top: 444,
+        height: 76,
+        toggleTop: 18,
+        labelTop: 0,
+        labelHeight: 60,
+    },
+    {
+        id: "koreanBackstreet",
+        label: "Korean backstreet",
+        imageSources: ["/korean_backstreet_image.png"],
+        top: 520,
+        height: 76,
+        toggleTop: 18,
+        labelTop: 0,
+        labelHeight: 60,
+    },
+    {
+        id: "other",
+        label: "Other",
+        imageSources: ["/other_image.png"],
+        top: 596,
+        height: 76,
+        toggleTop: 18,
+        labelTop: 0,
+        labelHeight: 60,
+        allowsCustomInput: true,
+    },
+];
+const Q2_STAGE_HEIGHT = 812;
+const Q2_OPTION_WIDTH = 323; // option width in the 375px design
+const Q2_TOGGLE_IMAGE_SIZE = 24;
+const Q2_LABEL_LEFT_PERCENT = (46 / Q2_OPTION_WIDTH) * 100;
+const Q2_LABEL_WIDTH_PERCENT = (277 / Q2_OPTION_WIDTH) * 100;
+const Q2_TOGGLE_WIDTH_PERCENT = (Q2_TOGGLE_IMAGE_SIZE / Q2_OPTION_WIDTH) * 100;
 
 function ImgWithFallback({ sources = [], alt, ...imgProps }) {
     const [activeIndex, setActiveIndex] = useState(0);
@@ -141,10 +202,15 @@ export default function App() {
     const [ageInteracted, setAgeInteracted] = useState(false);
     const [gender, setGender] = useState(null);
     const [q1Answer, setQ1Answer] = useState(null);
+    const [q2Answer, setQ2Answer] = useState(null);
+    const [q2OtherText, setQ2OtherText] = useState("");
     const genderOptionCount = GENDER_OPTIONS.length;
     const genderOptionRefs = useRef([]);
     const q1OptionCount = Q1_OPTIONS.length;
     const q1OptionRefs = useRef([]);
+    const q2OptionCount = Q2_OPTIONS.length;
+    const q2OptionRefs = useRef([]);
+    const q2OtherInputRef = useRef(null);
     const focusGenderOption = useCallback(
         (index) => {
             const target = genderOptionRefs.current[index];
@@ -162,6 +228,15 @@ export default function App() {
             }
         },
         [q1OptionRefs]
+    );
+    const focusQ2Option = useCallback(
+        (index) => {
+            const target = q2OptionRefs.current[index];
+            if (target) {
+                target.focus();
+            }
+        },
+        [q2OptionRefs]
     );
     const handleGenderKeyDown = useCallback(
         (event, optionIndex) => {
@@ -223,9 +298,52 @@ export default function App() {
         },
         [focusQ1Option, q1OptionCount]
     );
+    const handleSelectQ2Option = useCallback((optionId, focusInput = false) => {
+        setQ2Answer(optionId);
+        if (optionId === "other" && focusInput) {
+            setTimeout(() => {
+                const input = q2OtherInputRef.current;
+                if (input) {
+                    input.focus();
+                    input.select();
+                }
+            }, 0);
+        }
+    }, []);
+    const handleQ2KeyDown = useCallback(
+        (event, optionIndex) => {
+            if (q2OptionCount <= 0) {
+                return;
+            }
+
+            if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+                event.preventDefault();
+                const nextIndex = (optionIndex + 1) % q2OptionCount;
+                handleSelectQ2Option(Q2_OPTIONS[nextIndex].id);
+                focusQ2Option(nextIndex);
+            } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+                event.preventDefault();
+                const previousIndex =
+                    (optionIndex - 1 + q2OptionCount) % q2OptionCount;
+                handleSelectQ2Option(Q2_OPTIONS[previousIndex].id);
+                focusQ2Option(previousIndex);
+            } else if (event.key === "Home") {
+                event.preventDefault();
+                handleSelectQ2Option(Q2_OPTIONS[0].id);
+                focusQ2Option(0);
+            } else if (event.key === "End") {
+                event.preventDefault();
+                const lastIndex = q2OptionCount - 1;
+                handleSelectQ2Option(Q2_OPTIONS[lastIndex].id);
+                focusQ2Option(lastIndex);
+            }
+        },
+        [focusQ2Option, handleSelectQ2Option, q2OptionCount]
+    );
     const ageStopCount = AGE_STOPS.length;
     const canAdvanceFromPage1 = email.trim().length > 0;
     const canAdvanceFromPage2 = ageInteracted && gender !== null;
+    const canAdvanceFromPage3 = q1Answer !== null;
     const handleAgeChange = useCallback((event) => {
         setAgeIndex(Number(event.target.value));
         setAgeInteracted(true);
@@ -239,6 +357,9 @@ export default function App() {
     useEffect(() => {
         q1OptionRefs.current = q1OptionRefs.current.slice(0, q1OptionCount);
     }, [q1OptionCount]);
+    useEffect(() => {
+        q2OptionRefs.current = q2OptionRefs.current.slice(0, q2OptionCount);
+    }, [q2OptionCount]);
     const selectedAgeStop = AGE_STOPS[ageIndex] ?? null;
     const ageHandlePosition = useMemo(() => {
         if (ageStopCount <= 1) {
@@ -262,16 +383,25 @@ export default function App() {
     // public/ 경로
     const bg0 = useMemo(() => process.env.PUBLIC_URL + "/background0.png", []);
     const bg1 = useMemo(() => process.env.PUBLIC_URL + "/background1.png", []); // 페이지1 배경
+    const bg2 = useMemo(() => process.env.PUBLIC_URL + "/background2.png", []);
 
     // 배경 프리로드(전환 시 깜빡임 방지)
     useEffect(() => {
-        [bg0, bg1].forEach((src) => {
+        [bg0, bg1, bg2].forEach((src) => {
             const img = new Image();
             img.src = src;
         });
-    }, [bg0, bg1]);
+    }, [bg0, bg1, bg2]);
 
-    const bgUrl = page === 0 ? bg0 : bg1;
+    const bgUrl = useMemo(() => {
+        if (page === 0) {
+            return bg0;
+        }
+        if (page === 4) {
+            return bg2;
+        }
+        return bg1;
+    }, [bg0, bg1, bg2, page]);
     const page0StateClass = expanded ? "is-expanded" : "is-collapsed";
 
     // ----- PAGE 1 (임시) -----
@@ -595,6 +725,177 @@ export default function App() {
                         >
                             <ImgWithFallback
                                 className="page3-before-btn-img"
+                                sources={BEFORE_BUTTON_SOURCES}
+                                alt="이전"
+                            />
+                        </button>
+                        <button
+                            className="img-btn page3-next-btn"
+                            type="button"
+                            onClick={() => {
+                                if (canAdvanceFromPage3) {
+                                    setPage(4);
+                                }
+                            }}
+                            aria-label="다음 페이지"
+                            title={
+                                canAdvanceFromPage3
+                                    ? "다음 페이지로 이동"
+                                    : "만족도를 선택하면 다음으로 이동할 수 있습니다"
+                            }
+                            disabled={!canAdvanceFromPage3}
+                        >
+                            <ImgWithFallback
+                                className="page3-next-btn-img"
+                                sources={
+                                    canAdvanceFromPage3
+                                        ? NEXT_ON_BUTTON_SOURCES
+                                        : NEXT_OFF_BUTTON_SOURCES
+                                }
+                                alt="다음"
+                            />
+                            <ImgWithFallback
+                                className="page3-next-text"
+                                sources={NEXT_TEXT_SOURCES}
+                                alt=""
+                                aria-hidden="true"
+                            />
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (page === 4) {
+        return (
+            <div className="app-root">
+                <div
+                    className="phone-stage"
+                    style={{
+                        backgroundImage: `url(${bgUrl})`,
+                    }}
+                >
+                    <div className="page page4">
+                        <ImgWithFallback
+                            className="page4-q2-title"
+                            sources={Q2_TITLE_SOURCES}
+                            alt="질문 2 제목"
+                        />
+                        <ImgWithFallback
+                            className="page4-q2-text"
+                            sources={Q2_TEXT_SOURCES}
+                            alt="질문 2 안내"
+                        />
+                        <div
+                            className="page4-q2-options"
+                            role="radiogroup"
+                            aria-label="행사에서 가장 좋았던 점 선택"
+                        >
+                            {Q2_OPTIONS.map((option, index) => {
+                                const isSelected = q2Answer === option.id;
+                                const toggleSources = isSelected
+                                    ? ON_TOGGLE_SOURCES
+                                    : OFF_TOGGLE_SOURCES;
+                                const isTabStop =
+                                    q2Answer === null ? index === 0 : isSelected;
+                                const topPercent = (option.top / Q2_STAGE_HEIGHT) * 100;
+                                const heightPercent =
+                                    (option.height / Q2_STAGE_HEIGHT) * 100;
+                                const toggleTopPercent =
+                                    (option.toggleTop / option.height) * 100;
+                                const toggleHeightPercent =
+                                    (Q2_TOGGLE_IMAGE_SIZE / option.height) * 100;
+                                const labelTopPercent =
+                                    (option.labelTop / option.height) * 100;
+                                const labelHeightPercent =
+                                    (option.labelHeight / option.height) * 100;
+
+                                return (
+                                    <div
+                                        key={option.id}
+                                        className="page4-q2-option-wrapper"
+                                        style={{
+                                            top: `${topPercent}%`,
+                                            height: `${heightPercent}%`,
+                                        }}
+                                    >
+                                        <button
+                                            type="button"
+                                            className="page4-q2-option-button"
+                                            onClick={() =>
+                                                handleSelectQ2Option(
+                                                    option.id,
+                                                    option.allowsCustomInput ?? false
+                                                )
+                                            }
+                                            onKeyDown={(event) =>
+                                                handleQ2KeyDown(event, index)
+                                            }
+                                            role="radio"
+                                            aria-checked={isSelected}
+                                            tabIndex={isTabStop ? 0 : -1}
+                                            ref={(element) => {
+                                                q2OptionRefs.current[index] = element;
+                                            }}
+                                        >
+                                            <span className="sr-only">{option.label}</span>
+                                            <ImgWithFallback
+                                                className="page4-q2-toggle"
+                                                sources={toggleSources}
+                                                alt=""
+                                                aria-hidden="true"
+                                                style={{
+                                                    top: `${toggleTopPercent}%`,
+                                                    height: `${toggleHeightPercent}%`,
+                                                    width: `${Q2_TOGGLE_WIDTH_PERCENT}%`,
+                                                }}
+                                            />
+                                            <ImgWithFallback
+                                                className="page4-q2-label"
+                                                sources={option.imageSources}
+                                                alt=""
+                                                aria-hidden="true"
+                                                style={{
+                                                    top: `${labelTopPercent}%`,
+                                                    height: `${labelHeightPercent}%`,
+                                                    left: `${Q2_LABEL_LEFT_PERCENT}%`,
+                                                    width: `${Q2_LABEL_WIDTH_PERCENT}%`,
+                                                }}
+                                            />
+                                        </button>
+                                        {option.allowsCustomInput && isSelected ? (
+                                            <input
+                                                ref={q2OtherInputRef}
+                                                className="page4-q2-other-input"
+                                                type="text"
+                                                value={q2OtherText}
+                                                onChange={(event) =>
+                                                    setQ2OtherText(event.target.value)
+                                                }
+                                                placeholder="직접 입력"
+                                                aria-label="기타 의견 입력"
+                                                style={{
+                                                    top: `${labelTopPercent}%`,
+                                                    height: `${labelHeightPercent}%`,
+                                                    left: `${Q2_LABEL_LEFT_PERCENT}%`,
+                                                    width: `${Q2_LABEL_WIDTH_PERCENT}%`,
+                                                }}
+                                            />
+                                        ) : null}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                        <button
+                            className="img-btn page4-before-btn"
+                            type="button"
+                            onClick={() => setPage(3)}
+                            aria-label="이전 페이지"
+                            title="이전 페이지로 돌아가기"
+                        >
+                            <ImgWithFallback
+                                className="page4-before-btn-img"
                                 sources={BEFORE_BUTTON_SOURCES}
                                 alt="이전"
                             />
