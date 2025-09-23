@@ -91,7 +91,7 @@ export default function App() {
                         <div className="page1-email-area">
                             <img
                                 className="page1-email-image"
-                                src="/email_image.png"
+                                src="/email_text_image.png"
                                 alt="이메일 안내"
                             />
                             <label className="page1-email-input">
