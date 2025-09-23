@@ -158,6 +158,65 @@ const Q2_TOGGLE_IMAGE_SIZE = 24;
 const Q2_LABEL_LEFT_PERCENT = (46 / Q2_OPTION_WIDTH) * 100;
 const Q2_LABEL_WIDTH_PERCENT = (277 / Q2_OPTION_WIDTH) * 100;
 const Q2_TOGGLE_WIDTH_PERCENT = (Q2_TOGGLE_IMAGE_SIZE / Q2_OPTION_WIDTH) * 100;
+const Q3_TITLE_SOURCES = ["/q3_title_image.png"];
+const Q3_TEXT_SOURCES = ["/q3_text_image.png"];
+const Q3_OPTIONS = [
+    {
+        id: "fashion",
+        label: "Fashion",
+        imageSources: ["/Fashion_image.png"],
+        top: 264,
+        height: 74,
+        toggleTop: 30,
+        labelTop: 0,
+        labelHeight: 60,
+    },
+    {
+        id: "sports",
+        label: "Sports",
+        imageSources: ["/sports_image.png"],
+        top: 338,
+        height: 74,
+        toggleTop: 30,
+        labelTop: 0,
+        labelHeight: 60,
+    },
+    {
+        id: "anime",
+        label: "Anime",
+        imageSources: ["/anime_image.png"],
+        top: 412,
+        height: 94,
+        toggleTop: 30,
+        labelTop: 0,
+        labelHeight: 80,
+    },
+    {
+        id: "movie",
+        label: "Movie",
+        imageSources: ["/movie_image.png"],
+        top: 506,
+        height: 74,
+        toggleTop: 30,
+        labelTop: 0,
+        labelHeight: 60,
+    },
+    {
+        id: "education",
+        label: "Education",
+        imageSources: ["/education_image.png"],
+        top: 580,
+        height: 73,
+        toggleTop: 30,
+        labelTop: 0,
+        labelHeight: 73,
+    },
+];
+const Q3_STAGE_HEIGHT = 812;
+const Q3_TOGGLE_IMAGE_SIZE = Q2_TOGGLE_IMAGE_SIZE;
+const Q3_LABEL_LEFT_PERCENT = Q2_LABEL_LEFT_PERCENT;
+const Q3_LABEL_WIDTH_PERCENT = Q2_LABEL_WIDTH_PERCENT;
+const Q3_TOGGLE_WIDTH_PERCENT = Q2_TOGGLE_WIDTH_PERCENT;
 
 function ImgWithFallback({ sources = [], alt, ...imgProps }) {
     const [activeIndex, setActiveIndex] = useState(0);
@@ -204,12 +263,15 @@ export default function App() {
     const [q1Answer, setQ1Answer] = useState(null);
     const [q2Answer, setQ2Answer] = useState(null);
     const [q2OtherText, setQ2OtherText] = useState("");
+    const [q3Answer, setQ3Answer] = useState(null);
     const genderOptionCount = GENDER_OPTIONS.length;
     const genderOptionRefs = useRef([]);
     const q1OptionCount = Q1_OPTIONS.length;
     const q1OptionRefs = useRef([]);
     const q2OptionCount = Q2_OPTIONS.length;
     const q2OptionRefs = useRef([]);
+    const q3OptionCount = Q3_OPTIONS.length;
+    const q3OptionRefs = useRef([]);
     const q2OtherInputRef = useRef(null);
     const focusGenderOption = useCallback(
         (index) => {
@@ -237,6 +299,15 @@ export default function App() {
             }
         },
         [q2OptionRefs]
+    );
+    const focusQ3Option = useCallback(
+        (index) => {
+            const target = q3OptionRefs.current[index];
+            if (target) {
+                target.focus();
+            }
+        },
+        [q3OptionRefs]
     );
     const handleGenderKeyDown = useCallback(
         (event, optionIndex) => {
@@ -340,10 +411,42 @@ export default function App() {
         },
         [focusQ2Option, handleSelectQ2Option, q2OptionCount]
     );
+    const handleQ3KeyDown = useCallback(
+        (event, optionIndex) => {
+            if (q3OptionCount <= 0) {
+                return;
+            }
+
+            if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+                event.preventDefault();
+                const nextIndex = (optionIndex + 1) % q3OptionCount;
+                setQ3Answer(Q3_OPTIONS[nextIndex].id);
+                focusQ3Option(nextIndex);
+            } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+                event.preventDefault();
+                const previousIndex =
+                    (optionIndex - 1 + q3OptionCount) % q3OptionCount;
+                setQ3Answer(Q3_OPTIONS[previousIndex].id);
+                focusQ3Option(previousIndex);
+            } else if (event.key === "Home") {
+                event.preventDefault();
+                setQ3Answer(Q3_OPTIONS[0].id);
+                focusQ3Option(0);
+            } else if (event.key === "End") {
+                event.preventDefault();
+                const lastIndex = q3OptionCount - 1;
+                setQ3Answer(Q3_OPTIONS[lastIndex].id);
+                focusQ3Option(lastIndex);
+            }
+        },
+        [focusQ3Option, q3OptionCount]
+    );
     const ageStopCount = AGE_STOPS.length;
     const canAdvanceFromPage1 = email.trim().length > 0;
     const canAdvanceFromPage2 = ageInteracted && gender !== null;
     const canAdvanceFromPage3 = q1Answer !== null;
+    const canAdvanceFromPage4 = q2Answer !== null;
+    const canAdvanceFromPage5 = q3Answer !== null;
     const handleAgeChange = useCallback((event) => {
         setAgeIndex(Number(event.target.value));
         setAgeInteracted(true);
@@ -360,6 +463,9 @@ export default function App() {
     useEffect(() => {
         q2OptionRefs.current = q2OptionRefs.current.slice(0, q2OptionCount);
     }, [q2OptionCount]);
+    useEffect(() => {
+        q3OptionRefs.current = q3OptionRefs.current.slice(0, q3OptionCount);
+    }, [q3OptionCount]);
     const selectedAgeStop = AGE_STOPS[ageIndex] ?? null;
     const ageHandlePosition = useMemo(() => {
         if (ageStopCount <= 1) {
@@ -384,14 +490,15 @@ export default function App() {
     const bg0 = useMemo(() => process.env.PUBLIC_URL + "/background0.png", []);
     const bg1 = useMemo(() => process.env.PUBLIC_URL + "/background1.png", []); // 페이지1 배경
     const bg2 = useMemo(() => process.env.PUBLIC_URL + "/background2.png", []);
+    const bg3 = useMemo(() => process.env.PUBLIC_URL + "/background3.png", []);
 
     // 배경 프리로드(전환 시 깜빡임 방지)
     useEffect(() => {
-        [bg0, bg1, bg2].forEach((src) => {
+        [bg0, bg1, bg2, bg3].forEach((src) => {
             const img = new Image();
             img.src = src;
         });
-    }, [bg0, bg1, bg2]);
+    }, [bg0, bg1, bg2, bg3]);
 
     const bgUrl = useMemo(() => {
         if (page === 0) {
@@ -400,8 +507,11 @@ export default function App() {
         if (page === 4) {
             return bg2;
         }
+        if (page === 5) {
+            return bg3;
+        }
         return bg1;
-    }, [bg0, bg1, bg2, page]);
+    }, [bg0, bg1, bg2, bg3, page]);
     const page0StateClass = expanded ? "is-expanded" : "is-collapsed";
 
     // ----- PAGE 1 (임시) -----
@@ -898,6 +1008,186 @@ export default function App() {
                                 className="page4-before-btn-img"
                                 sources={BEFORE_BUTTON_SOURCES}
                                 alt="이전"
+                            />
+                        </button>
+                        <button
+                            className="img-btn page4-next-btn"
+                            type="button"
+                            onClick={() => {
+                                if (canAdvanceFromPage4) {
+                                    setPage(5);
+                                }
+                            }}
+                            aria-label="다음 페이지"
+                            title={
+                                canAdvanceFromPage4
+                                    ? "다음 페이지로 이동"
+                                    : "선택지를 고르면 다음으로 이동할 수 있습니다"
+                            }
+                            disabled={!canAdvanceFromPage4}
+                        >
+                            <ImgWithFallback
+                                className="page4-next-btn-img"
+                                sources={
+                                    canAdvanceFromPage4
+                                        ? NEXT_ON_BUTTON_SOURCES
+                                        : NEXT_OFF_BUTTON_SOURCES
+                                }
+                                alt="다음"
+                            />
+                            <ImgWithFallback
+                                className="page4-next-text"
+                                sources={NEXT_TEXT_SOURCES}
+                                alt=""
+                                aria-hidden="true"
+                            />
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (page === 5) {
+        return (
+            <div className="app-root">
+                <div
+                    className="phone-stage"
+                    style={{
+                        backgroundImage: `url(${bgUrl})`,
+                    }}
+                >
+                    <div className="page page5">
+                        <ImgWithFallback
+                            className="page5-q3-title"
+                            sources={Q3_TITLE_SOURCES}
+                            alt="질문 3 제목"
+                        />
+                        <ImgWithFallback
+                            className="page5-q3-text"
+                            sources={Q3_TEXT_SOURCES}
+                            alt="질문 3 안내"
+                        />
+                        <div
+                            className="page5-q3-options"
+                            role="radiogroup"
+                            aria-label="관심 있는 카테고리 선택"
+                        >
+                            {Q3_OPTIONS.map((option, index) => {
+                                const isSelected = q3Answer === option.id;
+                                const toggleSources = isSelected
+                                    ? ON_TOGGLE_SOURCES
+                                    : OFF_TOGGLE_SOURCES;
+                                const isTabStop =
+                                    q3Answer === null ? index === 0 : isSelected;
+                                const topPercent =
+                                    (option.top / Q3_STAGE_HEIGHT) * 100;
+                                const heightPercent =
+                                    (option.height / Q3_STAGE_HEIGHT) * 100;
+                                const toggleTopPercent =
+                                    (option.toggleTop / option.height) * 100;
+                                const toggleHeightPercent =
+                                    (Q3_TOGGLE_IMAGE_SIZE / option.height) * 100;
+                                const labelTopPercent =
+                                    (option.labelTop / option.height) * 100;
+                                const labelHeightPercent =
+                                    (option.labelHeight / option.height) * 100;
+
+                                return (
+                                    <div
+                                        key={option.id}
+                                        className="page5-q3-option-wrapper"
+                                        style={{
+                                            top: `${topPercent}%`,
+                                            height: `${heightPercent}%`,
+                                        }}
+                                    >
+                                        <button
+                                            type="button"
+                                            className="page5-q3-option-button"
+                                            onClick={() => setQ3Answer(option.id)}
+                                            onKeyDown={(event) =>
+                                                handleQ3KeyDown(event, index)
+                                            }
+                                            role="radio"
+                                            aria-checked={isSelected}
+                                            tabIndex={isTabStop ? 0 : -1}
+                                            ref={(element) => {
+                                                q3OptionRefs.current[index] = element;
+                                            }}
+                                        >
+                                            <span className="sr-only">{option.label}</span>
+                                            <ImgWithFallback
+                                                className="page5-q3-toggle"
+                                                sources={toggleSources}
+                                                alt=""
+                                                aria-hidden="true"
+                                                style={{
+                                                    top: `${toggleTopPercent}%`,
+                                                    height: `${toggleHeightPercent}%`,
+                                                    width: `${Q3_TOGGLE_WIDTH_PERCENT}%`,
+                                                }}
+                                            />
+                                            <ImgWithFallback
+                                                className="page5-q3-label"
+                                                sources={option.imageSources}
+                                                alt=""
+                                                aria-hidden="true"
+                                                style={{
+                                                    top: `${labelTopPercent}%`,
+                                                    height: `${labelHeightPercent}%`,
+                                                    left: `${Q3_LABEL_LEFT_PERCENT}%`,
+                                                    width: `${Q3_LABEL_WIDTH_PERCENT}%`,
+                                                }}
+                                            />
+                                        </button>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                        <button
+                            className="img-btn page5-before-btn"
+                            type="button"
+                            onClick={() => setPage(4)}
+                            aria-label="이전 페이지"
+                            title="이전 페이지로 돌아가기"
+                        >
+                            <ImgWithFallback
+                                className="page5-before-btn-img"
+                                sources={BEFORE_BUTTON_SOURCES}
+                                alt="이전"
+                            />
+                        </button>
+                        <button
+                            className="img-btn page5-next-btn"
+                            type="button"
+                            onClick={() => {
+                                if (canAdvanceFromPage5) {
+                                    // 다음 단계는 이후 작업에서 구현 예정
+                                }
+                            }}
+                            aria-label="다음 페이지"
+                            title={
+                                canAdvanceFromPage5
+                                    ? "다음 페이지로 이동"
+                                    : "선택지를 고르면 다음으로 이동할 수 있습니다"
+                            }
+                            disabled={!canAdvanceFromPage5}
+                        >
+                            <ImgWithFallback
+                                className="page5-next-btn-img"
+                                sources={
+                                    canAdvanceFromPage5
+                                        ? NEXT_ON_BUTTON_SOURCES
+                                        : NEXT_OFF_BUTTON_SOURCES
+                                }
+                                alt="다음"
+                            />
+                            <ImgWithFallback
+                                className="page5-next-text"
+                                sources={NEXT_TEXT_SOURCES}
+                                alt=""
+                                aria-hidden="true"
                             />
                         </button>
                     </div>
