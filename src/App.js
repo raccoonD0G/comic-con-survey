@@ -6,12 +6,12 @@ export default function App() {
     const [page, setPage] = useState(0);
     const [expanded, setExpanded] = useState(false);
     const [agreed, setAgreed] = useState(false);
+    const [email, setEmail] = useState("");
     const topImgRef = useRef(null);
     const bottomImgRef = useRef(null);
     const [stackMetrics, setStackMetrics] = useState({
         collapsed: null,
         expanded: null,
-        offset: 0,
     });
 
     // public/ 경로
@@ -46,13 +46,10 @@ export default function App() {
 
         const expandedHeight = topHeight + bottomHeight;
         const collapsedHeight = topHeight + bottomHeight * collapsedRatio;
-        const offset = collapsedHeight - expandedHeight;
-
         setStackMetrics((prev) => {
             if (
                 prev.collapsed === collapsedHeight &&
-                prev.expanded === expandedHeight &&
-                prev.offset === offset
+                prev.expanded === expandedHeight
             ) {
                 return prev;
             }
@@ -60,7 +57,6 @@ export default function App() {
             return {
                 collapsed: collapsedHeight,
                 expanded: expandedHeight,
-                offset,
             };
         });
     }, [collapsedRatio]);
@@ -74,9 +70,7 @@ export default function App() {
 
     const hasStackMetrics = stackMetrics.collapsed !== null && stackMetrics.expanded !== null;
     const stackHeight = expanded ? stackMetrics.expanded : stackMetrics.collapsed;
-    const stackShift = expanded ? stackMetrics.offset : 0;
     const stackStyles = hasStackMetrics ? { height: `${stackHeight}px` } : undefined;
-    const stackInnerStyles = hasStackMetrics ? { transform: `translateY(${stackShift}px)` } : undefined;
 
     // ----- PAGE 1 (임시) -----
     if (page === 1) {
@@ -89,8 +83,73 @@ export default function App() {
                     }}
                 >
                     <div className="page page1">
-                        <h1>PAGE 1</h1>
-                        <p>여기에 다음 페이지 내용을 채우면 됩니다.</p>
+                        <img
+                            className="page1-basic-info"
+                            src="/basic_Information.png"
+                            alt="기본 정보"
+                        />
+                        <div className="page1-email-area">
+                            <img
+                                className="page1-email-image"
+                                src="/email_image.png"
+                                alt="이메일 안내"
+                            />
+                            <label className="page1-email-input">
+                                <span className="sr-only">이메일 주소 입력</span>
+                                <img src="/emil_text_box.png" alt="" aria-hidden="true" />
+                                <input
+                                    type="email"
+                                    value={email}
+                                    onChange={(event) => setEmail(event.target.value)}
+                                    placeholder="이메일을 입력하세요"
+                                    autoComplete="email"
+                                />
+                            </label>
+                        </div>
+                        <div className="page1-controls">
+                            <button
+                                className="img-btn before-btn"
+                                onClick={() => setPage(0)}
+                                aria-label="이전 페이지"
+                                title="이전 페이지로 돌아가기"
+                            >
+                                <img src="/before.png" alt="이전" />
+                            </button>
+                            <button
+                                className="img-btn next-btn"
+                                onClick={() => setPage(2)}
+                                aria-label="다음 페이지"
+                                title="다음 페이지로 이동"
+                            >
+                                <img src="/next.png" alt="다음" />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (page === 2) {
+        return (
+            <div className="app-root">
+                <div
+                    className="phone-stage"
+                    style={{
+                        backgroundImage: `url(${bgUrl})`,
+                    }}
+                >
+                    <div className="page page2">
+                        <h1>PAGE 2</h1>
+                        <p>콘텐츠가 곧 제공됩니다.</p>
+                        <button
+                            className="img-btn before-btn"
+                            onClick={() => setPage(1)}
+                            aria-label="이전 페이지"
+                            title="이전 페이지"
+                        >
+                            <img src="/before.png" alt="이전" />
+                        </button>
                     </div>
                 </div>
             </div>
@@ -113,7 +172,7 @@ export default function App() {
                         style={stackStyles}
                         data-stack-ready={hasStackMetrics ? "true" : "false"}
                     >
-                        <div className="stack-inner" style={stackInnerStyles}>
+                        <div className="stack-inner">
                             <img
                                 ref={topImgRef}
                                 className="text-img top"

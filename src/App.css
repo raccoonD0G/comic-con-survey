@@ -40,6 +40,119 @@
     padding-bottom: 40px;
 }
 
+.page1 {
+    width: 100%;
+    height: 100%;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: clamp(24px, 5vh, 48px) clamp(20px, 6vw, 40px);
+    gap: clamp(24px, 6vh, 48px);
+}
+
+.page1-basic-info {
+    width: min(78%, 360px);
+    max-width: 100%;
+    height: auto;
+    align-self: flex-start;
+}
+
+.page1-email-area {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(16px, 5vh, 32px);
+    margin-top: clamp(32px, 12vh, 80px);
+    margin-bottom: clamp(24px, 10vh, 64px);
+}
+
+.page1-email-image {
+    width: min(70%, 340px);
+    max-width: 340px;
+    height: auto;
+}
+
+.page1-email-input {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    width: min(82%, 380px);
+}
+
+.page1-email-input img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.page1-email-input input {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 72%;
+    height: 42%;
+    margin: auto;
+    background: transparent;
+    border: none;
+    color: #1f2937;
+    font-size: clamp(16px, 3.6vw, 20px);
+    font-family: inherit;
+    font-weight: 500;
+    padding: 0 clamp(12px, 3vw, 18px);
+    text-align: left;
+}
+
+.page1-email-input input::placeholder {
+    color: rgba(31, 41, 55, 0.6);
+}
+
+.page1-email-input input:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.9);
+    border-radius: 999px;
+}
+
+.page1-controls {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: clamp(12px, 3vh, 20px);
+    margin-top: auto;
+}
+
+.page1 .img-btn {
+    margin-top: 0;
+}
+
+.page1-controls .before-btn img {
+    display: block;
+    height: auto;
+    max-width: min(45%, 200px);
+}
+
+.page1-controls .next-btn {
+    width: 100%;
+}
+
+.page1-controls .next-btn img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.page2 {
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    color: #fff;
+    text-align: center;
+}
+
 /* EntryText 스택 */
 .text-stack {
     position: relative;
@@ -101,4 +214,16 @@
 
 .img-btn {
     display: inline-flex;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+    white-space: nowrap;
 }
