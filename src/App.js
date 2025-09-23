@@ -15,6 +15,8 @@ const SCROLL_LINE_SOURCES = ["/scroll_line_image.png", "/scroll_line.png"];
 const SCROLL_HANDLE_SOURCES = ["/scroll_handle_image.png", "/scroll_handle.png"];
 const AGE_TRACK_LEFT_PERCENT = 7.466667;
 const AGE_TRACK_WIDTH_PERCENT = 90.4;
+const AGE_TRACK_START_OFFSET_PERCENT = (16 / 339) * AGE_TRACK_WIDTH_PERCENT;
+const AGE_TRACK_END_OFFSET_PERCENT = (26 / 339) * AGE_TRACK_WIDTH_PERCENT;
 const AGE_HANDLE_TOP_PERCENT = 33.251232;
 const AGE_STOPS = [
     {
@@ -40,6 +42,28 @@ const AGE_STOPS = [
     {
         id: "60s",
         label: "60대 이상",
+    },
+];
+const OFF_TOGGLE_SOURCES = ["/off_toggle.png"];
+const ON_TOGGLE_SOURCES = ["/on_toggle.png"];
+const GENDER_OPTIONS = [
+    {
+        id: "male",
+        label: "남성",
+        imageSources: ["/male_image.png"],
+        topPercent: 53.817734,
+    },
+    {
+        id: "female",
+        label: "여성",
+        imageSources: ["/female_image.png"],
+        topPercent: 61.206897,
+    },
+    {
+        id: "other",
+        label: "기타",
+        imageSources: ["/other_image.png"],
+        topPercent: 68.596059,
     },
 ];
 const OFF_TOGGLE_SOURCES = ["/off_toggle.png"];
@@ -179,14 +203,19 @@ export default function App() {
     useEffect(() => {
         genderOptionRefs.current = genderOptionRefs.current.slice(0, genderOptionCount);
     }, [genderOptionCount]);
-
     const selectedAgeStop = AGE_STOPS[ageIndex] ?? null;
     const ageHandlePosition = useMemo(() => {
         if (ageStopCount <= 1) {
-            return `calc(${AGE_TRACK_LEFT_PERCENT}% + 0%)`;
+            return `calc(${AGE_TRACK_LEFT_PERCENT}% + ${AGE_TRACK_START_OFFSET_PERCENT}%)`;
         }
 
-        const offsetPercent = (ageIndex / (ageStopCount - 1)) * AGE_TRACK_WIDTH_PERCENT;
+        const effectiveTrackPercent =
+            AGE_TRACK_WIDTH_PERCENT -
+            AGE_TRACK_START_OFFSET_PERCENT -
+            AGE_TRACK_END_OFFSET_PERCENT;
+        const offsetPercent =
+            AGE_TRACK_START_OFFSET_PERCENT +
+            (ageIndex / (ageStopCount - 1)) * effectiveTrackPercent;
         return `calc(${AGE_TRACK_LEFT_PERCENT}% + ${offsetPercent}%)`;
     }, [ageIndex, ageStopCount]);
     const ageValueText = selectedAgeStop ? `${selectedAgeStop.label}` : undefined;
@@ -319,7 +348,7 @@ export default function App() {
                             sources={SCROLL_HANDLE_SOURCES}
                             alt=""
                             aria-hidden="true"
-                            style={{ left: ageHandlePosition }}
+                            style={{ left: ageHandlePosition, top: `${AGE_HANDLE_TOP_PERCENT}%` }}
                         />
                         <input
                             className="page2-age-range"
