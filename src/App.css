@@ -9,12 +9,6 @@
 
 /* “핸드폰 비율(9:16)” 무대 */
 .phone-stage {
-.page0 {
-    justify-content: flex-end;
-    padding-top: 0;
-    padding-bottom: 40px;
-}
-
     /* 9:16 고정 비율 + 가능한 크게, 화면에 맞춤 */
     aspect-ratio: 9 / 16;
     width: min(100vw, calc(100vh * 9 / 16));
@@ -26,6 +20,7 @@
     /* 내부 페이지를 레이아웃하기 위한 컨테이너 */
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 
 /* 실제 페이지 콘텐츠는 phone-stage 안에서 배치 */
@@ -39,24 +34,49 @@
     box-sizing: border-box;
 }
 
-/* 이하 기존 스타일 유지 */
-.text-stack {
-    position: relative;
-    width: 400px;
-    overflow: hidden;
+.page0 {
+    justify-content: flex-end;
+    padding-top: 0;
+    padding-bottom: 40px;
 }
 
-.stack-inner img {
+/* EntryText 스택 */
+.text-stack {
+    position: relative;
+    width: min(85%, 420px);
+    max-width: 420px;
+    overflow: hidden;
+    transition: height 600ms ease;
+}
+
+.text-stack[data-stack-ready="false"] {
+    max-height: clamp(120px, 72vw, 220px);
+}
+
+.stack-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    transition: transform 600ms ease;
+}
+
+.text-img {
     display: block;
     width: 100%;
 }
 
 .fade-mask {
     position: absolute;
-    bottom: 0;
-    height: 50%;
-    width: 100%;
-    background: linear-gradient(to bottom, transparent, black);
+    inset: auto 0 0;
+    height: 55%;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.85));
+    opacity: 1;
+    transition: opacity 600ms ease;
+    pointer-events: none;
+}
+
+.text-stack.expanded .fade-mask {
+    opacity: 0;
 }
 
 .arrow-button,
@@ -65,13 +85,20 @@
     background: none;
     border: none;
     cursor: pointer;
+    padding: 0;
 }
 
-    .img-btn img {
-        display: block;
-    }
+.arrow-button img,
+.img-btn img {
+    display: block;
+}
 
-/* 선택: 배경 전환시 부드럽게 페이드 하고 싶다면 */
-.phone-stage {
-    position: relative;
+.arrow-button:focus-visible,
+.img-btn:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+}
+
+.img-btn {
+    display: inline-flex;
 }

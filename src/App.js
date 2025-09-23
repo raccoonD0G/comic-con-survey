@@ -1,17 +1,24 @@
 // App.js
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState, useRef } from "react";
 import "./App.css";
 
 export default function App() {
     const [page, setPage] = useState(0);
     const [expanded, setExpanded] = useState(false);
     const [agreed, setAgreed] = useState(false);
+    const topImgRef = useRef(null);
+    const bottomImgRef = useRef(null);
+    const [stackMetrics, setStackMetrics] = useState({
+        collapsed: null,
+        expanded: null,
+        offset: 0,
+    });
 
-    // public/ °æ·Î
+    // public/ ê²½ë¡œ
     const bg0 = useMemo(() => process.env.PUBLIC_URL + "/bg.png", []);
-    const bg1 = useMemo(() => process.env.PUBLIC_URL + "/bg_page1.png", []); // ÆäÀÌÁö1 ¹è°æ
+    const bg1 = useMemo(() => process.env.PUBLIC_URL + "/bg_page1.png", []); // í˜ì´ì§€1 ë°°ê²½
 
-    // ¹è°æ ÇÁ¸®·Îµå(ÀüÈ¯ ½Ã ±ôºıÀÓ ¹æÁö)
+    // ë°°ê²½ í”„ë¦¬ë¡œë“œ(ì „í™˜ ì‹œ ê¹œë¹¡ì„ ë°©ì§€)
     useEffect(() => {
         [bg0, bg1].forEach((src) => {
             const img = new Image();
@@ -20,8 +27,58 @@ export default function App() {
     }, [bg0, bg1]);
 
     const bgUrl = page === 0 ? bg0 : bg1;
+    const collapsedRatio = 0.5;
 
-    // ----- PAGE 1 (ÀÓ½Ã) -----
+    const updateStackMetrics = useCallback(() => {
+        const topEl = topImgRef.current;
+        const bottomEl = bottomImgRef.current;
+
+        if (!topEl || !bottomEl) {
+            return;
+        }
+
+        const topHeight = topEl.getBoundingClientRect().height;
+        const bottomHeight = bottomEl.getBoundingClientRect().height;
+
+        if (!topHeight || !bottomHeight) {
+            return;
+        }
+
+        const expandedHeight = topHeight + bottomHeight;
+        const collapsedHeight = topHeight + bottomHeight * collapsedRatio;
+        const offset = collapsedHeight - expandedHeight;
+
+        setStackMetrics((prev) => {
+            if (
+                prev.collapsed === collapsedHeight &&
+                prev.expanded === expandedHeight &&
+                prev.offset === offset
+            ) {
+                return prev;
+            }
+
+            return {
+                collapsed: collapsedHeight,
+                expanded: expandedHeight,
+                offset,
+            };
+        });
+    }, [collapsedRatio]);
+
+    useEffect(() => {
+        updateStackMetrics();
+
+        window.addEventListener("resize", updateStackMetrics);
+        return () => window.removeEventListener("resize", updateStackMetrics);
+    }, [updateStackMetrics]);
+
+    const hasStackMetrics = stackMetrics.collapsed !== null && stackMetrics.expanded !== null;
+    const stackHeight = expanded ? stackMetrics.expanded : stackMetrics.collapsed;
+    const stackShift = expanded ? stackMetrics.offset : 0;
+    const stackStyles = hasStackMetrics ? { height: `${stackHeight}px` } : undefined;
+    const stackInnerStyles = hasStackMetrics ? { transform: `translateY(${stackShift}px)` } : undefined;
+
+    // ----- PAGE 1 (ì„ì‹œ) -----
     if (page === 1) {
         return (
             <div className="app-root">
@@ -33,7 +90,7 @@ export default function App() {
                 >
                     <div className="page page1">
                         <h1>PAGE 1</h1>
-                        <p>¿©±â¿¡ ´ÙÀ½ ÆäÀÌÁö ³»¿ëÀ» Ã¤¿ì¸é µË´Ï´Ù.</p>
+                        <p>ì—¬ê¸°ì— ë‹¤ìŒ í˜ì´ì§€ ë‚´ìš©ì„ ì±„ìš°ë©´ ë©ë‹ˆë‹¤.</p>
                     </div>
                 </div>
             </div>
@@ -50,41 +107,57 @@ export default function App() {
                 }}
             >
                 <div className="page page0">
-                    {/* 1) EntryText ½ºÅÃ */}
-                    <div className={`text-stack ${expanded ? "expanded" : "collapsed"}`}>
-                        <div className="stack-inner">
-                            <img className="text-img top" src="/EntryText0.png" alt="EntryText0" />
-                            <img className="text-img bottom" src="/EntryText1.png" alt="EntryText1" />
+                    {/* 1) EntryText ìŠ¤íƒ */}
+                    <div
+                        className={`text-stack ${expanded ? "expanded" : "collapsed"}`}
+                        style={stackStyles}
+                        data-stack-ready={hasStackMetrics ? "true" : "false"}
+                    >
+                        <div className="stack-inner" style={stackInnerStyles}>
+                            <img
+                                ref={topImgRef}
+                                className="text-img top"
+                                src="/EntryText0.png"
+                                alt="EntryText0"
+                                onLoad={updateStackMetrics}
+                            />
+                            <img
+                                ref={bottomImgRef}
+                                className="text-img bottom"
+                                src="/EntryText1.png"
+                                alt="EntryText1"
+                                onLoad={updateStackMetrics}
+                            />
                         </div>
-                        {!expanded && <div className="fade-mask" aria-hidden="true" />}
+                        <div className="fade-mask" aria-hidden="true" />
                     </div>
 
-                    {/* 2) È­»ìÇ¥ ¹öÆ° */}
+                    {/* 2) í™”ì‚´í‘œ ë²„íŠ¼ */}
                     {!expanded && (
-                        <button className="arrow-button" onClick={() => setExpanded(true)} aria-label="´õ º¸±â">
-                            <img src="/Arrow.png" alt="ÆîÄ¡±â" />
+                        <button className="arrow-button" onClick={() => setExpanded(true)} aria-label="ë” ë³´ê¸°">
+                            <img src="/Arrow.png" alt="í¼ì¹˜ê¸°" />
                         </button>
                     )}
 
-                    {/* 3) I AGREE ¹öÆ° */}
+                    {/* 3) I AGREE ë²„íŠ¼ */}
                     <button
                         className="img-btn agree-btn"
                         onClick={() => setAgreed(true)}
                         disabled={agreed}
                         aria-label="I AGREE"
-                        title={agreed ? "µ¿ÀÇµÊ" : "µ¿ÀÇÇÏ±â"}
+                        title={agreed ? "ë™ì˜ë¨" : "ë™ì˜í•˜ê¸°"}
                     >
                         <img src={agreed ? "/I_AGREE_on.png" : "/I_AGREE_off.png"} alt="I AGREE" />
                     </button>
 
-                    {/* 4) START ¹öÆ° */}
+                    {/* 4) START ë²„íŠ¼ */}
                     {agreed ? (
-                        <button className="img-btn start-btn" onClick={() => setPage(1)} aria-label="START" title="½ÃÀÛÇÏ±â">
+                        <button className="img-btn start-btn" onClick={() => setPage(1)} aria-label="START" title="ì‹œì‘í•˜ê¸°">
                             <img src="/START_on.png" alt="START" />
                         </button>
                     ) : (
-                        <button className="img-btn start-btn" aria-label="START" title="µ¿ÀÇ°¡ ÇÊ¿äÇÕ´Ï´Ù" disabled>
-                            <img src="/START_off.png" alt="START ºñÈ°¼º" />
+                        <button className="img-btn start-btn" aria-label="START" title="ë™ì˜ê°€ í•„ìš”í•©ë‹ˆë‹¤" disabled>
+                            <img src="/START_off.png" alt="START ë¹„í™œì„±" />
                         </button>
                     )}
                 </div>
