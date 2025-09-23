@@ -6,6 +6,7 @@ const BASIC_INFO_SOURCES = ["/basic_Information_image.png", "/basic_Information_
 const BEFORE_BUTTON_SOURCES = ["/before.png", "/before_button.png"];
 const NEXT_ON_BUTTON_SOURCES = ["/next_on_button.png", "/next.png"];
 const NEXT_OFF_BUTTON_SOURCES = ["/next_off_button.png", "/next.png"];
+const NEXT_TEXT_SOURCES = ["/next_text_image.png"];
 const EMAIL_IMAGE_SOURCES = ["/email_text_image.png", "/email_text_image.png"];
 const EMAIL_TEXT_BOX_SOURCES = ["/email_text_box.png", "/emil_text_box.png"];
 const AGE_TEXT_SOURCES = ["/age_text_image.png", "/age_text_image.png"];
@@ -140,63 +141,68 @@ export default function App() {
                             sources={BASIC_INFO_SOURCES}
                             alt="기본 정보"
                         />
-                        <div className="page1-email-area">
+                        <ImgWithFallback
+                            className="page1-email-image"
+                            sources={EMAIL_IMAGE_SOURCES}
+                            alt="이메일 안내"
+                        />
+                        <label className="page1-email-input">
+                            <span className="sr-only">이메일 주소 입력</span>
                             <ImgWithFallback
-                                className="page1-email-image"
-                                sources={EMAIL_IMAGE_SOURCES}
-                                alt="이메일 안내"
+                                className="page1-email-input-bg"
+                                sources={EMAIL_TEXT_BOX_SOURCES}
+                                alt=""
+                                aria-hidden="true"
                             />
-                            <label className="page1-email-input">
-                                <span className="sr-only">이메일 주소 입력</span>
-                                <ImgWithFallback
-                                    sources={EMAIL_TEXT_BOX_SOURCES}
-                                    alt=""
-                                    aria-hidden="true"
-                                />
-                                <input
-                                    type="email"
-                                    value={email}
-                                    onChange={(event) => setEmail(event.target.value)}
-                                    placeholder="이메일을 입력하세요"
-                                    autoComplete="email"
-                                />
-                            </label>
-                        </div>
-                        <div className="page-nav">
-                            <button
-                                className="img-btn before-btn"
-                                type="button"
-                                onClick={() => setPage(0)}
-                                aria-label="이전 페이지"
-                                title="이전 페이지로 돌아가기"
-                            >
-                                <ImgWithFallback
-                                    sources={BEFORE_BUTTON_SOURCES}
-                                    alt="이전"
-                                />
-                            </button>
-                            <button
-                                className="img-btn next-btn"
-                                type="button"
-                                onClick={() => setPage(2)}
-                                aria-label="다음 페이지"
-                                title={
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={(event) => setEmail(event.target.value)}
+                                placeholder="이메일을 입력하세요"
+                                autoComplete="email"
+                            />
+                        </label>
+                        <button
+                            className="img-btn page1-before-btn"
+                            type="button"
+                            onClick={() => setPage(0)}
+                            aria-label="이전 페이지"
+                            title="이전 페이지로 돌아가기"
+                        >
+                            <ImgWithFallback
+                                className="page1-before-btn-img"
+                                sources={BEFORE_BUTTON_SOURCES}
+                                alt="이전"
+                            />
+                        </button>
+                        <button
+                            className="img-btn page1-next-btn"
+                            type="button"
+                            onClick={() => setPage(2)}
+                            aria-label="다음 페이지"
+                            title={
+                                canAdvanceFromPage1
+                                    ? "다음 페이지로 이동"
+                                    : "이메일을 입력하면 다음 페이지로 이동할 수 있습니다"
+                            }
+                            disabled={!canAdvanceFromPage1}
+                        >
+                            <ImgWithFallback
+                                className="page1-next-btn-img"
+                                sources={
                                     canAdvanceFromPage1
-                                        ? "다음 페이지로 이동"
-                                        : "이메일을 입력하면 다음 페이지로 이동할 수 있습니다"
-                                    }
-                                disabled={!canAdvanceFromPage1}
-                            >
-                                <ImgWithFallback
-                                    sources={
-                                        canAdvanceFromPage1
-                                            ? NEXT_ON_BUTTON_SOURCES
-                                            : NEXT_OFF_BUTTON_SOURCES
-                                    }
-                                    alt="다음"
-                                />
-                            </button>
-                        </div>
+                                        ? NEXT_ON_BUTTON_SOURCES
+                                        : NEXT_OFF_BUTTON_SOURCES
+                                }
+                                alt="다음"
+                            />
+                            <ImgWithFallback
+                                className="page1-next-text"
+                                sources={NEXT_TEXT_SOURCES}
+                                alt=""
+                                aria-hidden="true"
+                            />
+                        </button>
                     </div>
                 </div>
             </div>
