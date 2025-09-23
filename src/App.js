@@ -1,5 +1,5 @@
 // App.js
-import React, { useCallback, useEffect, useMemo, useState, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import "./App.css";
 
 const BASIC_INFO_SOURCES = ["/basic_Information_image.png", "/basic_Information_image.png"];
@@ -108,12 +108,6 @@ export default function App() {
         return `${(ageIndex / (ageStopCount - 1)) * 100}%`;
     }, [ageIndex, ageStopCount]);
     const ageValueText = selectedAgeStop ? `${selectedAgeStop.label}` : undefined;
-    const topImgRef = useRef(null);
-    const bottomImgRef = useRef(null);
-    const [stackMetrics, setStackMetrics] = useState({
-        collapsed: null,
-        expanded: null,
-    });
 
     // public/ 경로
     const bg0 = useMemo(() => process.env.PUBLIC_URL + "/background0.png", []);
@@ -128,50 +122,7 @@ export default function App() {
     }, [bg0, bg1]);
 
     const bgUrl = page === 0 ? bg0 : bg1;
-    const collapsedRatio = 0.5;
-
-    const updateStackMetrics = useCallback(() => {
-        const topEl = topImgRef.current;
-        const bottomEl = bottomImgRef.current;
-
-        if (!topEl || !bottomEl) {
-            return;
-        }
-
-        const topHeight = topEl.getBoundingClientRect().height;
-        const bottomHeight = bottomEl.getBoundingClientRect().height;
-
-        if (!topHeight || !bottomHeight) {
-            return;
-        }
-
-        const expandedHeight = topHeight + bottomHeight;
-        const collapsedHeight = topHeight + bottomHeight * collapsedRatio;
-        setStackMetrics((prev) => {
-            if (
-                prev.collapsed === collapsedHeight &&
-                prev.expanded === expandedHeight
-            ) {
-                return prev;
-            }
-
-            return {
-                collapsed: collapsedHeight,
-                expanded: expandedHeight,
-            };
-        });
-    }, [collapsedRatio]);
-
-    useEffect(() => {
-        updateStackMetrics();
-
-        window.addEventListener("resize", updateStackMetrics);
-        return () => window.removeEventListener("resize", updateStackMetrics);
-    }, [updateStackMetrics]);
-
-    const hasStackMetrics = stackMetrics.collapsed !== null && stackMetrics.expanded !== null;
-    const stackHeight = expanded ? stackMetrics.expanded : stackMetrics.collapsed;
-    const stackStyles = hasStackMetrics ? { height: `${stackHeight}px` } : undefined;
+    const page0StateClass = expanded ? "is-expanded" : "is-collapsed";
 
     // ----- PAGE 1 (임시) -----
     if (page === 1) {
@@ -407,31 +358,19 @@ export default function App() {
                     backgroundImage: `url(${bgUrl})`,
                 }}
             >
-                <div className="page page0">
-                    {/* 1) EntryText 스택 */}
-                    <div
-                        className={`text-stack ${expanded ? "expanded" : "collapsed"}`}
-                        style={stackStyles}
-                        data-stack-ready={hasStackMetrics ? "true" : "false"}
-                    >
-                        <div className="stack-inner">
-                            <img
-                                ref={topImgRef}
-                                className="text-img top"
-                                src="/entry_text_image0.png"
-                                alt="EntryText0"
-                                onLoad={updateStackMetrics}
-                            />
-                            <img
-                                ref={bottomImgRef}
-                                className="text-img bottom"
-                                src="/entry_text_image1.png"
-                                alt="EntryText1"
-                                onLoad={updateStackMetrics}
-                            />
-                        </div>
-                        <div className="fade-mask" aria-hidden="true" />
-                    </div>
+                <div className={`page page0 ${page0StateClass}`}>
+                    {/* 1) EntryText 이미지 */}
+                    <img
+                        className="page0-entry-img page0-entry-img-top"
+                        src="/entry_text_image0.png"
+                        alt="EntryText0"
+                    />
+                    <img
+                        className="page0-entry-img page0-entry-img-bottom"
+                        src="/entry_text_image1.png"
+                        alt="EntryText1"
+                    />
+                    <div className="page0-entry-fade" aria-hidden="true" />
 
                     {/* 2) 화살표 버튼 */}
                     <button
@@ -463,12 +402,22 @@ export default function App() {
 
                     {/* 4) START 버튼 */}
                     {agreed ? (
-                        <button className="img-btn start-btn" onClick={() => setPage(1)} aria-label="START" title="시작하기">
+                        <button
+                            className="img-btn start-btn"
+                            onClick={() => setPage(1)}
+                            aria-label="START"
+                            title="시작하기"
+                        >
                             <img src="/start_on_button.png" alt="START" />
                         </button>
                     ) : (
-                        <button className="img-btn start-btn" aria-label="START" title="동의가 필요합니다" disabled>
-                                <img src="/start_off_button.png" alt="START 비활성" />
+                        <button
+                            className="img-btn start-btn"
+                            aria-label="START"
+                            title="동의가 필요합니다"
+                            disabled
+                        >
+                            <img src="/start_off_button.png" alt="START 비활성" />
                         </button>
                     )}
                 </div>
