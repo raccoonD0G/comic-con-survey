@@ -1167,6 +1167,11 @@ export default function App() {
                                 );
                             })}
                         </div>
+                        <ImgWithFallback
+                            className="page-progress"
+                            sources={["/progress_1.png"]}
+                            alt="진행 상황 1/5"
+                        />
                         <button
                             className="img-btn page3-before-btn"
                             type="button"
@@ -1338,6 +1343,11 @@ export default function App() {
                                 );
                             })}
                         </div>
+                        <ImgWithFallback
+                            className="page-progress"
+                            sources={["/progress_2.png"]}
+                            alt="진행 상황 2/5"
+                        />
                         <button
                             className="img-btn page4-before-btn"
                             type="button"
@@ -1508,6 +1518,11 @@ export default function App() {
                                 );
                             })}
                         </div>
+                        <ImgWithFallback
+                            className="page-progress"
+                            sources={["/progress_3.png"]}
+                            alt="진행 상황 3/5"
+                        />
                         <button
                             className="img-btn page5-before-btn"
                             type="button"
@@ -1635,6 +1650,11 @@ export default function App() {
                                 );
                             })}
                         </div>
+                        <ImgWithFallback
+                            className="page-progress"
+                            sources={["/progress_4.png"]}
+                            alt="진행 상황 4/5"
+                        />
                         <button
                             className="img-btn page6-before-btn"
                             type="button"
@@ -1770,6 +1790,11 @@ export default function App() {
                                 );
                             })}
                         </div>
+                        <ImgWithFallback
+                            className="page-progress"
+                            sources={["/progress_5.png"]}
+                            alt="진행 상황 5/5"
+                        />
                         <button
                             className="img-btn page7-before-btn"
                             type="button"

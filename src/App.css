@@ -183,7 +183,8 @@
     height: 50%;
     background: transparent;
     border: none;
-    color: #1f2937;
+    color: #ffffff;
+    caret-color: #ffffff;
     font-size: clamp(16px, 3.5vw, 18px);
     font-family: inherit;
     font-weight: 500;
@@ -192,7 +193,7 @@
 }
 
 .page1-email-input input::placeholder {
-    color: rgba(31, 41, 55, 0.6);
+    color: rgba(255, 255, 255, 0.68);
 }
 
 .page1-email-input input:focus-visible {
@@ -247,6 +248,17 @@
     pointer-events: none;
     z-index: 1;
     display: block;
+}
+
+.page-progress {
+    position: absolute;
+    left: 41.866667%;
+    top: 84.162561%;
+    width: 16%;
+    height: auto;
+    max-width: none;
+    pointer-events: none;
+    z-index: 1;
 }
 
 .page-nav {
@@ -667,7 +679,8 @@
     background: rgba(255, 255, 255, 0.92);
     border: none;
     border-radius: 999px;
-    color: #1f2937;
+    color: #ffffff;
+    caret-color: #ffffff;
     font-size: clamp(16px, 3.5vw, 18px);
     font-family: inherit;
     font-weight: 500;
@@ -677,7 +690,7 @@
     align-items: center;
 }
 .page4-q2-other-input::placeholder {
-    color: rgba(31, 41, 55, 0.6);
+    color: rgba(255, 255, 255, 0.7);
 }
 .page4-q2-other-input:focus-visible {
     outline: none;
@@ -1084,7 +1097,7 @@
 .page6-next-btn,
 .page7-done-btn {
     top: auto;
-    bottom: 0;
+    bottom: -1.8%;
 }
 
 .arrow-button.is-hidden {
