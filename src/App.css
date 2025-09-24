@@ -1025,6 +1025,22 @@
     display: block;
 }
 
+.page7-submit-error {
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    bottom: 14%;
+    background: rgba(255, 255, 255, 0.92);
+    color: #b91c1c;
+    font-weight: 600;
+    font-size: clamp(12px, 3vw, 14px);
+    text-align: center;
+    padding: 8px 12px;
+    border-radius: 18px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    z-index: 2;
+}
+
 
 .page8 {
     position: relative;
