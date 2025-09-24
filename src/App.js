@@ -265,25 +265,25 @@ const Q4_OPTIONS = [
         id: "probablyWilling",
         label: "Probably willing",
         imageSources: ["/probably_willing.png"],
-        top: 74,
+        top: 82,
     },
     {
         id: "notSure",
         label: "Not sure",
         imageSources: ["/not_sure.png"],
-        top: 148,
+        top: 164,
     },
     {
         id: "no",
         label: "No",
         imageSources: ["/no.png"],
-        top: 242,
+        top: 246,
     },
     {
         id: "iDontKnow",
         label: "I don't know",
         imageSources: ["/i_dont.png"],
-        top: 316,
+        top: 328,
     },
 ];
 const Q4_OPTIONS_CONTAINER_HEIGHT = 376;
