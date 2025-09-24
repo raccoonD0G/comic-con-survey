@@ -8,6 +8,7 @@ const NEXT_ON_BUTTON_SOURCES = ["/next_on_button.png", "/next.png"];
 const NEXT_OFF_BUTTON_SOURCES = ["/next_off_button.png", "/next.png"];
 const NEXT_TEXT_SOURCES = ["/next_text_image.png"];
 const DONE_BUTTON_SOURCES = ["/done_button.png"];
+const DONE_OFF_BUTTON_SOURCES = ["/done_off_button.png"];
 const DONE_TEXT_SOURCES = ["/done_text_image.png"];
 const EMAIL_IMAGE_SOURCES = ["/email_text_image.png", "/email_text_image.png"];
 const EMAIL_TEXT_BOX_SOURCES = ["/email_text_box.png", "/emil_text_box.png"];
@@ -145,7 +146,7 @@ const Q2_OPTIONS = [
     {
         id: "other",
         label: "Other",
-        imageSources: ["/other_image.png"],
+        imageSources: ["/other_text_image.png"],
         top: 596,
         height: 76,
         toggleTop: 18,
@@ -635,7 +636,7 @@ export default function App() {
     );
     const ageStopCount = AGE_STOPS.length;
     const canAdvanceFromPage1 = email.trim().length > 0;
-    const canAdvanceFromPage2 = ageInteracted && gender !== null;
+    const canAdvanceFromPage2 = gender !== null;
     const canAdvanceFromPage3 = q1Answer !== null;
     const canAdvanceFromPage4 = q2Answer !== null;
     const canAdvanceFromPage5 = q3Answer !== null;
@@ -934,7 +935,7 @@ export default function App() {
                             title={
                                 canAdvanceFromPage2
                                     ? "다음 페이지로 이동"
-                                    : "연령대와 성별을 선택하면 다음으로 이동할 수 있습니다"
+                                    : "성별을 선택하면 다음으로 이동할 수 있습니다"
                             }
                             disabled={!canAdvanceFromPage2}
                         >
@@ -1650,13 +1651,16 @@ export default function App() {
                                 canAdvanceFromPage7
                                     ? "설문을 완료합니다"
                                     : "선택지를 고르면 설문을 완료할 수 있습니다"
-
                             }
                             disabled={!canAdvanceFromPage7}
                         >
                             <ImgWithFallback
                                 className="page7-done-btn-img"
-                                sources={DONE_BUTTON_SOURCES}
+                                sources={
+                                    canAdvanceFromPage7
+                                        ? DONE_BUTTON_SOURCES
+                                        : DONE_OFF_BUTTON_SOURCES
+                                }
                                 alt="완료"
                             />
                             <ImgWithFallback

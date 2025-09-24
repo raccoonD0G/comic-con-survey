@@ -1025,9 +1025,6 @@
     display: block;
 }
 
-.page7-done-btn:disabled {
-    opacity: 0.6;
-}
 
 .page8 {
     position: relative;
