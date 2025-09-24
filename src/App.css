@@ -21,6 +21,7 @@
     display: flex;
     flex-direction: column;
     position: relative;
+    overflow: hidden;
 }
 
 /* 실제 페이지 콘텐츠는 phone-stage 안에서 배치 */
@@ -1072,6 +1073,18 @@
 
 .arrow-button {
     transition: opacity 220ms ease;
+}
+
+/* 하단 내비게이션 버튼이 배경 밖으로 나가지 않도록 고정 */
+.page1-next-btn,
+.page2-next-btn,
+.page3-next-btn,
+.page4-next-btn,
+.page5-next-btn,
+.page6-next-btn,
+.page7-done-btn {
+    top: auto;
+    bottom: 1.6%;
 }
 
 .arrow-button.is-hidden {
