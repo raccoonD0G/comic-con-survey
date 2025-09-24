@@ -293,7 +293,7 @@ const Q4_OPTIONS_CONTAINER_HEIGHT = 376;
 const Q5_TITLE_SOURCES = ["/q5_title_image.png"];
 const Q5_TEXT_SOURCES = ["/q5_text_image.png"];
 const Q5_OPTION_BASE_HEIGHT = 48;
-const Q5_OPTION_GAP = 34;
+const Q5_OPTION_GAP = 22;
 const Q5_DOUBLE_LINE_MULTIPLIER = 1.26;
 const Q5_OPTIONS_WITH_LAYOUT = [
     {
