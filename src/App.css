@@ -232,13 +232,18 @@
     display: block;
 }
 
-.page1-next-text {
+.page1-next-text,
+.page2-next-text,
+.page3-next-text,
+.page4-next-text,
+.page5-next-text {
     position: absolute;
-    left: 42.1333%;
-    top: 8.4507%;
+    left: 42.133333%;
+    top: 8.450704%;
     max-width: none;
     pointer-events: none;
     z-index: 1;
+    display: block;
 }
 
 .page-nav {
@@ -458,17 +463,7 @@
     display: block;
 }
 
-.page2-next-text {
-    position: absolute;
-    left: 42.133333%;
-    top: 8.450704%;
-    width: 15.466667%;
-    height: 42.253521%;
-    max-width: none;
-    pointer-events: none;
-    z-index: 1;
-    display: block;
-}
+
 
 .page2-gender-toggle-btn:focus-visible {
     outline: 2px solid #fff;
@@ -591,17 +586,7 @@
     height: 100%;
     display: block;
 }
-.page3-next-text {
-    position: absolute;
-    left: 42.133333%;
-    top: 8.450704%;
-    width: 15.466667%;
-    height: 42.253521%;
-    max-width: none;
-    pointer-events: none;
-    z-index: 1;
-    display: block;
-}
+
 
 .page4 {
     position: relative;
@@ -722,17 +707,7 @@
     height: 100%;
     display: block;
 }
-.page4-next-text {
-    position: absolute;
-    left: 42.133333%;
-    top: 8.450704%;
-    width: 15.466667%;
-    height: 42.253521%;
-    max-width: none;
-    pointer-events: none;
-    z-index: 1;
-    display: block;
-}
+
 
 .page5 {
     position: relative;
@@ -762,9 +737,7 @@
 .page5-q3-options {
     position: absolute;
     left: 6.133333%;
-    top: 32.512315%;
     width: 86.133333%;
-    height: 47.900986%;
 }
 .page5-q3-option-wrapper {
     position: absolute;
@@ -830,17 +803,7 @@
     height: 100%;
     display: block;
 }
-.page5-next-text {
-    position: absolute;
-    left: 42.133333%;
-    top: 8.450704%;
-    width: 15.466667%;
-    height: 42.253521%;
-    max-width: none;
-    pointer-events: none;
-    z-index: 1;
-    display: block;
-}
+
 
 .arrow-button,
 .img-btn {
