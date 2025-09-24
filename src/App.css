@@ -236,7 +236,8 @@
 .page2-next-text,
 .page3-next-text,
 .page4-next-text,
-.page5-next-text {
+.page5-next-text,
+.page6-next-text {
     position: absolute;
     left: 42.133333%;
     top: 8.450704%;
@@ -804,6 +805,108 @@
     display: block;
 }
 
+.page6 {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: block;
+    padding: 0;
+}
+.page6-q4-title {
+    position: absolute;
+    left: 7.733333%;
+    top: 12.192118%;
+    width: 18.933333%;
+    height: auto;
+    max-width: none;
+    display: block;
+}
+.page6-q4-text {
+    position: absolute;
+    left: 8.266667%;
+    top: 20.935961%;
+    width: 85.066667%;
+    height: auto;
+    max-width: none;
+    display: block;
+}
+.page6-q4-options {
+    position: absolute;
+    left: 6.133333%;
+    top: 32.512315%;
+    width: 86.133333%;
+    height: 46.305419%;
+}
+.page6-q4-option {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 15.957447%;
+}
+.page6-q4-option-button {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    display: block;
+    cursor: pointer;
+}
+.page6-q4-option-button:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+}
+.page6-q4-option-button:disabled {
+    cursor: default;
+}
+.page6-q4-toggle {
+    position: absolute;
+    left: 0;
+    top: 30%;
+    width: 7.430341%;
+    height: auto;
+    max-width: none;
+    display: block;
+    pointer-events: none;
+}
+.page6-q4-label {
+    position: absolute;
+    left: 14.241486%;
+    top: 0;
+    width: 85.758514%;
+    height: 100%;
+    max-width: none;
+    display: block;
+    pointer-events: none;
+}
+.page6-before-btn {
+    position: absolute;
+    left: 5.333333%;
+    top: 86.82266%;
+    width: 22.133333%;
+    height: 3.325123%;
+    display: block;
+}
+.page6-before-btn-img {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+.page6-next-btn {
+    position: absolute;
+    left: 0;
+    top: 91.256158%;
+    width: 100%;
+    height: 8.743842%;
+    display: block;
+}
+.page6-next-btn-img {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
 
 .arrow-button,
 .img-btn {
