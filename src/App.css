@@ -238,7 +238,7 @@
 .page4-next-text,
 .page5-next-text,
 .page6-next-text,
-.page7-next-text {
+.page7-done-text {
     position: absolute;
     left: 42.133333%;
     top: 8.450704%;
@@ -1010,7 +1010,7 @@
     display: block;
 }
 
-.page7-next-btn {
+.page7-done-btn {
     position: absolute;
     left: 0;
     top: 91.256158%;
@@ -1019,9 +1019,31 @@
     display: block;
 }
 
-.page7-next-btn-img {
+.page7-done-btn-img {
     width: 100%;
     height: 100%;
+    display: block;
+}
+
+.page7-done-btn:disabled {
+    opacity: 0.6;
+}
+
+.page8 {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: block;
+    padding: 0;
+}
+
+.page8-ending-image {
+    position: absolute;
+    left: 16.533333%;
+    top: 16.009852%;
+    height: 60.757389%;
+    width: auto;
+    max-width: none;
     display: block;
 }
 

@@ -7,6 +7,8 @@ const BEFORE_BUTTON_SOURCES = ["/before.png", "/before_button.png"];
 const NEXT_ON_BUTTON_SOURCES = ["/next_on_button.png", "/next.png"];
 const NEXT_OFF_BUTTON_SOURCES = ["/next_off_button.png", "/next.png"];
 const NEXT_TEXT_SOURCES = ["/next_text_image.png"];
+const DONE_BUTTON_SOURCES = ["/done_button.png"];
+const DONE_TEXT_SOURCES = ["/done_text_image.png"];
 const EMAIL_IMAGE_SOURCES = ["/email_text_image.png", "/email_text_image.png"];
 const EMAIL_TEXT_BOX_SOURCES = ["/email_text_box.png", "/emil_text_box.png"];
 const AGE_TEXT_SOURCES = ["/age_text_image.png", "/age_text_image.png"];
@@ -322,6 +324,7 @@ const Q5_OPTIONS = [
     },
 ];
 const Q5_OPTIONS_CONTAINER_HEIGHT = 376;
+const ENDING_IMAGE_SOURCES = ["/ending.png"];
 
 function ImgWithFallback({ sources = [], alt, ...imgProps }) {
     const [activeIndex, setActiveIndex] = useState(0);
@@ -708,7 +711,7 @@ export default function App() {
         if (page === 5) {
             return bg3;
         }
-        if (page === 6 || page === 7) {
+        if (page === 6 || page === 7 || page === 8) {
             return bg4;
         }
         return bg1;
@@ -1635,37 +1638,55 @@ export default function App() {
                             />
                         </button>
                         <button
-                            className="img-btn page7-next-btn"
+                            className="img-btn page7-done-btn"
                             type="button"
                             onClick={() => {
                                 if (canAdvanceFromPage7) {
-                                    // 다음 단계는 이후 작업에서 구현 예정
+                                    setPage(8);
                                 }
                             }}
-                            aria-label="다음 페이지"
+                            aria-label="설문 완료"
                             title={
                                 canAdvanceFromPage7
-                                    ? "다음 페이지로 이동"
-                                    : "선택지를 고르면 다음으로 이동할 수 있습니다"
+                                    ? "설문을 완료합니다"
+                                    : "선택지를 고르면 설문을 완료할 수 있습니다"
+
                             }
                             disabled={!canAdvanceFromPage7}
                         >
                             <ImgWithFallback
-                                className="page7-next-btn-img"
-                                sources={
-                                    canAdvanceFromPage7
-                                        ? NEXT_ON_BUTTON_SOURCES
-                                        : NEXT_OFF_BUTTON_SOURCES
-                                }
-                                alt="다음"
+                                className="page7-done-btn-img"
+                                sources={DONE_BUTTON_SOURCES}
+                                alt="완료"
                             />
                             <ImgWithFallback
-                                className="page7-next-text"
-                                sources={NEXT_TEXT_SOURCES}
+                                className="page7-done-text"
+                                sources={DONE_TEXT_SOURCES}
                                 alt=""
                                 aria-hidden="true"
                             />
                         </button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (page === 8) {
+        return (
+            <div className="app-root">
+                <div
+                    className="phone-stage"
+                    style={{
+                        backgroundImage: `url(${bgUrl})`,
+                    }}
+                >
+                    <div className="page page8">
+                        <ImgWithFallback
+                            className="page8-ending-image"
+                            sources={ENDING_IMAGE_SOURCES}
+                            alt="설문이 완료되었습니다"
+                        />
                     </div>
                 </div>
             </div>
