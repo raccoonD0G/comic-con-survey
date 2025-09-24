@@ -694,6 +694,53 @@ export default function App() {
         setAgeInteracted(true);
     }, []);
     useEffect(() => {
+        if (typeof window === "undefined") {
+            return;
+        }
+
+        const rootElement = document.documentElement;
+        if (!rootElement) {
+            return;
+        }
+
+        const updateViewportHeight = () => {
+            const viewportHeight = window.innerHeight;
+            if (viewportHeight > 0 && Number.isFinite(viewportHeight)) {
+                rootElement.style.setProperty(
+                    "--app-viewport-height",
+                    `${viewportHeight}px`
+                );
+            }
+        };
+
+        updateViewportHeight();
+
+        window.addEventListener("resize", updateViewportHeight);
+        window.addEventListener("orientationchange", updateViewportHeight);
+
+        const visualViewport = window.visualViewport;
+        if (visualViewport) {
+            visualViewport.addEventListener("resize", updateViewportHeight);
+            visualViewport.addEventListener("scroll", updateViewportHeight);
+        }
+
+        return () => {
+            window.removeEventListener("resize", updateViewportHeight);
+            window.removeEventListener("orientationchange", updateViewportHeight);
+
+            if (visualViewport) {
+                visualViewport.removeEventListener(
+                    "resize",
+                    updateViewportHeight
+                );
+                visualViewport.removeEventListener(
+                    "scroll",
+                    updateViewportHeight
+                );
+            }
+        };
+    }, []);
+    useEffect(() => {
         genderOptionRefs.current = genderOptionRefs.current.slice(0, genderOptionCount);
     }, [genderOptionCount]);
     useEffect(() => {
