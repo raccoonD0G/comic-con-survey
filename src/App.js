@@ -217,6 +217,41 @@ const Q3_TOGGLE_IMAGE_SIZE = Q2_TOGGLE_IMAGE_SIZE;
 const Q3_LABEL_LEFT_PERCENT = Q2_LABEL_LEFT_PERCENT;
 const Q3_LABEL_WIDTH_PERCENT = Q2_LABEL_WIDTH_PERCENT;
 const Q3_TOGGLE_WIDTH_PERCENT = Q2_TOGGLE_WIDTH_PERCENT;
+const Q3_OPTIONS_BOUNDARIES = (() => {
+    if (Q3_OPTIONS.length === 0) {
+        return {
+            top: 0,
+            height: Q3_STAGE_HEIGHT,
+        };
+    }
+
+    let minTop = Q3_OPTIONS[0].top;
+    let maxBottom = Q3_OPTIONS[0].top + Q3_OPTIONS[0].height;
+
+    for (const option of Q3_OPTIONS) {
+        if (option.top < minTop) {
+            minTop = option.top;
+        }
+        const optionBottom = option.top + option.height;
+        if (optionBottom > maxBottom) {
+            maxBottom = optionBottom;
+        }
+    }
+
+    const computedHeight = maxBottom - minTop;
+
+    if (computedHeight <= 0) {
+        return { top: 0, height: Q3_STAGE_HEIGHT };
+    }
+
+    return { top: minTop, height: computedHeight };
+})();
+const Q3_OPTIONS_CONTAINER_STAGE_TOP = Q3_OPTIONS_BOUNDARIES.top;
+const Q3_OPTIONS_CONTAINER_STAGE_HEIGHT = Q3_OPTIONS_BOUNDARIES.height;
+const Q3_OPTIONS_CONTAINER_TOP_PERCENT =
+    (Q3_OPTIONS_CONTAINER_STAGE_TOP / Q3_STAGE_HEIGHT) * 100;
+const Q3_OPTIONS_CONTAINER_HEIGHT_PERCENT =
+    (Q3_OPTIONS_CONTAINER_STAGE_HEIGHT / Q3_STAGE_HEIGHT) * 100;
 
 function ImgWithFallback({ sources = [], alt, ...imgProps }) {
     const [activeIndex, setActiveIndex] = useState(0);
@@ -1073,6 +1108,10 @@ export default function App() {
                             className="page5-q3-options"
                             role="radiogroup"
                             aria-label="관심 있는 카테고리 선택"
+                            style={{
+                                top: `${Q3_OPTIONS_CONTAINER_TOP_PERCENT}%`,
+                                height: `${Q3_OPTIONS_CONTAINER_HEIGHT_PERCENT}%`,
+                            }}
                         >
                             {Q3_OPTIONS.map((option, index) => {
                                 const isSelected = q3Answer === option.id;
@@ -1082,17 +1121,35 @@ export default function App() {
                                 const isTabStop =
                                     q3Answer === null ? index === 0 : isSelected;
                                 const topPercent =
-                                    (option.top / Q3_STAGE_HEIGHT) * 100;
+                                    Q3_OPTIONS_CONTAINER_STAGE_HEIGHT > 0
+                                        ? ((option.top -
+                                              Q3_OPTIONS_CONTAINER_STAGE_TOP) /
+                                              Q3_OPTIONS_CONTAINER_STAGE_HEIGHT) *
+                                          100
+                                        : 0;
                                 const heightPercent =
-                                    (option.height / Q3_STAGE_HEIGHT) * 100;
+                                    Q3_OPTIONS_CONTAINER_STAGE_HEIGHT > 0
+                                        ? (option.height /
+                                              Q3_OPTIONS_CONTAINER_STAGE_HEIGHT) *
+                                          100
+                                        : 0;
                                 const toggleTopPercent =
-                                    (option.toggleTop / option.height) * 100;
+                                    option.height > 0
+                                        ? (option.toggleTop / option.height) * 100
+                                        : 0;
                                 const toggleHeightPercent =
-                                    (Q3_TOGGLE_IMAGE_SIZE / option.height) * 100;
+                                    option.height > 0
+                                        ? (Q3_TOGGLE_IMAGE_SIZE / option.height) *
+                                          100
+                                        : 0;
                                 const labelTopPercent =
-                                    (option.labelTop / option.height) * 100;
+                                    option.height > 0
+                                        ? (option.labelTop / option.height) * 100
+                                        : 0;
                                 const labelHeightPercent =
-                                    (option.labelHeight / option.height) * 100;
+                                    option.height > 0
+                                        ? (option.labelHeight / option.height) * 100
+                                        : 0;
 
                                 return (
                                     <div
