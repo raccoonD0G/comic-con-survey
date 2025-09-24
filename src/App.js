@@ -509,7 +509,7 @@ export default function App() {
             return bg2;
         }
         if (page === 5) {
-            return bg4;
+            return bg3;
         }
         return bg1;
     }, [bg0, bg1, bg2, bg3, bg4, page]);
