@@ -7,6 +7,8 @@ const BEFORE_BUTTON_SOURCES = ["/before.png", "/before_button.png"];
 const NEXT_ON_BUTTON_SOURCES = ["/next_on_button.png", "/next.png"];
 const NEXT_OFF_BUTTON_SOURCES = ["/next_off_button.png", "/next.png"];
 const NEXT_TEXT_SOURCES = ["/next_text_image.png"];
+const DONE_BUTTON_SOURCES = ["/done_button.png"];
+const DONE_TEXT_SOURCES = ["/done_text_image.png"];
 const EMAIL_IMAGE_SOURCES = ["/email_text_image.png", "/email_text_image.png"];
 const EMAIL_TEXT_BOX_SOURCES = ["/email_text_box.png", "/emil_text_box.png"];
 const AGE_TEXT_SOURCES = ["/age_text_image.png", "/age_text_image.png"];
@@ -287,6 +289,42 @@ const Q4_OPTIONS = [
     },
 ];
 const Q4_OPTIONS_CONTAINER_HEIGHT = 376;
+const Q5_TITLE_SOURCES = ["/q5_title_image.png"];
+const Q5_TEXT_SOURCES = ["/q5_text_image.png"];
+const Q5_OPTIONS = [
+    {
+        id: "expensiveEquipment",
+        label: "Expensive equipment",
+        imageSources: ["/expensive_equipment.png"],
+        top: 0,
+    },
+    {
+        id: "complicatedProductionProcess",
+        label: "Complicated production process",
+        imageSources: ["/complicated_production_process.png"],
+        top: 82,
+    },
+    {
+        id: "lackOfTechnicalSkills",
+        label: "Lack of technical skills",
+        imageSources: ["/lack_of_technical_skills.png"],
+        top: 164,
+    },
+    {
+        id: "makingItUnique",
+        label: "Making it unique",
+        imageSources: ["/making_it_unique.png"],
+        top: 246,
+    },
+    {
+        id: "tooMuchEffort",
+        label: "Too much effort",
+        imageSources: ["/too_much_effort.png"],
+        top: 328,
+    },
+];
+const Q5_OPTIONS_CONTAINER_HEIGHT = 376;
+const ENDING_IMAGE_SOURCES = ["/ending.png"];
 
 function ImgWithFallback({ sources = [], alt, ...imgProps }) {
     const [activeIndex, setActiveIndex] = useState(0);
@@ -335,6 +373,7 @@ export default function App() {
     const [q2OtherText, setQ2OtherText] = useState("");
     const [q3Answer, setQ3Answer] = useState(null);
     const [q4Answer, setQ4Answer] = useState(null);
+    const [q5Answer, setQ5Answer] = useState(null);
     const genderOptionCount = GENDER_OPTIONS.length;
     const genderOptionRefs = useRef([]);
     const q1OptionCount = Q1_OPTIONS.length;
@@ -345,6 +384,8 @@ export default function App() {
     const q3OptionRefs = useRef([]);
     const q4OptionCount = Q4_OPTIONS.length;
     const q4OptionRefs = useRef([]);
+    const q5OptionCount = Q5_OPTIONS.length;
+    const q5OptionRefs = useRef([]);
     const q2OtherInputRef = useRef(null);
     const focusGenderOption = useCallback(
         (index) => {
@@ -390,6 +431,15 @@ export default function App() {
             }
         },
         [q4OptionRefs]
+    );
+    const focusQ5Option = useCallback(
+        (index) => {
+            const target = q5OptionRefs.current[index];
+            if (target) {
+                target.focus();
+            }
+        },
+        [q5OptionRefs]
     );
     const handleGenderKeyDown = useCallback(
         (event, optionIndex) => {
@@ -553,6 +603,36 @@ export default function App() {
         },
         [focusQ4Option, q4OptionCount]
     );
+    const handleQ5KeyDown = useCallback(
+        (event, optionIndex) => {
+            if (q5OptionCount <= 0) {
+                return;
+            }
+
+            if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+                event.preventDefault();
+                const nextIndex = (optionIndex + 1) % q5OptionCount;
+                setQ5Answer(Q5_OPTIONS[nextIndex].id);
+                focusQ5Option(nextIndex);
+            } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+                event.preventDefault();
+                const previousIndex =
+                    (optionIndex - 1 + q5OptionCount) % q5OptionCount;
+                setQ5Answer(Q5_OPTIONS[previousIndex].id);
+                focusQ5Option(previousIndex);
+            } else if (event.key === "Home") {
+                event.preventDefault();
+                setQ5Answer(Q5_OPTIONS[0].id);
+                focusQ5Option(0);
+            } else if (event.key === "End") {
+                event.preventDefault();
+                const lastIndex = q5OptionCount - 1;
+                setQ5Answer(Q5_OPTIONS[lastIndex].id);
+                focusQ5Option(lastIndex);
+            }
+        },
+        [focusQ5Option, q5OptionCount]
+    );
     const ageStopCount = AGE_STOPS.length;
     const canAdvanceFromPage1 = email.trim().length > 0;
     const canAdvanceFromPage2 = ageInteracted && gender !== null;
@@ -560,6 +640,7 @@ export default function App() {
     const canAdvanceFromPage4 = q2Answer !== null;
     const canAdvanceFromPage5 = q3Answer !== null;
     const canAdvanceFromPage6 = q4Answer !== null;
+    const canAdvanceFromPage7 = q5Answer !== null;
     const handleAgeChange = useCallback((event) => {
         setAgeIndex(Number(event.target.value));
         setAgeInteracted(true);
@@ -582,6 +663,9 @@ export default function App() {
     useEffect(() => {
         q4OptionRefs.current = q4OptionRefs.current.slice(0, q4OptionCount);
     }, [q4OptionCount]);
+    useEffect(() => {
+        q5OptionRefs.current = q5OptionRefs.current.slice(0, q5OptionCount);
+    }, [q5OptionCount]);
     const selectedAgeStop = AGE_STOPS[ageIndex] ?? null;
     const ageHandlePosition = useMemo(() => {
         if (ageStopCount <= 1) {
@@ -627,7 +711,7 @@ export default function App() {
         if (page === 5) {
             return bg3;
         }
-        if (page === 6) {
+        if (page === 6 || page === 7 || page === 8) {
             return bg4;
         }
         return bg1;
@@ -1432,7 +1516,7 @@ export default function App() {
                             type="button"
                             onClick={() => {
                                 if (canAdvanceFromPage6) {
-                                    // 다음 단계는 이후 작업에서 구현 예정
+                                    setPage(7);
                                 }
                             }}
                             aria-label="다음 페이지"
@@ -1459,6 +1543,149 @@ export default function App() {
                                 aria-hidden="true"
                             />
                         </button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (page === 7) {
+        return (
+            <div className="app-root">
+                <div
+                    className="phone-stage"
+                    style={{
+                        backgroundImage: `url(${bgUrl})`,
+                    }}
+                >
+                    <div className="page page7">
+                        <ImgWithFallback
+                            className="page7-q5-title"
+                            sources={Q5_TITLE_SOURCES}
+                            alt="질문 5 제목"
+                        />
+                        <ImgWithFallback
+                            className="page7-q5-text"
+                            sources={Q5_TEXT_SOURCES}
+                            alt="질문 5 안내"
+                        />
+                        <div
+                            className="page7-q5-options"
+                            role="radiogroup"
+                            aria-label="창작 시 가장 큰 어려움 선택"
+                        >
+                            {Q5_OPTIONS.map((option, index) => {
+                                const isSelected = q5Answer === option.id;
+                                const toggleSources = isSelected
+                                    ? ON_TOGGLE_SOURCES
+                                    : OFF_TOGGLE_SOURCES;
+                                const isTabStop =
+                                    q5Answer === null ? index === 0 : isSelected;
+                                const topPercent =
+                                    Q5_OPTIONS_CONTAINER_HEIGHT > 0
+                                        ? (option.top / Q5_OPTIONS_CONTAINER_HEIGHT) * 100
+                                        : 0;
+
+                                return (
+                                    <div
+                                        key={option.id}
+                                        className="page7-q5-option"
+                                        style={{ top: `${topPercent}%` }}
+                                    >
+                                        <button
+                                            type="button"
+                                            className="page7-q5-option-button"
+                                            onClick={() => setQ5Answer(option.id)}
+                                            onKeyDown={(event) =>
+                                                handleQ5KeyDown(event, index)
+                                            }
+                                            role="radio"
+                                            aria-checked={isSelected}
+                                            tabIndex={isTabStop ? 0 : -1}
+                                            ref={(element) => {
+                                                q5OptionRefs.current[index] = element;
+                                            }}
+                                        >
+                                            <span className="sr-only">{option.label}</span>
+                                            <ImgWithFallback
+                                                className="page7-q5-toggle"
+                                                sources={toggleSources}
+                                                alt=""
+                                                aria-hidden="true"
+                                            />
+                                            <ImgWithFallback
+                                                className="page7-q5-label"
+                                                sources={option.imageSources}
+                                                alt=""
+                                                aria-hidden="true"
+                                            />
+                                        </button>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                        <button
+                            className="img-btn page7-before-btn"
+                            type="button"
+                            onClick={() => setPage(6)}
+                            aria-label="이전 페이지"
+                            title="이전 페이지로 돌아가기"
+                        >
+                            <ImgWithFallback
+                                className="page7-before-btn-img"
+                                sources={BEFORE_BUTTON_SOURCES}
+                                alt="이전"
+                            />
+                        </button>
+                        <button
+                            className="img-btn page7-done-btn"
+                            type="button"
+                            onClick={() => {
+                                if (canAdvanceFromPage7) {
+                                    setPage(8);
+                                }
+                            }}
+                            aria-label="설문 완료"
+                            title={
+                                canAdvanceFromPage7
+                                    ? "설문을 완료합니다"
+                                    : "선택지를 고르면 설문을 완료할 수 있습니다"
+                            }
+                            disabled={!canAdvanceFromPage7}
+                        >
+                            <ImgWithFallback
+                                className="page7-done-btn-img"
+                                sources={DONE_BUTTON_SOURCES}
+                                alt="완료"
+                            />
+                            <ImgWithFallback
+                                className="page7-done-text"
+                                sources={DONE_TEXT_SOURCES}
+                                alt=""
+                                aria-hidden="true"
+                            />
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    if (page === 8) {
+        return (
+            <div className="app-root">
+                <div
+                    className="phone-stage"
+                    style={{
+                        backgroundImage: `url(${bgUrl})`,
+                    }}
+                >
+                    <div className="page page8">
+                        <ImgWithFallback
+                            className="page8-ending-image"
+                            sources={ENDING_IMAGE_SOURCES}
+                            alt="설문이 완료되었습니다"
+                        />
                     </div>
                 </div>
             </div>
