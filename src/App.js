@@ -110,7 +110,7 @@ const Q2_OPTIONS = [
         top: 268,
         height: 100,
         toggleTop: 30,
-        labelTop: 30,
+        labelTop: 0,
         labelHeight: 84,
     },
     {
