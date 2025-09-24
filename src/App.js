@@ -375,6 +375,8 @@ export default function App() {
     const [q3Answer, setQ3Answer] = useState(null);
     const [q4Answer, setQ4Answer] = useState(null);
     const [q5Answer, setQ5Answer] = useState(null);
+    const [submitting, setSubmitting] = useState(false);
+    const [submitError, setSubmitError] = useState(null);
     const genderOptionCount = GENDER_OPTIONS.length;
     const genderOptionRefs = useRef([]);
     const q1OptionCount = Q1_OPTIONS.length;
@@ -388,6 +390,7 @@ export default function App() {
     const q5OptionCount = Q5_OPTIONS.length;
     const q5OptionRefs = useRef([]);
     const q2OtherInputRef = useRef(null);
+    const initialEmailRef = useRef("");
     const focusGenderOption = useCallback(
         (index) => {
             const target = genderOptionRefs.current[index];
@@ -504,14 +507,18 @@ export default function App() {
     );
     const handleSelectQ2Option = useCallback((optionId, focusInput = false) => {
         setQ2Answer(optionId);
-        if (optionId === "other" && focusInput) {
-            setTimeout(() => {
-                const input = q2OtherInputRef.current;
-                if (input) {
-                    input.focus();
-                    input.select();
-                }
-            }, 0);
+        if (optionId === "other") {
+            if (focusInput) {
+                setTimeout(() => {
+                    const input = q2OtherInputRef.current;
+                    if (input) {
+                        input.focus();
+                        input.select();
+                    }
+                }, 0);
+            }
+        } else {
+            setQ2OtherText("");
         }
     }, []);
     const handleQ2KeyDown = useCallback(
@@ -642,6 +649,19 @@ export default function App() {
     const canAdvanceFromPage5 = q3Answer !== null;
     const canAdvanceFromPage6 = q4Answer !== null;
     const canAdvanceFromPage7 = q5Answer !== null;
+    const handleAdvanceFromPage1 = useCallback(() => {
+        if (!canAdvanceFromPage1) {
+            return;
+        }
+
+        const trimmedEmail = email.trim();
+        if (trimmedEmail.length === 0) {
+            return;
+        }
+
+        initialEmailRef.current = trimmedEmail;
+        setPage(2);
+    }, [canAdvanceFromPage1, email]);
     const handleAgeChange = useCallback((event) => {
         setAgeIndex(Number(event.target.value));
         setAgeInteracted(true);
@@ -667,6 +687,12 @@ export default function App() {
     useEffect(() => {
         q5OptionRefs.current = q5OptionRefs.current.slice(0, q5OptionCount);
     }, [q5OptionCount]);
+    useEffect(() => {
+        if (page !== 7) {
+            setSubmitError(null);
+            setSubmitting(false);
+        }
+    }, [page]);
     const selectedAgeStop = AGE_STOPS[ageIndex] ?? null;
     const ageHandlePosition = useMemo(() => {
         if (ageStopCount <= 1) {
@@ -683,9 +709,95 @@ export default function App() {
         return `calc(${AGE_TRACK_LEFT_PERCENT}% + ${offsetPercent}%)`;
     }, [ageIndex, ageStopCount]);
     const ageValueText = selectedAgeStop ? `${selectedAgeStop.label}` : undefined;
-    const genderValueText = gender
-        ? GENDER_OPTIONS.find((option) => option.id === gender)?.label
-        : undefined;
+    const handleSubmitSurvey = useCallback(async () => {
+        if (!canAdvanceFromPage7 || submitting) {
+            return;
+        }
+
+        const trimmedEmail = email.trim();
+        const capturedEmail =
+            initialEmailRef.current && initialEmailRef.current.trim().length > 0
+                ? initialEmailRef.current
+                : trimmedEmail;
+
+        if (!capturedEmail) {
+            setSubmitError("이메일 정보가 누락되었습니다.");
+            return;
+        }
+
+        setSubmitting(true);
+        setSubmitError(null);
+
+        const trimmedOtherText =
+            q2Answer === "other" ? q2OtherText.trim() : "";
+
+        const payload = {
+            email: capturedEmail,
+            initialEmail:
+                initialEmailRef.current && initialEmailRef.current.trim().length > 0
+                    ? initialEmailRef.current
+                    : capturedEmail,
+            latestEmail: trimmedEmail || capturedEmail,
+            responses: {
+                age: selectedAgeStop ? selectedAgeStop.id : null,
+                ageLabel: selectedAgeStop ? selectedAgeStop.label : null,
+                gender,
+                q1: q1Answer,
+                q2: q2Answer,
+                q2OtherText:
+                    q2Answer === "other" && trimmedOtherText.length > 0
+                        ? trimmedOtherText
+                        : null,
+                q3: q3Answer,
+                q4: q4Answer,
+                q5: q5Answer,
+            },
+        };
+
+        try {
+            const response = await fetch("/api/surveys", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (!response.ok) {
+                let message = "설문 저장에 실패했습니다. 잠시 후 다시 시도해주세요.";
+                try {
+                    const errorBody = await response.json();
+                    if (errorBody && typeof errorBody.error === "string") {
+                        message = errorBody.error;
+                    }
+                } catch (parseError) {
+                    // JSON 파싱 실패는 무시합니다.
+                }
+                setSubmitError(message);
+                return;
+            }
+
+            setPage(8);
+        } catch (error) {
+            setSubmitError(
+                "설문을 저장하는 중 오류가 발생했습니다. 네트워크 연결을 확인해주세요."
+            );
+        } finally {
+            setSubmitting(false);
+        }
+    }, [
+        canAdvanceFromPage7,
+        email,
+        gender,
+        q1Answer,
+        q2Answer,
+        q2OtherText,
+        q3Answer,
+        q4Answer,
+        q5Answer,
+        selectedAgeStop,
+        submitting,
+    ]);
 
     // public/ 경로
     const bg0 = useMemo(() => process.env.PUBLIC_URL + "/background0.png", []);
@@ -772,7 +884,7 @@ export default function App() {
                         <button
                             className="img-btn page1-next-btn"
                             type="button"
-                            onClick={() => setPage(2)}
+                            onClick={handleAdvanceFromPage1}
                             aria-label="다음 페이지"
                             title={
                                 canAdvanceFromPage1
@@ -1641,23 +1753,22 @@ export default function App() {
                         <button
                             className="img-btn page7-done-btn"
                             type="button"
-                            onClick={() => {
-                                if (canAdvanceFromPage7) {
-                                    setPage(8);
-                                }
-                            }}
+                            onClick={handleSubmitSurvey}
                             aria-label="설문 완료"
                             title={
-                                canAdvanceFromPage7
-                                    ? "설문을 완료합니다"
-                                    : "선택지를 고르면 설문을 완료할 수 있습니다"
+                                submitting
+                                    ? "설문을 저장하는 중입니다"
+                                    : canAdvanceFromPage7
+                                        ? "설문을 완료합니다"
+                                        : "선택지를 고르면 설문을 완료할 수 있습니다"
                             }
-                            disabled={!canAdvanceFromPage7}
+                            aria-busy={submitting ? true : undefined}
+                            disabled={!canAdvanceFromPage7 || submitting}
                         >
                             <ImgWithFallback
                                 className="page7-done-btn-img"
                                 sources={
-                                    canAdvanceFromPage7
+                                    canAdvanceFromPage7 && !submitting
                                         ? DONE_BUTTON_SOURCES
                                         : DONE_OFF_BUTTON_SOURCES
                                 }
@@ -1670,6 +1781,16 @@ export default function App() {
                                 aria-hidden="true"
                             />
                         </button>
+                        {submitError ? (
+                            <div className="page7-submit-error" role="alert">
+                                {submitError}
+                            </div>
+                        ) : null}
+                        {submitting ? (
+                            <div className="sr-only" aria-live="polite">
+                                설문을 저장하는 중입니다.
+                            </div>
+                        ) : null}
                     </div>
                 </div>
             </div>
