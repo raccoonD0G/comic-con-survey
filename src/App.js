@@ -1650,6 +1650,7 @@ export default function App() {
                                 canAdvanceFromPage7
                                     ? "설문을 완료합니다"
                                     : "선택지를 고르면 설문을 완료할 수 있습니다"
+
                             }
                             disabled={!canAdvanceFromPage7}
                         >
