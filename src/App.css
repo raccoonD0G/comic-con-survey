@@ -313,13 +313,14 @@
 }
 
 .page-bottom-nav {
-    position: absolute;
-    left: 0;
-    right: 0;
+    position: fixed;
+    left: 50%;
     bottom: 0;
+    width: min(var(--phone-stage-width), 100vw);
     height: var(--page-nav-height);
+    transform: translateX(-50%);
     display: flex;
-    z-index: 10;
+    z-index: 100;
 }
 
 .page-bottom-nav .img-btn {
