@@ -1,5 +1,7 @@
 export const BASIC_INFO_SOURCES = ["/basic_Information_image.png", "/basic_Information_image.png"];
 export const BEFORE_BUTTON_SOURCES = ["/before.png", "/before_button.png"];
+export const BEFORE_BUTTON_BOTTOM_PERCENT = 86.82266 + 3.325123;
+export const BEFORE_BUTTON_TARGET_GAP_PX = 8;
 export const NEXT_ON_BUTTON_SOURCES = ["/next_on_button.png", "/next.png"];
 export const NEXT_OFF_BUTTON_SOURCES = ["/next_off_button.png", "/next.png"];
 export const NEXT_TEXT_SOURCES = ["/next_text_image.png"];
