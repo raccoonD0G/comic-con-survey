@@ -4,6 +4,7 @@ import "./App.css";
 
 import ImgWithFallback from "./components/ImgWithFallback";
 import useImagePreloader from "./hooks/useImagePreloader";
+import useQuestionLayoutScale from "./hooks/useQuestionLayoutScale";
 import {
     AGE_HANDLE_TOP_PERCENT,
     AGE_STOPS,
@@ -32,7 +33,6 @@ import {
     ON_TOGGLE_SOURCES,
     PHONE_STAGE_DESIGN_HEIGHT,
     PHONE_STAGE_DESIGN_WIDTH,
-    PAGE_NAV_DESIGN_HEIGHT,
     PRELOAD_IMAGE_SOURCES,
     Q1_OPTION_BASE_TOP_PERCENT,
     Q1_OPTION_STEP_PERCENT,
@@ -120,7 +120,7 @@ export default function App() {
     const q5OtherInputRef = useRef(null);
     const initialEmailRef = useRef("");
     const [phoneStageElement, setPhoneStageElement] = useState(null);
-    const [questionLayoutScale, setQuestionLayoutScale] = useState(1);
+    const questionLayoutScale = useQuestionLayoutScale(phoneStageElement, page);
     const focusGenderOption = useCallback(
         (index) => {
             const target = genderOptionRefs.current[index];
@@ -632,100 +632,13 @@ export default function App() {
     useEffect(() => {
         q5OptionRefs.current = q5OptionRefs.current.slice(0, q5OptionCount);
     }, [q5OptionCount]);
-    const updateQuestionLayoutScale = useCallback(() => {
-        if (!phoneStageElement) {
-            return;
-        }
 
-        const rect = phoneStageElement.getBoundingClientRect();
-        const availableWidth = rect.width;
-        const availableHeight = rect.height - PAGE_NAV_DESIGN_HEIGHT;
-
-        if (!Number.isFinite(availableWidth) || availableWidth <= 0) {
-            return;
-        }
-
-        const widthScale = availableWidth / PHONE_STAGE_DESIGN_WIDTH;
-        let heightScale = availableHeight / PHONE_STAGE_DESIGN_HEIGHT;
-
-        const beforeButtonBottomPx =
-            (BEFORE_BUTTON_BOTTOM_PERCENT / 100) * PHONE_STAGE_DESIGN_HEIGHT;
-        const beforeButtonTargetHeight =
-            availableHeight - BEFORE_BUTTON_TARGET_GAP_PX;
-
-        if (
-            Number.isFinite(beforeButtonBottomPx) &&
-            beforeButtonBottomPx > 0 &&
-            Number.isFinite(beforeButtonTargetHeight)
-        ) {
-            const beforeButtonScale =
-                beforeButtonTargetHeight / beforeButtonBottomPx;
-
-            if (Number.isFinite(beforeButtonScale) && beforeButtonScale > 0) {
-                heightScale = Math.max(heightScale, beforeButtonScale);
-            }
-        }
-
-        if (!Number.isFinite(heightScale) || heightScale <= 0) {
-            heightScale = widthScale;
-        }
-
-        const nextScale = Math.min(widthScale, heightScale);
-
-        if (Number.isFinite(nextScale) && nextScale > 0) {
-            setQuestionLayoutScale(nextScale);
-        }
-    }, [phoneStageElement]);
     useEffect(() => {
         const phoneStage = phoneStageRef.current;
         if (phoneStage) {
             phoneStage.scrollTop = 0;
         }
     }, [page]);
-    useEffect(() => {
-        if (!phoneStageElement) {
-            return;
-        }
-
-        let frameRequest = null;
-
-        const handleResize = () => {
-            if (frameRequest !== null) {
-                cancelAnimationFrame(frameRequest);
-            }
-
-            frameRequest = requestAnimationFrame(() => {
-                frameRequest = null;
-                updateQuestionLayoutScale();
-            });
-        };
-
-        updateQuestionLayoutScale();
-
-        if (typeof ResizeObserver === "function") {
-            const observer = new ResizeObserver(handleResize);
-            observer.observe(phoneStageElement);
-
-            return () => {
-                if (frameRequest !== null) {
-                    cancelAnimationFrame(frameRequest);
-                }
-                observer.disconnect();
-            };
-        }
-
-        window.addEventListener("resize", handleResize);
-
-        return () => {
-            if (frameRequest !== null) {
-                cancelAnimationFrame(frameRequest);
-            }
-            window.removeEventListener("resize", handleResize);
-        };
-    }, [phoneStageElement, updateQuestionLayoutScale]);
-    useEffect(() => {
-        updateQuestionLayoutScale();
-    }, [page, updateQuestionLayoutScale]);
     useEffect(() => {
         if (page !== 0 || expanded) {
             return;
