@@ -29,11 +29,11 @@ export const ENDING_IMAGE_SOURCES = ["/B8.png"];
 export const PHONE_STAGE_DESIGN_WIDTH = 375;
 export const PHONE_STAGE_DESIGN_HEIGHT = 812;
 export const PAGE_NAV_DESIGN_HEIGHT = 71;
-export const AGE_TRACK_LEFT_PERCENT = 7.466667;
+export const AGE_TRACK_LEFT_PERCENT = 4.533333;
 export const AGE_TRACK_WIDTH_PERCENT = 90.4;
 export const AGE_TRACK_START_OFFSET_PERCENT = (25 / 339) * AGE_TRACK_WIDTH_PERCENT;
 export const AGE_TRACK_END_OFFSET_PERCENT = (25 / 339) * AGE_TRACK_WIDTH_PERCENT;
-export const AGE_HANDLE_TOP_PERCENT = 33.251232;
+export const AGE_HANDLE_TOP_PERCENT = 23.522167;
 
 export const AGE_STOPS = [
     {
@@ -67,19 +67,19 @@ export const GENDER_OPTIONS = [
         id: "male",
         label: "남성",
         imageSources: ["/male_image.png"],
-        topPercent: 53.817734,
+        topPercent: 41.502463,
     },
     {
         id: "female",
         label: "여성",
         imageSources: ["/female_image.png"],
-        topPercent: 61.206897,
+        topPercent: 48.891626,
     },
     {
         id: "other",
         label: "기타",
         imageSources: ["/other_image.png"],
-        topPercent: 68.596059,
+        topPercent: 56.280788,
     },
 ];
 
