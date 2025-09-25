@@ -1,382 +1,75 @@
 // App.js
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "./App.css";
-
-const BASIC_INFO_SOURCES = ["/basic_Information_image.png", "/basic_Information_image.png"];
-const BEFORE_BUTTON_SOURCES = ["/before.png", "/before_button.png"];
-const NEXT_ON_BUTTON_SOURCES = ["/next_on_button.png", "/next.png"];
-const NEXT_OFF_BUTTON_SOURCES = ["/next_off_button.png", "/next.png"];
-const NEXT_TEXT_SOURCES = ["/next_text_image.png"];
-const DONE_BUTTON_SOURCES = ["/done_button.png"];
-const DONE_OFF_BUTTON_SOURCES = ["/done_off_button.png"];
-const DONE_TEXT_SOURCES = ["/done_text_image.png"];
-const EMAIL_IMAGE_SOURCES = ["/email_text_image.png", "/email_text_image.png"];
-const EMAIL_TEXT_BOX_SOURCES = ["/email_text_box.png", "/emil_text_box.png"];
-const AGE_TEXT_SOURCES = ["/age_text_image.png", "/age_text_image.png"];
-const GENDER_TEXT_SOURCES = ["/gender_text_image.png", "/gender_text_image.png"];
-const SCROLL_LINE_SOURCES = ["/scroll_line_image.png", "/scroll_line.png"];
-const SCROLL_HANDLE_SOURCES = ["/scroll_handle_image.png", "/scroll_handle.png"];
-const PHONE_STAGE_DESIGN_WIDTH = 375;
-const PHONE_STAGE_DESIGN_HEIGHT = 812;
-const AGE_TRACK_LEFT_PERCENT = 7.466667;
-const AGE_TRACK_WIDTH_PERCENT = 90.4;
-const AGE_TRACK_START_OFFSET_PERCENT = (25 / 339) * AGE_TRACK_WIDTH_PERCENT;
-const AGE_TRACK_END_OFFSET_PERCENT = (25 / 339) * AGE_TRACK_WIDTH_PERCENT;
-const AGE_HANDLE_TOP_PERCENT = 33.251232;
-const AGE_STOPS = [
-    {
-        id: "10s",
-        label: "10대",
-    },
-    {
-        id: "20s",
-        label: "20대",
-    },
-    {
-        id: "30s",
-        label: "30대",
-    },
-    {
-        id: "40s",
-        label: "40대",
-    },
-    {
-        id: "50s",
-        label: "50대",
-    },
-    {
-        id: "60s",
-        label: "60대 이상",
-    },
-];
-const OFF_TOGGLE_SOURCES = ["/off_toggle.png"];
-const ON_TOGGLE_SOURCES = ["/on_toggle.png"];
-const GENDER_OPTIONS = [
-    {
-        id: "male",
-        label: "남성",
-        imageSources: ["/male_image.png"],
-        topPercent: 53.817734,
-    },
-    {
-        id: "female",
-        label: "여성",
-        imageSources: ["/female_image.png"],
-        topPercent: 61.206897,
-    },
-    {
-        id: "other",
-        label: "기타",
-        imageSources: ["/other_image.png"],
-        topPercent: 68.596059,
-    },
-];
-const Q1_TITLE_SOURCES = ["/q1_title_image.png"];
-const Q1_TEXT_SOURCES = ["/q1_text_image.png"];
-const Q1_OPTIONS = [
-    {
-        id: "absolutelyAmazing",
-        label: "Absolutely amazing",
-        imageSources: ["/absolutely_amazing_image.png"],
-    },
-    {
-        id: "superFun",
-        label: "Super fun",
-        imageSources: ["/super_fun_image.png"],
-    },
-    {
-        id: "itWasOkay",
-        label: "It was okay",
-        imageSources: ["/it_was_okay_image.png"],
-    },
-    {
-        id: "couldBeBetter",
-        label: "Could be better",
-        imageSources: ["/could_be_better_image.png"],
-    },
-    {
-        id: "notMyThing",
-        label: "Not my thing",
-        imageSources: ["/not_my_thing_image.png"],
-    },
-];
-const Q1_OPTION_BASE_TOP_PERCENT = (265 / 812) * 100;
-const Q1_OPTION_STEP_PERCENT = (82 / 812) * 100;
-const Q2_TITLE_SOURCES = ["/q2_title_image.png"];
-const Q2_TEXT_SOURCES = ["/q2_text_image.png"];
-const Q2_OPTIONS = [
-    {
-        id: "interactivity",
-        label: "The interactivity",
-        imageSources: ["/the_interactivity_image.png"],
-        top: 268,
-        height: 100,
-        toggleTop: 30,
-        labelTop: 0,
-        labelHeight: 84,
-    },
-    {
-        id: "awesomeGraphics",
-        label: "The awesome graphics",
-        imageSources: ["/the_awesome_graphics_image.png"],
-        top: 368,
-        height: 76,
-        toggleTop: 18,
-        labelTop: 0,
-        labelHeight: 60,
-    },
-    {
-        id: "funStorytelling",
-        label: "The fun storytelling",
-        imageSources: ["/the_fun_storytelling_image.png"],
-        top: 444,
-        height: 76,
-        toggleTop: 18,
-        labelTop: 0,
-        labelHeight: 60,
-    },
-    {
-        id: "koreanBackstreet",
-        label: "Korean backstreet",
-        imageSources: ["/korean_backstreet_image.png"],
-        top: 520,
-        height: 76,
-        toggleTop: 18,
-        labelTop: 0,
-        labelHeight: 60,
-    },
-    {
-        id: "other",
-        label: "Other",
-        imageSources: ["/other_text_image.png"],
-        top: 596,
-        height: 76,
-        toggleTop: 18,
-        labelTop: 0,
-        labelHeight: 60,
-        allowsCustomInput: true,
-    },
-];
-const Q2_STAGE_HEIGHT = PHONE_STAGE_DESIGN_HEIGHT;
-const Q2_OPTION_WIDTH = 323; // option width in the 375px design
-const Q2_TOGGLE_IMAGE_SIZE = 24;
-const Q2_LABEL_LEFT_PERCENT = (46 / Q2_OPTION_WIDTH) * 100;
-const Q2_LABEL_WIDTH_PERCENT = (277 / Q2_OPTION_WIDTH) * 100;
-const Q2_TOGGLE_WIDTH_PERCENT = (Q2_TOGGLE_IMAGE_SIZE / Q2_OPTION_WIDTH) * 100;
-const Q3_TITLE_SOURCES = ["/q3_title_image.png"];
-const Q3_TEXT_SOURCES = ["/q3_text_image.png"];
-const Q3_OPTIONS = [
-    {
-        id: "fashion",
-        label: "Fashion",
-        imageSources: ["/Fashion_image.png"],
-        top: 264,
-        height: 74,
-        toggleTop: 30,
-        labelTop: 0,
-        labelHeight: 60,
-    },
-    {
-        id: "sports",
-        label: "Sports",
-        imageSources: ["/sports_image.png"],
-        top: 338,
-        height: 74,
-        toggleTop: 30,
-        labelTop: 0,
-        labelHeight: 60,
-    },
-    {
-        id: "anime",
-        label: "Anime",
-        imageSources: ["/anime_image.png"],
-        top: 412,
-        height: 94,
-        toggleTop: 30,
-        labelTop: 0,
-        labelHeight: 80,
-    },
-    {
-        id: "movie",
-        label: "Movie",
-        imageSources: ["/movie_image.png"],
-        top: 506,
-        height: 74,
-        toggleTop: 30,
-        labelTop: 0,
-        labelHeight: 60,
-    },
-    {
-        id: "education",
-        label: "Education",
-        imageSources: ["/education_image.png"],
-        top: 580,
-        height: 73,
-        toggleTop: 30,
-        labelTop: 0,
-        labelHeight: 73,
-    },
-];
-const Q3_STAGE_HEIGHT = PHONE_STAGE_DESIGN_HEIGHT;
-const Q3_TOGGLE_IMAGE_SIZE = Q2_TOGGLE_IMAGE_SIZE;
-const Q3_LABEL_LEFT_PERCENT = Q2_LABEL_LEFT_PERCENT;
-const Q3_LABEL_WIDTH_PERCENT = Q2_LABEL_WIDTH_PERCENT;
-const Q3_TOGGLE_WIDTH_PERCENT = Q2_TOGGLE_WIDTH_PERCENT;
-const Q3_OPTIONS_BOUNDARIES = (() => {
-    if (Q3_OPTIONS.length === 0) {
-        return {
-            top: 0,
-            height: Q3_STAGE_HEIGHT,
-        };
-    }
-
-    let minTop = Q3_OPTIONS[0].top;
-    let maxBottom = Q3_OPTIONS[0].top + Q3_OPTIONS[0].height;
-
-    for (const option of Q3_OPTIONS) {
-        if (option.top < minTop) {
-            minTop = option.top;
-        }
-        const optionBottom = option.top + option.height;
-        if (optionBottom > maxBottom) {
-            maxBottom = optionBottom;
-        }
-    }
-
-    const computedHeight = maxBottom - minTop;
-
-    if (computedHeight <= 0) {
-        return { top: 0, height: Q3_STAGE_HEIGHT };
-    }
-
-    return { top: minTop, height: computedHeight };
-})();
-const Q3_OPTIONS_CONTAINER_STAGE_TOP = Q3_OPTIONS_BOUNDARIES.top;
-const Q3_OPTIONS_CONTAINER_STAGE_HEIGHT = Q3_OPTIONS_BOUNDARIES.height;
-const Q3_OPTIONS_CONTAINER_TOP_PERCENT =
-    (Q3_OPTIONS_CONTAINER_STAGE_TOP / Q3_STAGE_HEIGHT) * 100;
-const Q3_OPTIONS_CONTAINER_HEIGHT_PERCENT =
-    (Q3_OPTIONS_CONTAINER_STAGE_HEIGHT / Q3_STAGE_HEIGHT) * 100;
-const Q4_TITLE_SOURCES = ["/q4_title_image.png"];
-const Q4_TEXT_SOURCES = ["/q4_text_image.png"];
-const Q4_OPTIONS = [
-    {
-        id: "definitelyYes",
-        label: "Definitely yes",
-        imageSources: ["/definitely_yes.png"],
-        top: 0,
-    },
-    {
-        id: "probablyWilling",
-        label: "Probably willing",
-        imageSources: ["/probably_willing.png"],
-        top: 82,
-    },
-    {
-        id: "notSure",
-        label: "Not sure",
-        imageSources: ["/not_sure.png"],
-        top: 164,
-    },
-    {
-        id: "no",
-        label: "No",
-        imageSources: ["/no.png"],
-        top: 246,
-    },
-    {
-        id: "iDontKnow",
-        label: "I don't know",
-        imageSources: ["/i_dont.png"],
-        top: 328,
-    },
-];
-const Q4_OPTIONS_CONTAINER_HEIGHT = 376;
-const Q5_TITLE_SOURCES = ["/q5_title_image.png"];
-const Q5_TEXT_SOURCES = ["/q5_text_image.png"];
-const Q5_OPTIONS = [
-    {
-        id: "expensiveEquipment",
-        label: "Expensive equipment",
-        imageSources: ["/expensive_equipment.png"],
-        top: 0,
-        height: 58,
-        toggleTop: 17,
-    },
-    {
-        id: "complicatedProductionProcess",
-        label: "Complicated production process",
-        imageSources: ["/complicated_production_process.png"],
-        top: 74,
-        height: 84,
-        toggleTop: 30,
-    },
-    {
-        id: "lackOfTechnicalSkills",
-        label: "Lack of technical skills",
-        imageSources: ["/lack_of_technical_skills.png"],
-        top: 174,
-        height: 60,
-        toggleTop: 18,
-    },
-    {
-        id: "makingItUnique",
-        label: "Making it unique",
-        imageSources: ["/making_it_unique.png"],
-        top: 250,
-        height: 60,
-        toggleTop: 18,
-    },
-    {
-        id: "tooMuchEffort",
-        label: "Too much effort",
-        imageSources: ["/too_much_effort.png"],
-        top: 326,
-        height: 60,
-        toggleTop: 18,
-    },
-];
-const Q5_OPTIONS_CONTAINER_HEIGHT = Q5_OPTIONS.reduce((maxBottom, option) => {
-    const bottom = option.top + option.height;
-    return bottom > maxBottom ? bottom : maxBottom;
-}, 0);
-const ENDING_IMAGE_SOURCES = ["/ending.png"];
-const VIEWPORT_HEIGHT_EPSILON = 1;
-const KEYBOARD_VISUAL_VIEWPORT_GAP = 120;
-
-function ImgWithFallback({ sources = [], alt, ...imgProps }) {
-    const [activeIndex, setActiveIndex] = useState(0);
-
-    useEffect(() => {
-        setActiveIndex(0);
-    }, [sources]);
-
-    const sourceList = sources.length > 0 ? sources : [""];
-    const lastIndex = sourceList.length - 1;
-
-    const handleError = useCallback(() => {
-        setActiveIndex((previous) => {
-            const nextIndex = previous + 1;
-            if (nextIndex <= lastIndex) {
-                return nextIndex;
-            }
-            return previous;
-        });
-    }, [lastIndex]);
-
-    const currentIndex = activeIndex > lastIndex ? lastIndex : activeIndex;
-    const canAdvance = currentIndex < lastIndex;
-    const currentSrc = sourceList[currentIndex];
-
-    return (
-        <img
-            src={currentSrc}
-            alt={alt}
-            onError={canAdvance ? handleError : undefined}
-            {...imgProps}
-        />
-    );
-}
+import ImgWithFallback from "./components/ImgWithFallback";
+import PhoneStage from "./components/PhoneStage";
+import {
+    BASIC_INFO_SOURCES,
+    BEFORE_BUTTON_SOURCES,
+    DONE_BUTTON_SOURCES,
+    DONE_OFF_BUTTON_SOURCES,
+    DONE_TEXT_SOURCES,
+    EMAIL_IMAGE_SOURCES,
+    EMAIL_TEXT_BOX_SOURCES,
+    GENDER_TEXT_SOURCES,
+    NEXT_OFF_BUTTON_SOURCES,
+    NEXT_ON_BUTTON_SOURCES,
+    NEXT_TEXT_SOURCES,
+    Q1_TEXT_SOURCES,
+    Q1_TITLE_SOURCES,
+    Q2_TEXT_SOURCES,
+    Q2_TITLE_SOURCES,
+    Q3_TEXT_SOURCES,
+    Q3_TITLE_SOURCES,
+    Q4_TEXT_SOURCES,
+    Q4_TITLE_SOURCES,
+    Q5_TEXT_SOURCES,
+    Q5_TITLE_SOURCES,
+    SCROLL_HANDLE_SOURCES,
+    SCROLL_LINE_SOURCES,
+    ENDING_IMAGE_SOURCES,
+    AGE_TEXT_SOURCES,
+    OFF_TOGGLE_SOURCES,
+    ON_TOGGLE_SOURCES,
+} from "./constants/assets";
+import {
+    PHONE_STAGE_DESIGN_HEIGHT,
+    PHONE_STAGE_DESIGN_WIDTH,
+    AGE_TRACK_LEFT_PERCENT,
+    AGE_TRACK_WIDTH_PERCENT,
+    AGE_TRACK_START_OFFSET_PERCENT,
+    AGE_TRACK_END_OFFSET_PERCENT,
+    AGE_HANDLE_TOP_PERCENT,
+    VIEWPORT_HEIGHT_EPSILON,
+    KEYBOARD_VISUAL_VIEWPORT_GAP,
+} from "./constants/layout";
+import {
+    AGE_STOPS,
+    GENDER_OPTIONS,
+    Q1_OPTIONS,
+    Q1_OPTION_BASE_TOP_PERCENT,
+    Q1_OPTION_STEP_PERCENT,
+    Q2_OPTIONS,
+    Q2_STAGE_HEIGHT,
+    Q2_TOGGLE_IMAGE_SIZE,
+    Q2_LABEL_LEFT_PERCENT,
+    Q2_LABEL_WIDTH_PERCENT,
+    Q2_TOGGLE_WIDTH_PERCENT,
+    Q3_OPTIONS,
+    Q3_STAGE_HEIGHT,
+    Q3_TOGGLE_IMAGE_SIZE,
+    Q3_LABEL_LEFT_PERCENT,
+    Q3_LABEL_WIDTH_PERCENT,
+    Q3_TOGGLE_WIDTH_PERCENT,
+    Q3_OPTIONS_CONTAINER_STAGE_TOP,
+    Q3_OPTIONS_CONTAINER_STAGE_HEIGHT,
+    Q3_OPTIONS_CONTAINER_TOP_PERCENT,
+    Q3_OPTIONS_CONTAINER_HEIGHT_PERCENT,
+    Q4_OPTIONS,
+    Q4_OPTIONS_CONTAINER_HEIGHT,
+    Q5_OPTIONS,
+    Q5_OPTIONS_CONTAINER_HEIGHT,
+} from "./constants/options";
 
 export default function App() {
     const [page, setPage] = useState(0);
@@ -1022,28 +715,17 @@ export default function App() {
     const page0StateClass = expanded ? "is-expanded" : "is-collapsed";
 
     const renderPhoneStage = useCallback(
-        (content, { innerClassName } = {}) => {
-            const innerClasses = ["phone-stage-inner"];
-            if (innerClassName) {
-                innerClasses.push(innerClassName);
-            }
-
-            return (
-                <div className="app-root">
-                    <div className="phone-stage" ref={phoneStageRef}>
-                        <div
-                            className={innerClasses.join(" ")}
-                            style={{
-                                backgroundImage: `url(${bgUrl})`,
-                            }}
-                        >
-                            {content}
-                        </div>
-                    </div>
-                </div>
-            );
-        },
-        [bgUrl]
+        (content, { innerClassName } = {}) => (
+            <PhoneStage
+                ref={phoneStageRef}
+                backgroundUrl={bgUrl}
+                innerClassName={innerClassName}
+                page={page}
+            >
+                {content}
+            </PhoneStage>
+        ),
+        [bgUrl, page]
     );
 
     // ----- PAGE 1 (임시) -----
