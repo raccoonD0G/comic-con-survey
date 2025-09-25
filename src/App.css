@@ -282,6 +282,20 @@
     position: absolute;
     left: 40%;
     top: 8.450704%;
+    width: 15.466667%;
+    height: auto;
+    max-width: none;
+    pointer-events: none;
+    z-index: 1;
+    display: block;
+}
+
+.page7-done-text {
+    position: absolute;
+    left: 40%;
+    top: 8.450704%;
+    width: 19.733333%;
+    height: auto;
     max-width: none;
     pointer-events: none;
     z-index: 1;
