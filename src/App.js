@@ -887,83 +887,90 @@ export default function App() {
     // ----- PAGE 1 (임시) -----
     if (page === 1) {
         return renderPhoneStage(
-            <div className="page page1">
-                <ImgWithFallback
-                    className="page1-basic-info"
-                    sources={BASIC_INFO_SOURCES}
-                    alt="기본 정보"
-                />
-                <ImgWithFallback
-                    className="page1-email-image"
-                    sources={EMAIL_IMAGE_SOURCES}
-                    alt="이메일 안내"
-                />
-                <label className="page1-email-input">
-                    <span className="sr-only">이메일 주소 입력</span>
+            renderQuestionLayout(
+                "page1",
+                <>
                     <ImgWithFallback
-                        className="page1-email-input-bg"
-                        sources={EMAIL_TEXT_BOX_SOURCES}
-                        alt=""
-                        aria-hidden="true"
+                        className="page1-basic-info"
+                        sources={BASIC_INFO_SOURCES}
+                        alt="기본 정보"
                     />
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(event) => setEmail(event.target.value)}
-                        placeholder="이메일을 입력하세요"
-                        autoComplete="email"
-                    />
-                </label>
-                <button
-                    className="img-btn page1-before-btn"
-                    type="button"
-                    onClick={() => setPage(0)}
-                    aria-label="이전 페이지"
-                    title="이전 페이지로 돌아가기"
-                >
                     <ImgWithFallback
-                        className="page1-before-btn-img"
-                        sources={BEFORE_BUTTON_SOURCES}
-                        alt="이전"
+                        className="page1-email-image"
+                        sources={EMAIL_IMAGE_SOURCES}
+                        alt="이메일 안내"
                     />
-                </button>
-                <div className="page-bottom-nav">
-                    <button
-                        className="img-btn page1-next-btn"
-                        type="button"
-                        onClick={handleAdvanceFromPage1}
-                        aria-label="다음 페이지"
-                        title={
-                            canAdvanceFromPage1
-                                ? "다음 페이지로 이동"
-                                : "이메일을 입력하면 다음 페이지로 이동할 수 있습니다"
-                        }
-                        disabled={!canAdvanceFromPage1}
-                    >
+                    <label className="page1-email-input">
+                        <span className="sr-only">이메일 주소 입력</span>
                         <ImgWithFallback
-                            className="page1-next-btn-img"
-                            sources={
-                                canAdvanceFromPage1
-                                    ? NEXT_ON_BUTTON_SOURCES
-                                    : NEXT_OFF_BUTTON_SOURCES
-                            }
-                            alt="다음"
-                        />
-                        <ImgWithFallback
-                            className="page1-next-text"
-                            sources={NEXT_TEXT_SOURCES}
+                            className="page1-email-input-bg"
+                            sources={EMAIL_TEXT_BOX_SOURCES}
                             alt=""
                             aria-hidden="true"
                         />
+                        <input
+                            type="email"
+                            value={email}
+                            onChange={(event) => setEmail(event.target.value)}
+                            placeholder="이메일을 입력하세요"
+                            autoComplete="email"
+                        />
+                    </label>
+                    <button
+                        className="img-btn page1-before-btn"
+                        type="button"
+                        onClick={() => setPage(0)}
+                        aria-label="이전 페이지"
+                        title="이전 페이지로 돌아가기"
+                    >
+                        <ImgWithFallback
+                            className="page1-before-btn-img"
+                            sources={BEFORE_BUTTON_SOURCES}
+                            alt="이전"
+                        />
                     </button>
-                </div>
-            </div>
+                </>,
+                (
+                    <div className="page-bottom-nav">
+                        <button
+                            className="img-btn page1-next-btn"
+                            type="button"
+                            onClick={handleAdvanceFromPage1}
+                            aria-label="다음 페이지"
+                            title={
+                                canAdvanceFromPage1
+                                    ? "다음 페이지로 이동"
+                                    : "이메일을 입력하면 다음 페이지로 이동할 수 있습니다"
+                            }
+                            disabled={!canAdvanceFromPage1}
+                        >
+                            <ImgWithFallback
+                                className="page1-next-btn-img"
+                                sources={
+                                    canAdvanceFromPage1
+                                        ? NEXT_ON_BUTTON_SOURCES
+                                        : NEXT_OFF_BUTTON_SOURCES
+                                }
+                                alt="다음"
+                            />
+                            <ImgWithFallback
+                                className="page1-next-text"
+                                sources={NEXT_TEXT_SOURCES}
+                                alt=""
+                                aria-hidden="true"
+                            />
+                        </button>
+                    </div>
+                )
+            )
         );
     }
 
     if (page === 2) {
         return renderPhoneStage(
-            <div className="page page2">
+            renderQuestionLayout(
+                "page2",
+                <>
                         <ImgWithFallback
                             className="page2-basic-info"
                             sources={BASIC_INFO_SOURCES}
@@ -1074,41 +1081,44 @@ export default function App() {
                                 alt="이전"
                             />
                         </button>
-                        <div className="page-bottom-nav">
-                            <button
-                                className="img-btn page2-next-btn"
-                                type="button"
-                                onClick={() => {
-                                    if (canAdvanceFromPage2) {
-                                        setPage(3);
-                                    }
-                                }}
-                                aria-label="다음 페이지"
-                                title={
+                </>,
+                (
+                    <div className="page-bottom-nav">
+                        <button
+                            className="img-btn page2-next-btn"
+                            type="button"
+                            onClick={() => {
+                                if (canAdvanceFromPage2) {
+                                    setPage(3);
+                                }
+                            }}
+                            aria-label="다음 페이지"
+                            title={
+                                canAdvanceFromPage2
+                                    ? "다음 페이지로 이동"
+                                    : "성별을 선택하면 다음으로 이동할 수 있습니다"
+                            }
+                            disabled={!canAdvanceFromPage2}
+                        >
+                            <ImgWithFallback
+                                className="page2-next-btn-img"
+                                sources={
                                     canAdvanceFromPage2
                                         ? "다음 페이지로 이동"
                                         : "성별을 선택하면 다음으로 이동할 수 있습니다"
                                 }
-                                disabled={!canAdvanceFromPage2}
-                            >
-                                <ImgWithFallback
-                                    className="page2-next-btn-img"
-                                    sources={
-                                        canAdvanceFromPage2
-                                            ? NEXT_ON_BUTTON_SOURCES
-                                            : NEXT_OFF_BUTTON_SOURCES
-                                    }
-                                    alt="다음"
-                                />
-                                <ImgWithFallback
-                                    className="page2-next-text"
-                                    sources={NEXT_TEXT_SOURCES}
-                                    alt=""
-                                    aria-hidden="true"
-                                />
-                            </button>
-                        </div>
-            </div>
+                                alt="다음"
+                            />
+                            <ImgWithFallback
+                                className="page2-next-text"
+                                sources={NEXT_TEXT_SOURCES}
+                                alt=""
+                                aria-hidden="true"
+                            />
+                        </button>
+                    </div>
+                )
+            )
         );
     }
 
