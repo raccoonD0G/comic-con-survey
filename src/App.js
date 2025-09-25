@@ -473,9 +473,19 @@ export default function App() {
 
             const widthScale =
                 viewportWidth / PHONE_STAGE_DESIGN_WIDTH;
-            const phoneStageWidth = viewportWidth;
-            const phoneStageHeight =
+            const naturalPhoneStageHeight =
                 PHONE_STAGE_DESIGN_HEIGHT * widthScale;
+
+            let phoneStageScale = 1;
+            let phoneStageHeight = naturalPhoneStageHeight;
+
+            if (naturalPhoneStageHeight > nextViewportHeight) {
+                phoneStageScale =
+                    nextViewportHeight / naturalPhoneStageHeight;
+                phoneStageHeight = nextViewportHeight;
+            }
+
+            const phoneStageWidth = viewportWidth;
 
             rootElement.style.setProperty(
                 "--phone-stage-width",
@@ -485,6 +495,11 @@ export default function App() {
                 "--phone-stage-height",
                 `${phoneStageHeight}px`
             );
+            rootElement.style.setProperty(
+                "--phone-stage-scale",
+                `${phoneStageScale}`
+            );
+
 
             if (wasKeyboardOpenRef.current) {
                 if (Math.abs(window.scrollY) > VIEWPORT_HEIGHT_EPSILON) {
