@@ -186,7 +186,7 @@
 .page1-basic-info {
     position: absolute;
     left: 4.8%;
-    top: 15.640394%;
+    top: 6.773399%;
     width: 66.133333%;
     max-width: none;
     height: auto;
@@ -195,7 +195,7 @@
 .page1-email-image {
     position: absolute;
     left: 42.9333%;
-    top: 40.3941%;
+    top: 36.330049%;
     width: 13.6%;
     max-width: none;
     height: auto;
@@ -204,7 +204,7 @@
 .page1-email-input {
     position: absolute;
     left: 7.7333%;
-    top: 45.8128%;
+    top: 41.748768%;
     width: 85.3333%;
     height: 6.8966%;
     display: block;
@@ -375,7 +375,7 @@
 .page2-basic-info {
     position: absolute;
     left: 4.8%;
-    top: 15.640394%;
+    top: 6.773399%;
     width: 66.133333%;
     height: auto;
     max-width: none;
@@ -385,7 +385,7 @@
 .page2-age-title {
     position: absolute;
     left: 8%;
-    top: 28.078818%;
+    top: 18.349754%;
     width: 10.133333%;
     height: auto;
     max-width: none;
@@ -394,8 +394,8 @@
 
 .page2-age-line {
     position: absolute;
-    left: 7.466667%;
-    top: 33.990148%;
+    left: 4.533333%;
+    top: 24.261084%;
     width: 90.4%;
     height: auto;
     max-width: none;
@@ -405,7 +405,7 @@
 
 .page2-age-handle {
     position: absolute;
-    top: 33.251232%;
+    top: 23.522167%;
     width: 4.8%;
     height: auto;
     max-width: none;
@@ -421,8 +421,8 @@
 
 .page2-age-range {
     position: absolute;
-    left: 7.466667%;
-    top: 33.990148%;
+    left: 4.533333%;
+    top: 24.261084%;
     width: 90.4%;
     height: 4.55665%;
     margin: 0;
@@ -467,7 +467,7 @@
 .page2-gender-title {
     position: absolute;
     left: 8%;
-    top: 48.522167%;
+    top: 36.206897%;
     width: 18.666667%;
     height: auto;
     max-width: none;
