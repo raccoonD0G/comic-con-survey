@@ -111,58 +111,32 @@
     padding: 0;
 }
 
+
 .page0-entry-img {
     position: absolute;
-    left: 5.0667%;
-    width: 89.6%;
     max-width: none;
     height: auto;
-    transition: top 600ms ease;
-}
-
-.page0-entry-img-bottom {
-    left: 3.2%;
-    width: 99.7333%;
-}
-
-.page0.is-collapsed .page0-entry-img-top {
-    top: 73.7685%;
-}
-
-.page0.is-expanded .page0-entry-img-top {
-    top: 64.6552%;
-}
-
-.page0.is-collapsed .page0-entry-img-bottom {
-    top: 84.9754%;
-}
-
-.page0.is-expanded .page0-entry-img-bottom {
-    top: 75.9852%;
-}
-
-.page0-entry-fade {
-    position: absolute;
-    left: 3.2%;
-    width: 93.3333%;
-    height: 9.4828%;
-    background: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0),
-        rgba(0, 0, 0, 0.85)
-    );
-    opacity: 1;
-    transition: top 600ms ease, opacity 600ms ease;
+    opacity: 0;
+    transform: translateY(8%);
+    transition: opacity 600ms ease, transform 600ms ease;
     pointer-events: none;
 }
 
-.page0.is-collapsed .page0-entry-fade {
-    top: 84.9754%;
+.page0-entry-img-top {
+    left: 5.8667%;
+    top: 66.625%;
+    width: 89.6%;
 }
 
-.page0.is-expanded .page0-entry-fade {
-    top: 75.9852%;
-    opacity: 0;
+.page0-entry-img-bottom {
+    left: 4%;
+    top: 77.9635%;
+    width: 93.3333%;
+}
+
+.page0.is-expanded .page0-entry-img {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .page0 .arrow-button,
@@ -172,8 +146,8 @@
 }
 
 .page0 .arrow-button {
-    left: 47.7333%;
-    top: 88.0542%;
+    left: 47.4667%;
+    top: 63.5463%;
     width: 4%;
     transition: opacity 220ms ease;
 }
@@ -184,14 +158,14 @@
 }
 
 .page0 .agree-btn {
-    left: 36.5333%;
-    top: 90.1478%;
+    left: 36.2667%;
+    top: 59.3603%;
     width: 26.6667%;
 }
 
 .page0 .start-btn {
     left: 28%;
-    top: 48.2759%;
+    top: 50.1232%;
     width: 44%;
 }
 
@@ -314,11 +288,10 @@
 
 .page-bottom-nav {
     position: fixed;
-    left: 50%;
+    left: 0;
+    right: 0;
     bottom: 0;
-    width: min(var(--phone-stage-width), 100vw);
     height: var(--page-nav-height);
-    transform: translateX(-50%);
     display: flex;
     z-index: 100;
 }
@@ -596,8 +569,8 @@
 .page3-q1-title {
     position: absolute;
     left: 7.733333%;
-    top: 12.184874%;
-    width: 15.2%;
+    top: 6.773399%;
+    width: 16%;
     height: auto;
     max-width: none;
     display: block;
@@ -605,7 +578,7 @@
 .page3-q1-text {
     position: absolute;
     left: 8%;
-    top: 20.935961%;
+    top: 15.8867%;
     width: 77.866667%;
     height: auto;
     max-width: none;
@@ -618,11 +591,16 @@
     width: 100%;
     height: 100%;
 }
-.page3-q1-option {
+.page3-q1-option-wrapper {
     position: absolute;
     left: 6.133333%;
     width: 86.133333%;
     height: 10.098522%;
+}
+.page3-q1-option-button {
+    position: relative;
+    width: 100%;
+    height: 100%;
     background: none;
     border: none;
     padding: 0;
@@ -630,11 +608,11 @@
     display: block;
     cursor: pointer;
 }
-.page3-q1-option:focus-visible {
+.page3-q1-option-button:focus-visible {
     outline: 2px solid #fff;
     outline-offset: 2px;
 }
-.page3-q1-option:disabled {
+.page3-q1-option-button:disabled {
     cursor: default;
 }
 .page3-q1-toggle {
@@ -656,6 +634,12 @@
     max-width: none;
     display: block;
     pointer-events: none;
+}
+.page3-q1-other-input {
+    left: 14.241486%;
+    top: 0;
+    width: 85.758514%;
+    height: 73.170732%;
 }
 .page3-before-btn {
     position: absolute;
@@ -680,8 +664,8 @@
 .page4-q2-title {
     position: absolute;
     left: 7.733333%;
-    top: 12.191176%;
-    width: 18.666667%;
+    top: 6.773399%;
+    width: 18.933333%;
     height: auto;
     max-width: none;
     display: block;
@@ -689,7 +673,7 @@
 .page4-q2-text {
     position: absolute;
     left: 8%;
-    top: 20.935961%;
+    top: 15.8867%;
     width: 77.866667%;
     height: auto;
     max-width: none;
@@ -698,9 +682,7 @@
 .page4-q2-options {
     position: absolute;
     left: 0;
-    top: 0;
     width: 100%;
-    height: 100%;
 }
 .page4-q2-option-wrapper {
     position: absolute;
@@ -740,11 +722,13 @@
     display: block;
     pointer-events: none;
 }
+.option-other-input,
 .page4-q2-other-input {
     position: absolute;
     z-index: 2;
     display: block;
 }
+.option-other-input-bg,
 .page4-q2-other-input-bg {
     width: 100%;
     height: 100%;
@@ -752,6 +736,7 @@
     max-width: none;
     pointer-events: none;
 }
+.option-other-input-field,
 .page4-q2-other-input-field {
     position: absolute;
     top: 50%;
@@ -769,9 +754,11 @@
     padding: 0 4.375%;
     text-align: left;
 }
+.option-other-input-field::placeholder,
 .page4-q2-other-input-field::placeholder {
     color: rgba(255, 255, 255, 0.68);
 }
+.option-other-input-field:focus-visible,
 .page4-q2-other-input-field:focus-visible {
     outline: none;
     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.9);
@@ -800,8 +787,8 @@
 .page5-q3-title {
     position: absolute;
     left: 7.733333%;
-    top: 12.184874%;
-    width: 18.933333%;
+    top: 6.773399%;
+    width: 19.2%;
     height: auto;
     max-width: none;
     display: block;
@@ -809,7 +796,7 @@
 .page5-q3-text {
     position: absolute;
     left: 8.266667%;
-    top: 20.935961%;
+    top: 15.8867%;
     width: 85.066667%;
     height: auto;
     max-width: none;
@@ -881,8 +868,8 @@
 .page6-q4-title {
     position: absolute;
     left: 7.733333%;
-    top: 12.192118%;
-    width: 18.933333%;
+    top: 6.773399%;
+    width: 19.733333%;
     height: auto;
     max-width: none;
     display: block;
@@ -890,8 +877,8 @@
 .page6-q4-text {
     position: absolute;
     left: 8.266667%;
-    top: 20.935961%;
-    width: 85.066667%;
+    top: 15.8867%;
+    width: 75.466667%;
     height: auto;
     max-width: none;
     display: block;
@@ -899,18 +886,19 @@
 .page6-q4-options {
     position: absolute;
     left: 6.133333%;
-    top: 32.512315%;
+    top: 26.973891%;
     width: 86.133333%;
-    height: 46.305419%;
+    height: 50.492611%;
 }
 .page6-q4-option {
     position: absolute;
     left: 0;
     width: 100%;
-    height: 15.957447%;
 }
 .page6-q4-option-button {
-    position: relative;
+    position: absolute;
+    left: 0;
+    top: 0;
     width: 100%;
     height: 100%;
     background: none;
@@ -930,9 +918,7 @@
 .page6-q4-toggle {
     position: absolute;
     left: 0;
-    top: 30%;
     width: 7.430341%;
-    height: auto;
     max-width: none;
     display: block;
     pointer-events: none;
@@ -940,12 +926,16 @@
 .page6-q4-label {
     position: absolute;
     left: 14.241486%;
-    top: 0;
     width: 85.758514%;
-    height: 100%;
     max-width: none;
     display: block;
     pointer-events: none;
+}
+.page6-q4-other-input {
+    position: absolute;
+    left: 14.241486%;
+    width: 85.758514%;
+    display: block;
 }
 .page6-before-btn {
     position: absolute;
@@ -971,8 +961,8 @@
 .page7-q5-title {
     position: absolute;
     left: 7.733333%;
-    top: 12.192118%;
-    width: 18.933333%;
+    top: 6.773399%;
+    width: 19.2%;
     height: auto;
     max-width: none;
     display: block;
@@ -981,7 +971,7 @@
 .page7-q5-text {
     position: absolute;
     left: 8.266667%;
-    top: 20.935961%;
+    top: 15.8867%;
     width: 75.2%;
     height: auto;
     max-width: none;
@@ -991,9 +981,9 @@
 .page7-q5-options {
     position: absolute;
     left: 6.133333%;
-    top: 33.251231%;
+    top: 26.973891%;
     width: 86.133333%;
-    height: 47.573792%;
+    height: 47.536946%;
 }
 
 .page7-q5-option {
@@ -1044,6 +1034,12 @@
     display: block;
     pointer-events: none;
 }
+.page7-q5-other-input {
+    left: 14.241486%;
+    top: 0;
+    width: 85.758514%;
+    height: 100%;
+}
 
 .page7-before-btn {
     position: absolute;
@@ -1083,16 +1079,6 @@
     height: 100%;
     display: block;
     padding: 0;
-}
-
-.page8-ending-image {
-    position: absolute;
-    left: 16.533333%;
-    top: 16.009852%;
-    height: 60.757389%;
-    width: auto;
-    max-width: none;
-    display: block;
 }
 
 
