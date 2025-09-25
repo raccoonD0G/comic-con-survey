@@ -413,6 +413,7 @@ export default function App() {
                 }
             }
 
+
             const candidateHeights = [];
 
             if (innerHeight > 0 && Number.isFinite(innerHeight)) {
