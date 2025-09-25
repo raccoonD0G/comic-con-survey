@@ -350,6 +350,8 @@ const Q5_OPTIONS_CONTAINER_HEIGHT = Q5_OPTIONS.reduce((maxBottom, option) => {
     return bottom > maxBottom ? bottom : maxBottom;
 }, 0);
 const ENDING_IMAGE_SOURCES = ["/ending.png"];
+const VIEWPORT_HEIGHT_EPSILON = 1;
+const KEYBOARD_VISUAL_VIEWPORT_GAP = 120;
 
 function ImgWithFallback({ sources = [], alt, ...imgProps }) {
     const [activeIndex, setActiveIndex] = useState(0);
@@ -402,6 +404,7 @@ export default function App() {
     const [submitting, setSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState(null);
     const genderOptionCount = GENDER_OPTIONS.length;
+    const phoneStageRef = useRef(null);
     const genderOptionRefs = useRef([]);
     const q1OptionCount = Q1_OPTIONS.length;
     const q1OptionRefs = useRef([]);
@@ -413,6 +416,7 @@ export default function App() {
     const q4OptionRefs = useRef([]);
     const q5OptionCount = Q5_OPTIONS.length;
     const q5OptionRefs = useRef([]);
+    const wasKeyboardOpenRef = useRef(false);
     const q2OtherInputRef = useRef(null);
     const initialEmailRef = useRef("");
     const focusGenderOption = useCallback(
@@ -694,6 +698,107 @@ export default function App() {
         setAgeInteracted(true);
     }, []);
     useEffect(() => {
+        if (typeof window === "undefined") {
+            return;
+        }
+
+        const rootElement = document.documentElement;
+        if (!rootElement) {
+            return;
+        }
+
+        const updateViewportHeight = () => {
+            const { innerHeight, visualViewport } = window;
+            const { clientHeight } = rootElement;
+
+            const candidateHeights = [];
+
+            if (innerHeight > 0 && Number.isFinite(innerHeight)) {
+                candidateHeights.push(innerHeight);
+            }
+
+            if (clientHeight > 0 && Number.isFinite(clientHeight)) {
+                candidateHeights.push(clientHeight);
+            }
+
+            if (candidateHeights.length === 0) {
+                return;
+            }
+
+            const layoutViewportHeight = Math.max(...candidateHeights);
+
+            let visualViewportHeight = null;
+            if (visualViewport) {
+                const { height } = visualViewport;
+                if (height > 0 && Number.isFinite(height)) {
+                    visualViewportHeight = height;
+                }
+
+                if (
+                    visualViewportHeight !== null &&
+                    layoutViewportHeight - visualViewportHeight >
+                        KEYBOARD_VISUAL_VIEWPORT_GAP
+                ) {
+                    wasKeyboardOpenRef.current = true;
+                    return;
+                }
+            }
+
+            const nextViewportHeight = Math.max(
+                layoutViewportHeight,
+                visualViewportHeight ?? 0
+            );
+
+            rootElement.style.setProperty(
+                "--app-viewport-height",
+                `${nextViewportHeight}px`
+            );
+
+            if (wasKeyboardOpenRef.current) {
+                if (Math.abs(window.scrollY) > VIEWPORT_HEIGHT_EPSILON) {
+                    window.scrollTo(0, 0);
+                }
+
+                const phoneStage = phoneStageRef.current;
+                if (
+                    phoneStage &&
+                    Math.abs(phoneStage.scrollTop) > VIEWPORT_HEIGHT_EPSILON
+                ) {
+                    phoneStage.scrollTop = 0;
+                }
+            }
+
+            wasKeyboardOpenRef.current = false;
+        };
+
+        updateViewportHeight();
+
+        window.addEventListener("resize", updateViewportHeight);
+        window.addEventListener("orientationchange", updateViewportHeight);
+
+        const visualViewport = window.visualViewport;
+        if (visualViewport) {
+            visualViewport.addEventListener("resize", updateViewportHeight);
+            visualViewport.addEventListener("scroll", updateViewportHeight);
+        }
+
+        return () => {
+            window.removeEventListener("resize", updateViewportHeight);
+            window.removeEventListener("orientationchange", updateViewportHeight);
+
+            if (visualViewport) {
+                visualViewport.removeEventListener(
+                    "resize",
+                    updateViewportHeight
+                );
+                visualViewport.removeEventListener(
+                    "scroll",
+                    updateViewportHeight
+                );
+            }
+        };
+    }, []);
+    useEffect(() => {
         genderOptionRefs.current = genderOptionRefs.current.slice(0, genderOptionCount);
     }, [genderOptionCount]);
     useEffect(() => {
@@ -711,6 +816,12 @@ export default function App() {
     useEffect(() => {
         q5OptionRefs.current = q5OptionRefs.current.slice(0, q5OptionCount);
     }, [q5OptionCount]);
+    useEffect(() => {
+        const phoneStage = phoneStageRef.current;
+        if (phoneStage) {
+            phoneStage.scrollTop = 0;
+        }
+    }, [page]);
     useEffect(() => {
         if (page !== 7) {
             setSubmitError(null);
@@ -861,6 +972,7 @@ export default function App() {
             <div className="app-root">
                 <div
                     className="phone-stage"
+                    ref={phoneStageRef}
                     style={{
                         backgroundImage: `url(${bgUrl})`,
                     }}
@@ -944,6 +1056,7 @@ export default function App() {
             <div className="app-root">
                 <div
                     className="phone-stage"
+                    ref={phoneStageRef}
                     style={{
                         backgroundImage: `url(${bgUrl})`,
                     }}
@@ -1102,6 +1215,7 @@ export default function App() {
             <div className="app-root">
                 <div
                     className="phone-stage"
+                    ref={phoneStageRef}
                     style={{
                         backgroundImage: `url(${bgUrl})`,
                     }}
@@ -1228,6 +1342,7 @@ export default function App() {
             <div className="app-root">
                 <div
                     className="phone-stage"
+                    ref={phoneStageRef}
                     style={{
                         backgroundImage: `url(${bgUrl})`,
                     }}
@@ -1321,23 +1436,37 @@ export default function App() {
                                             />
                                         </button>
                                         {option.allowsCustomInput && isSelected ? (
-                                            <input
-                                                ref={q2OtherInputRef}
+                                            <label
                                                 className="page4-q2-other-input"
-                                                type="text"
-                                                value={q2OtherText}
-                                                onChange={(event) =>
-                                                    setQ2OtherText(event.target.value)
-                                                }
-                                                placeholder="직접 입력"
-                                                aria-label="기타 의견 입력"
                                                 style={{
                                                     top: `${labelTopPercent}%`,
                                                     height: `${labelHeightPercent}%`,
                                                     left: `${Q2_LABEL_LEFT_PERCENT}%`,
                                                     width: `${Q2_LABEL_WIDTH_PERCENT}%`,
                                                 }}
-                                            />
+                                            >
+                                                <span className="sr-only">
+                                                    기타 의견 입력
+                                                </span>
+                                                <ImgWithFallback
+                                                    className="page4-q2-other-input-bg"
+                                                    sources={EMAIL_TEXT_BOX_SOURCES}
+                                                    alt=""
+                                                    aria-hidden="true"
+                                                />
+                                                <input
+                                                    ref={q2OtherInputRef}
+                                                    className="page4-q2-other-input-field"
+                                                    type="text"
+                                                    value={q2OtherText}
+                                                    onChange={(event) =>
+                                                        setQ2OtherText(
+                                                            event.target.value
+                                                        )
+                                                    }
+                                                    placeholder="직접 입력"
+                                                />
+                                            </label>
                                         ) : null}
                                     </div>
                                 );
@@ -1404,6 +1533,7 @@ export default function App() {
             <div className="app-root">
                 <div
                     className="phone-stage"
+                    ref={phoneStageRef}
                     style={{
                         backgroundImage: `url(${bgUrl})`,
                     }}
@@ -1579,6 +1709,7 @@ export default function App() {
             <div className="app-root">
                 <div
                     className="phone-stage"
+                    ref={phoneStageRef}
                     style={{
                         backgroundImage: `url(${bgUrl})`,
                     }}
@@ -1711,6 +1842,7 @@ export default function App() {
             <div className="app-root">
                 <div
                     className="phone-stage"
+                    ref={phoneStageRef}
                     style={{
                         backgroundImage: `url(${bgUrl})`,
                     }}
@@ -1860,6 +1992,7 @@ export default function App() {
             <div className="app-root">
                 <div
                     className="phone-stage"
+                    ref={phoneStageRef}
                     style={{
                         backgroundImage: `url(${bgUrl})`,
                     }}
@@ -1881,6 +2014,7 @@ export default function App() {
         <div className="app-root">
             <div
                 className="phone-stage"
+                ref={phoneStageRef}
                 style={{
                     backgroundImage: `url(${bgUrl})`,
                 }}
