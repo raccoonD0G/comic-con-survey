@@ -413,6 +413,7 @@ export default function App() {
                 }
             }
 
+
             const candidateHeights = [];
 
             if (innerHeight > 0 && Number.isFinite(innerHeight)) {
@@ -498,6 +499,7 @@ export default function App() {
                 "--phone-stage-scale",
                 `${phoneStageScale}`
             );
+
 
             if (wasKeyboardOpenRef.current) {
                 if (Math.abs(window.scrollY) > VIEWPORT_HEIGHT_EPSILON) {
