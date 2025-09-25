@@ -350,6 +350,8 @@ const Q5_OPTIONS_CONTAINER_HEIGHT = Q5_OPTIONS.reduce((maxBottom, option) => {
     return bottom > maxBottom ? bottom : maxBottom;
 }, 0);
 const ENDING_IMAGE_SOURCES = ["/ending.png"];
+const VIEWPORT_HEIGHT_EPSILON = 1;
+const KEYBOARD_VISUAL_VIEWPORT_GAP = 120;
 
 function ImgWithFallback({ sources = [], alt, ...imgProps }) {
     const [activeIndex, setActiveIndex] = useState(0);
@@ -413,6 +415,7 @@ export default function App() {
     const q4OptionRefs = useRef([]);
     const q5OptionCount = Q5_OPTIONS.length;
     const q5OptionRefs = useRef([]);
+    const wasKeyboardOpenRef = useRef(false);
     const q2OtherInputRef = useRef(null);
     const initialEmailRef = useRef("");
     const focusGenderOption = useCallback(
@@ -692,6 +695,95 @@ export default function App() {
     }, []);
     const markAgeInteracted = useCallback(() => {
         setAgeInteracted(true);
+    }, []);
+    useEffect(() => {
+        if (typeof window === "undefined") {
+            return;
+        }
+
+        const rootElement = document.documentElement;
+        if (!rootElement) {
+            return;
+        }
+
+        const updateViewportHeight = () => {
+            const { innerHeight, visualViewport } = window;
+            const { clientHeight } = rootElement;
+
+            const candidateHeights = [];
+
+            if (innerHeight > 0 && Number.isFinite(innerHeight)) {
+                candidateHeights.push(innerHeight);
+            }
+
+            if (clientHeight > 0 && Number.isFinite(clientHeight)) {
+                candidateHeights.push(clientHeight);
+            }
+
+            if (candidateHeights.length === 0) {
+                return;
+            }
+
+            const layoutViewportHeight = Math.max(...candidateHeights);
+
+            let isKeyboardOpen = false;
+            if (visualViewport) {
+                const { height } = visualViewport;
+                if (
+                    height > 0 &&
+                    Number.isFinite(height) &&
+                    layoutViewportHeight - height > KEYBOARD_VISUAL_VIEWPORT_GAP
+                ) {
+                    isKeyboardOpen = true;
+                }
+            }
+
+            if (isKeyboardOpen) {
+                wasKeyboardOpenRef.current = true;
+                return;
+            }
+
+            rootElement.style.setProperty(
+                "--app-viewport-height",
+                `${layoutViewportHeight}px`
+            );
+
+            if (
+                wasKeyboardOpenRef.current &&
+                Math.abs(window.scrollY) > VIEWPORT_HEIGHT_EPSILON
+            ) {
+                window.scrollTo(0, 0);
+            }
+
+            wasKeyboardOpenRef.current = false;
+        };
+
+        updateViewportHeight();
+
+        window.addEventListener("resize", updateViewportHeight);
+        window.addEventListener("orientationchange", updateViewportHeight);
+
+        const visualViewport = window.visualViewport;
+        if (visualViewport) {
+            visualViewport.addEventListener("resize", updateViewportHeight);
+            visualViewport.addEventListener("scroll", updateViewportHeight);
+        }
+
+        return () => {
+            window.removeEventListener("resize", updateViewportHeight);
+            window.removeEventListener("orientationchange", updateViewportHeight);
+
+            if (visualViewport) {
+                visualViewport.removeEventListener(
+                    "resize",
+                    updateViewportHeight
+                );
+                visualViewport.removeEventListener(
+                    "scroll",
+                    updateViewportHeight
+                );
+            }
+        };
     }, []);
     useEffect(() => {
         genderOptionRefs.current = genderOptionRefs.current.slice(0, genderOptionCount);
