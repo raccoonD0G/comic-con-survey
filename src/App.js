@@ -15,7 +15,9 @@ import {
     AGE_TRACK_WIDTH_PERCENT,
     BACKGROUND_IMAGE_PATHS,
     BASIC_INFO_SOURCES,
+    BEFORE_BUTTON_BOTTOM_PERCENT,
     BEFORE_BUTTON_SOURCES,
+    BEFORE_BUTTON_TARGET_GAP_PX,
     DONE_BUTTON_SOURCES,
     DONE_OFF_BUTTON_SOURCES,
     DONE_TEXT_SOURCES,
@@ -630,6 +632,7 @@ export default function App() {
     useEffect(() => {
         q5OptionRefs.current = q5OptionRefs.current.slice(0, q5OptionCount);
     }, [q5OptionCount]);
+
     useEffect(() => {
         const phoneStage = phoneStageRef.current;
         if (phoneStage) {
