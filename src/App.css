@@ -278,6 +278,16 @@
     display: block;
 }
 
+.page7-done-text {
+    position: absolute;
+    left: 40%;
+    top: 8.450704%;
+    max-width: none;
+    pointer-events: none;
+    z-index: 1;
+    display: block;
+}
+
 .page-progress {
     position: absolute;
     left: 41.866667%;
