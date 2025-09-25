@@ -24,7 +24,7 @@ export const Q4_TITLE_SOURCES = ["/q4_title_image.png"];
 export const Q4_TEXT_SOURCES = ["/q4_text_image.png"];
 export const Q5_TITLE_SOURCES = ["/q5_title_image.png"];
 export const Q5_TEXT_SOURCES = ["/q5_text_image.png"];
-export const ENDING_IMAGE_SOURCES = ["/ending.png"];
+export const ENDING_IMAGE_SOURCES = ["/B8.png"];
 
 export const PHONE_STAGE_DESIGN_WIDTH = 375;
 export const PHONE_STAGE_DESIGN_HEIGHT = 812;
@@ -376,6 +376,7 @@ export const BACKGROUND_IMAGE_PATHS = [
     "/B5.png",
     "/B6.png",
     "/B7.png",
+    "/B8.png",
 ];
 
 const STATIC_PRELOAD_SOURCES = [

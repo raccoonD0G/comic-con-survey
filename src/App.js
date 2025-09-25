@@ -20,7 +20,6 @@ import {
     DONE_TEXT_SOURCES,
     EMAIL_IMAGE_SOURCES,
     EMAIL_TEXT_BOX_SOURCES,
-    ENDING_IMAGE_SOURCES,
     GENDER_OPTIONS,
     GENDER_TEXT_SOURCES,
     KEYBOARD_VISUAL_VIEWPORT_GAP,
@@ -2186,11 +2185,7 @@ export default function App() {
     if (page === 8) {
         return renderPhoneStage(
             <div className="page page8">
-                        <ImgWithFallback
-                            className="page8-ending-image"
-                            sources={ENDING_IMAGE_SOURCES}
-                            alt="설문이 완료되었습니다"
-                        />
+                <span className="sr-only">설문이 완료되었습니다</span>
             </div>
         );
     }
