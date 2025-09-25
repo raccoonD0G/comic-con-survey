@@ -404,6 +404,7 @@ export default function App() {
     const [submitting, setSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState(null);
     const genderOptionCount = GENDER_OPTIONS.length;
+    const phoneStageRef = useRef(null);
     const genderOptionRefs = useRef([]);
     const q1OptionCount = Q1_OPTIONS.length;
     const q1OptionRefs = useRef([]);
@@ -726,33 +727,45 @@ export default function App() {
 
             const layoutViewportHeight = Math.max(...candidateHeights);
 
-            let isKeyboardOpen = false;
+            let visualViewportHeight = null;
             if (visualViewport) {
                 const { height } = visualViewport;
+                if (height > 0 && Number.isFinite(height)) {
+                    visualViewportHeight = height;
+                }
+
                 if (
-                    height > 0 &&
-                    Number.isFinite(height) &&
-                    layoutViewportHeight - height > KEYBOARD_VISUAL_VIEWPORT_GAP
+                    visualViewportHeight !== null &&
+                    layoutViewportHeight - visualViewportHeight >
+                        KEYBOARD_VISUAL_VIEWPORT_GAP
                 ) {
-                    isKeyboardOpen = true;
+                    wasKeyboardOpenRef.current = true;
+                    return;
                 }
             }
 
-            if (isKeyboardOpen) {
-                wasKeyboardOpenRef.current = true;
-                return;
-            }
+            const nextViewportHeight = Math.max(
+                layoutViewportHeight,
+                visualViewportHeight ?? 0
+            );
 
             rootElement.style.setProperty(
                 "--app-viewport-height",
-                `${layoutViewportHeight}px`
+                `${nextViewportHeight}px`
             );
 
-            if (
-                wasKeyboardOpenRef.current &&
-                Math.abs(window.scrollY) > VIEWPORT_HEIGHT_EPSILON
-            ) {
-                window.scrollTo(0, 0);
+            if (wasKeyboardOpenRef.current) {
+                if (Math.abs(window.scrollY) > VIEWPORT_HEIGHT_EPSILON) {
+                    window.scrollTo(0, 0);
+                }
+
+                const phoneStage = phoneStageRef.current;
+                if (
+                    phoneStage &&
+                    Math.abs(phoneStage.scrollTop) > VIEWPORT_HEIGHT_EPSILON
+                ) {
+                    phoneStage.scrollTop = 0;
+                }
             }
 
             wasKeyboardOpenRef.current = false;
@@ -803,6 +816,12 @@ export default function App() {
     useEffect(() => {
         q5OptionRefs.current = q5OptionRefs.current.slice(0, q5OptionCount);
     }, [q5OptionCount]);
+    useEffect(() => {
+        const phoneStage = phoneStageRef.current;
+        if (phoneStage) {
+            phoneStage.scrollTop = 0;
+        }
+    }, [page]);
     useEffect(() => {
         if (page !== 7) {
             setSubmitError(null);
@@ -953,6 +972,7 @@ export default function App() {
             <div className="app-root">
                 <div
                     className="phone-stage"
+                    ref={phoneStageRef}
                     style={{
                         backgroundImage: `url(${bgUrl})`,
                     }}
@@ -1036,6 +1056,7 @@ export default function App() {
             <div className="app-root">
                 <div
                     className="phone-stage"
+                    ref={phoneStageRef}
                     style={{
                         backgroundImage: `url(${bgUrl})`,
                     }}
@@ -1194,6 +1215,7 @@ export default function App() {
             <div className="app-root">
                 <div
                     className="phone-stage"
+                    ref={phoneStageRef}
                     style={{
                         backgroundImage: `url(${bgUrl})`,
                     }}
@@ -1320,6 +1342,7 @@ export default function App() {
             <div className="app-root">
                 <div
                     className="phone-stage"
+                    ref={phoneStageRef}
                     style={{
                         backgroundImage: `url(${bgUrl})`,
                     }}
@@ -1413,23 +1436,37 @@ export default function App() {
                                             />
                                         </button>
                                         {option.allowsCustomInput && isSelected ? (
-                                            <input
-                                                ref={q2OtherInputRef}
+                                            <label
                                                 className="page4-q2-other-input"
-                                                type="text"
-                                                value={q2OtherText}
-                                                onChange={(event) =>
-                                                    setQ2OtherText(event.target.value)
-                                                }
-                                                placeholder="직접 입력"
-                                                aria-label="기타 의견 입력"
                                                 style={{
                                                     top: `${labelTopPercent}%`,
                                                     height: `${labelHeightPercent}%`,
                                                     left: `${Q2_LABEL_LEFT_PERCENT}%`,
                                                     width: `${Q2_LABEL_WIDTH_PERCENT}%`,
                                                 }}
-                                            />
+                                            >
+                                                <span className="sr-only">
+                                                    기타 의견 입력
+                                                </span>
+                                                <ImgWithFallback
+                                                    className="page4-q2-other-input-bg"
+                                                    sources={EMAIL_TEXT_BOX_SOURCES}
+                                                    alt=""
+                                                    aria-hidden="true"
+                                                />
+                                                <input
+                                                    ref={q2OtherInputRef}
+                                                    className="page4-q2-other-input-field"
+                                                    type="text"
+                                                    value={q2OtherText}
+                                                    onChange={(event) =>
+                                                        setQ2OtherText(
+                                                            event.target.value
+                                                        )
+                                                    }
+                                                    placeholder="직접 입력"
+                                                />
+                                            </label>
                                         ) : null}
                                     </div>
                                 );
@@ -1496,6 +1533,7 @@ export default function App() {
             <div className="app-root">
                 <div
                     className="phone-stage"
+                    ref={phoneStageRef}
                     style={{
                         backgroundImage: `url(${bgUrl})`,
                     }}
@@ -1671,6 +1709,7 @@ export default function App() {
             <div className="app-root">
                 <div
                     className="phone-stage"
+                    ref={phoneStageRef}
                     style={{
                         backgroundImage: `url(${bgUrl})`,
                     }}
@@ -1803,6 +1842,7 @@ export default function App() {
             <div className="app-root">
                 <div
                     className="phone-stage"
+                    ref={phoneStageRef}
                     style={{
                         backgroundImage: `url(${bgUrl})`,
                     }}
@@ -1952,6 +1992,7 @@ export default function App() {
             <div className="app-root">
                 <div
                     className="phone-stage"
+                    ref={phoneStageRef}
                     style={{
                         backgroundImage: `url(${bgUrl})`,
                     }}
@@ -1973,6 +2014,7 @@ export default function App() {
         <div className="app-root">
             <div
                 className="phone-stage"
+                ref={phoneStageRef}
                 style={{
                     backgroundImage: `url(${bgUrl})`,
                 }}
