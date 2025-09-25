@@ -820,6 +820,7 @@ export default function App() {
                                 : NEXT_OFF_BUTTON_SOURCES
                         }
                         alt="다음"
+                        preserveAspect={false}
                     />
                     <ImgWithFallback
                         className="page1-next-text"
@@ -969,6 +970,7 @@ export default function App() {
                                         : NEXT_OFF_BUTTON_SOURCES
                                 }
                                 alt="다음"
+                                preserveAspect={false}
                             />
                             <ImgWithFallback
                                 className="page2-next-text"
@@ -1086,6 +1088,7 @@ export default function App() {
                                         : NEXT_OFF_BUTTON_SOURCES
                                 }
                                 alt="다음"
+                                preserveAspect={false}
                             />
                             <ImgWithFallback
                                 className="page3-next-text"
@@ -1267,6 +1270,7 @@ export default function App() {
                                         : NEXT_OFF_BUTTON_SOURCES
                                 }
                                 alt="다음"
+                                preserveAspect={false}
                             />
                             <ImgWithFallback
                                 className="page4-next-text"
@@ -1433,6 +1437,7 @@ export default function App() {
                                         : NEXT_OFF_BUTTON_SOURCES
                                 }
                                 alt="다음"
+                                preserveAspect={false}
                             />
                             <ImgWithFallback
                                 className="page5-next-text"
@@ -1556,6 +1561,7 @@ export default function App() {
                                         : NEXT_OFF_BUTTON_SOURCES
                                 }
                                 alt="다음"
+                                preserveAspect={false}
                             />
                             <ImgWithFallback
                                 className="page6-next-text"
@@ -1691,6 +1697,7 @@ export default function App() {
                                         : DONE_OFF_BUTTON_SOURCES
                                 }
                                 alt="완료"
+                                preserveAspect={false}
                             />
                             <ImgWithFallback
                                 className="page7-done-text"

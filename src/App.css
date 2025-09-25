@@ -49,6 +49,14 @@
     animation: none;
 }
 
+.img-preserve-aspect {
+    width: 100%;
+    height: auto !important;
+    display: block;
+    max-width: 100%;
+}
+
+
 @keyframes phone-stage-slide-in {
     from {
         opacity: 0;
@@ -301,6 +309,18 @@
     position: absolute;
     left: 40%;
     top: 14.084507%;
+    max-width: none;
+    pointer-events: none;
+    z-index: 1;
+    display: block;
+}
+
+.page7-done-text {
+    position: absolute;
+    left: 40%;
+    top: 8.450704%;
+    width: 15.466667%;
+    height: auto;
     max-width: none;
     pointer-events: none;
     z-index: 1;
