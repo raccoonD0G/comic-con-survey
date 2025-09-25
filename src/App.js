@@ -413,22 +413,6 @@ export default function App() {
                 }
             }
 
-            if (candidateWidths.length > 0) {
-                const layoutViewportWidth = Math.max(...candidateWidths);
-                const phoneStageWidth = layoutViewportWidth;
-                const phoneStageHeight =
-                    (phoneStageWidth / PHONE_STAGE_DESIGN_WIDTH) *
-                    PHONE_STAGE_DESIGN_HEIGHT;
-
-                rootElement.style.setProperty(
-                    "--phone-stage-width",
-                    `${phoneStageWidth}px`
-                );
-                rootElement.style.setProperty(
-                    "--phone-stage-height",
-                    `${phoneStageHeight}px`
-                );
-            }
 
             const candidateHeights = [];
 
@@ -468,9 +452,39 @@ export default function App() {
                 visualViewportHeight ?? 0
             );
 
+            if (nextViewportHeight <= 0) {
+                return;
+            }
+
             rootElement.style.setProperty(
                 "--app-viewport-height",
                 `${nextViewportHeight}px`
+            );
+
+            const viewportWidth =
+                candidateWidths.length > 0
+                    ? Math.max(...candidateWidths)
+                    : (nextViewportHeight * PHONE_STAGE_DESIGN_WIDTH) /
+                      PHONE_STAGE_DESIGN_HEIGHT;
+
+            const widthScale =
+                viewportWidth / PHONE_STAGE_DESIGN_WIDTH;
+            const heightScale =
+                nextViewportHeight / PHONE_STAGE_DESIGN_HEIGHT;
+            const stageScale = Math.min(widthScale, heightScale);
+
+            const phoneStageWidth =
+                PHONE_STAGE_DESIGN_WIDTH * stageScale;
+            const phoneStageHeight =
+                PHONE_STAGE_DESIGN_HEIGHT * stageScale;
+
+            rootElement.style.setProperty(
+                "--phone-stage-width",
+                `${phoneStageWidth}px`
+            );
+            rootElement.style.setProperty(
+                "--phone-stage-height",
+                `${phoneStageHeight}px`
             );
 
             if (wasKeyboardOpenRef.current) {
