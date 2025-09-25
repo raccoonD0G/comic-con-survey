@@ -294,59 +294,48 @@ const Q4_OPTIONS = [
 const Q4_OPTIONS_CONTAINER_HEIGHT = 376;
 const Q5_TITLE_SOURCES = ["/q5_title_image.png"];
 const Q5_TEXT_SOURCES = ["/q5_text_image.png"];
-const Q5_OPTION_BASE_HEIGHT = 48;
-const Q5_OPTION_GAP = 22;
-const Q5_DOUBLE_LINE_MULTIPLIER = 1.26;
-const Q5_OPTIONS_WITH_LAYOUT = [
+const Q5_OPTIONS = [
     {
         id: "expensiveEquipment",
         label: "Expensive equipment",
         imageSources: ["/expensive_equipment.png"],
-        heightMultiplier: 1,
+        top: 0,
+        height: 58,
+        toggleTop: 17,
     },
     {
         id: "complicatedProductionProcess",
         label: "Complicated production process",
         imageSources: ["/complicated_production_process.png"],
-        heightMultiplier: Q5_DOUBLE_LINE_MULTIPLIER,
+        top: 74,
+        height: 84,
+        toggleTop: 30,
     },
     {
         id: "lackOfTechnicalSkills",
         label: "Lack of technical skills",
         imageSources: ["/lack_of_technical_skills.png"],
-        heightMultiplier: 1,
+        top: 174,
+        height: 60,
+        toggleTop: 18,
     },
     {
         id: "makingItUnique",
         label: "Making it unique",
         imageSources: ["/making_it_unique.png"],
-        heightMultiplier: 1,
+        top: 250,
+        height: 60,
+        toggleTop: 18,
     },
     {
         id: "tooMuchEffort",
         label: "Too much effort",
         imageSources: ["/too_much_effort.png"],
-        heightMultiplier: 1,
+        top: 326,
+        height: 60,
+        toggleTop: 18,
     },
 ];
-const Q5_OPTIONS = (() => {
-    let runningTop = 0;
-    return Q5_OPTIONS_WITH_LAYOUT.map((option, index) => {
-        const { heightMultiplier = 1, ...rest } = option;
-        const height = Q5_OPTION_BASE_HEIGHT * heightMultiplier;
-        const optionWithMetrics = {
-            ...rest,
-            top: runningTop,
-            height,
-        };
-
-        if (index < Q5_OPTIONS_WITH_LAYOUT.length - 1) {
-            runningTop += height + Q5_OPTION_GAP;
-        }
-
-        return optionWithMetrics;
-    });
-})();
 const Q5_OPTIONS_CONTAINER_HEIGHT = Q5_OPTIONS.reduce((maxBottom, option) => {
     const bottom = option.top + option.height;
     return bottom > maxBottom ? bottom : maxBottom;
@@ -1903,6 +1892,10 @@ export default function App() {
                                               Q5_OPTIONS_CONTAINER_HEIGHT) *
                                           100
                                         : 0;
+                                const toggleTopPercent =
+                                    option.height > 0
+                                        ? (option.toggleTop / option.height) * 100
+                                        : 0;
 
                                 return (
                                     <div
@@ -1933,6 +1926,7 @@ export default function App() {
                                                 sources={toggleSources}
                                                 alt=""
                                                 aria-hidden="true"
+                                                style={{ top: `${toggleTopPercent}%` }}
                                             />
                                             <ImgWithFallback
                                                 className="page7-q5-label"

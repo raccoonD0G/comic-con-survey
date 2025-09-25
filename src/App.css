@@ -135,9 +135,9 @@
 }
 
 .page0 .agree-btn {
-    left: 39.2%;
-    top: 90.5172%;
-    width: 21.6%;
+    left: 36.5333%;
+    top: 90.1478%;
+    width: 26.6667%;
 }
 
 .page0 .start-btn {
@@ -240,7 +240,7 @@
 .page1-next-btn {
     position: absolute;
     left: 0;
-    top: 91.256158%;
+    bottom: 0;
     width: 100%;
     height: 8.743842%;
     display: block;
@@ -258,10 +258,19 @@
 .page3-next-text,
 .page4-next-text,
 .page5-next-text,
-.page6-next-text,
-.page7-done-text {
+.page6-next-text {
     position: absolute;
     left: 42.133333%;
+    top: 8.450704%;
+    max-width: none;
+    pointer-events: none;
+    z-index: 1;
+    display: block;
+}
+
+.page7-done-text {
+    position: absolute;
+    left: 40%;
     top: 8.450704%;
     max-width: none;
     pointer-events: none;
@@ -485,7 +494,7 @@
 .page2-next-btn {
     position: absolute;
     left: 0;
-    top: 91.256158%;
+    bottom: 0;
     width: 100%;
     height: 8.743842%;
     display: block;
@@ -610,7 +619,7 @@
 .page3-next-btn {
     position: absolute;
     left: 0;
-    top: 91.256158%;
+    bottom: 0;
     width: 100%;
     height: 8.743842%;
     display: block;
@@ -745,7 +754,7 @@
 .page4-next-btn {
     position: absolute;
     left: 0;
-    top: 91.256158%;
+    bottom: 0;
     width: 100%;
     height: 8.743842%;
     display: block;
@@ -841,7 +850,7 @@
 .page5-next-btn {
     position: absolute;
     left: 0;
-    top: 91.256158%;
+    bottom: 0;
     width: 100%;
     height: 8.743842%;
     display: block;
@@ -944,7 +953,7 @@
 .page6-next-btn {
     position: absolute;
     left: 0;
-    top: 91.256158%;
+    bottom: 0;
     width: 100%;
     height: 8.743842%;
     display: block;
@@ -977,7 +986,7 @@
     position: absolute;
     left: 8.266667%;
     top: 20.935961%;
-    width: 85.066667%;
+    width: 75.2%;
     height: auto;
     max-width: none;
     display: block;
@@ -986,9 +995,9 @@
 .page7-q5-options {
     position: absolute;
     left: 6.133333%;
-    top: 32.512315%;
+    top: 33.251231%;
     width: 86.133333%;
-    height: 47.842365%;
+    height: 47.573792%;
 }
 
 .page7-q5-option {
@@ -1022,7 +1031,6 @@
 .page7-q5-toggle {
     position: absolute;
     left: 0;
-    top: 30%;
     width: 7.430341%;
     height: auto;
     max-width: none;
@@ -1059,7 +1067,7 @@
 .page7-done-btn {
     position: absolute;
     left: 0;
-    top: 91.256158%;
+    bottom: 0;
     width: 100%;
     height: 8.743842%;
     display: block;
@@ -1118,18 +1126,6 @@
 
 .arrow-button {
     transition: opacity 220ms ease;
-}
-
-/* 하단 내비게이션 버튼이 배경 밖으로 나가지 않도록 고정 */
-.page1-next-btn,
-.page2-next-btn,
-.page3-next-btn,
-.page4-next-btn,
-.page5-next-btn,
-.page6-next-btn,
-.page7-done-btn {
-    top: auto;
-    bottom: -1.8%;
 }
 
 .arrow-button.is-hidden {
