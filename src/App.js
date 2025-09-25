@@ -990,38 +990,37 @@ export default function App() {
     ]);
 
     // public/ 경로
-    const bg0 = useMemo(() => process.env.PUBLIC_URL + "/B0.png", []);
-    const bg1 = useMemo(() => process.env.PUBLIC_URL + "/B1.png", []);
-    const bg2 = useMemo(() => process.env.PUBLIC_URL + "/B2.png", []);
-    const bg3 = useMemo(() => process.env.PUBLIC_URL + "/B3.png", []);
-    const bg4 = useMemo(() => process.env.PUBLIC_URL + "/B4.png", []);
-    const bg5 = useMemo(() => process.env.PUBLIC_URL + "/B5.png", []);
-    const bg6 = useMemo(() => process.env.PUBLIC_URL + "/B6.png", []);
-    const bg7 = useMemo(() => process.env.PUBLIC_URL + "/B7.png", []);
+    const bgSources = useMemo(
+        () => [
+            process.env.PUBLIC_URL + "/B0.png",
+            process.env.PUBLIC_URL + "/B1.png",
+            process.env.PUBLIC_URL + "/B2.png",
+            process.env.PUBLIC_URL + "/B3.png",
+            process.env.PUBLIC_URL + "/B4.png",
+            process.env.PUBLIC_URL + "/B5.png",
+            process.env.PUBLIC_URL + "/B6.png",
+            process.env.PUBLIC_URL + "/B7.png",
+        ],
+        []
+    );
 
-    // 배경 프리로드(전환 시 깜빡임 방지)
+    // 프리로드
     useEffect(() => {
-        [bg0, bg1, bg2, bg3, bg4].forEach((src) => {
+        bgSources.forEach((src) => {
             const img = new Image();
             img.src = src;
         });
-    }, [bg0, bg1, bg2, bg3, bg4]);
+    }, [bgSources]);
 
+    // 현재 페이지 배경
     const bgUrl = useMemo(() => {
-        if (page === 0) {
-            return bg0;
+        if (page >= 0 && page < bgSources.length) {
+            return bgSources[page];
         }
-        if (page === 4) {
-            return bg2;
-        }
-        if (page === 5) {
-            return bg3;
-        }
-        if (page === 6 || page === 7 || page === 8) {
-            return bg4;
-        }
-        return bg1;
-    }, [bg0, bg1, bg2, bg3, bg4, page]);
+        return bgSources[0]; // 기본값 (안전용)
+    }, [bgSources, page]);
+
+    // 상태 클래스
     const page0StateClass = expanded ? "is-expanded" : "is-collapsed";
 
     const renderPhoneStage = useCallback(
