@@ -123,7 +123,7 @@ export const Q2_OPTIONS = [
         top: 219,
         height: 100,
         toggleTop: 30,
-        labelTop: 0,
+        labelTop: 30,
         labelHeight: 84,
     },
     {
@@ -363,6 +363,7 @@ export const Q4_OPTIONS = [
 
 export const Q4_OPTIONS_CONTAINER_HEIGHT = 410;
 export const Q4_TOGGLE_IMAGE_SIZE = Q2_TOGGLE_IMAGE_SIZE;
+
 
 export const Q5_OPTION_WIDTH = 323;
 export const Q5_OPTIONS = [
