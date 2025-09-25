@@ -927,34 +927,36 @@ export default function App() {
                         alt="이전"
                     />
                 </button>
-                <button
-                    className="img-btn page1-next-btn"
-                    type="button"
-                    onClick={handleAdvanceFromPage1}
-                    aria-label="다음 페이지"
-                    title={
-                        canAdvanceFromPage1
-                            ? "다음 페이지로 이동"
-                            : "이메일을 입력하면 다음 페이지로 이동할 수 있습니다"
-                    }
-                    disabled={!canAdvanceFromPage1}
-                >
-                    <ImgWithFallback
-                        className="page1-next-btn-img"
-                        sources={
+                <div className="page-bottom-nav">
+                    <button
+                        className="img-btn page1-next-btn"
+                        type="button"
+                        onClick={handleAdvanceFromPage1}
+                        aria-label="다음 페이지"
+                        title={
                             canAdvanceFromPage1
-                                ? NEXT_ON_BUTTON_SOURCES
-                                : NEXT_OFF_BUTTON_SOURCES
+                                ? "다음 페이지로 이동"
+                                : "이메일을 입력하면 다음 페이지로 이동할 수 있습니다"
                         }
-                        alt="다음"
-                    />
-                    <ImgWithFallback
-                        className="page1-next-text"
-                        sources={NEXT_TEXT_SOURCES}
-                        alt=""
-                        aria-hidden="true"
-                    />
-                </button>
+                        disabled={!canAdvanceFromPage1}
+                    >
+                        <ImgWithFallback
+                            className="page1-next-btn-img"
+                            sources={
+                                canAdvanceFromPage1
+                                    ? NEXT_ON_BUTTON_SOURCES
+                                    : NEXT_OFF_BUTTON_SOURCES
+                            }
+                            alt="다음"
+                        />
+                        <ImgWithFallback
+                            className="page1-next-text"
+                            sources={NEXT_TEXT_SOURCES}
+                            alt=""
+                            aria-hidden="true"
+                        />
+                    </button>
+                </div>
             </div>
         );
     }
@@ -1072,38 +1074,40 @@ export default function App() {
                                 alt="이전"
                             />
                         </button>
-                        <button
-                            className="img-btn page2-next-btn"
-                            type="button"
-                            onClick={() => {
-                                if (canAdvanceFromPage2) {
-                                    setPage(3);
-                                }
-                            }}
-                            aria-label="다음 페이지"
-                            title={
-                                canAdvanceFromPage2
-                                    ? "다음 페이지로 이동"
-                                    : "성별을 선택하면 다음으로 이동할 수 있습니다"
-                            }
-                            disabled={!canAdvanceFromPage2}
-                        >
-                            <ImgWithFallback
-                                className="page2-next-btn-img"
-                                sources={
+                        <div className="page-bottom-nav">
+                            <button
+                                className="img-btn page2-next-btn"
+                                type="button"
+                                onClick={() => {
+                                    if (canAdvanceFromPage2) {
+                                        setPage(3);
+                                    }
+                                }}
+                                aria-label="다음 페이지"
+                                title={
                                     canAdvanceFromPage2
-                                        ? NEXT_ON_BUTTON_SOURCES
-                                        : NEXT_OFF_BUTTON_SOURCES
+                                        ? "다음 페이지로 이동"
+                                        : "성별을 선택하면 다음으로 이동할 수 있습니다"
                                 }
-                                alt="다음"
-                            />
-                            <ImgWithFallback
-                                className="page2-next-text"
-                                sources={NEXT_TEXT_SOURCES}
-                                alt=""
-                                aria-hidden="true"
-                            />
-                        </button>
+                                disabled={!canAdvanceFromPage2}
+                            >
+                                <ImgWithFallback
+                                    className="page2-next-btn-img"
+                                    sources={
+                                        canAdvanceFromPage2
+                                            ? NEXT_ON_BUTTON_SOURCES
+                                            : NEXT_OFF_BUTTON_SOURCES
+                                    }
+                                    alt="다음"
+                                />
+                                <ImgWithFallback
+                                    className="page2-next-text"
+                                    sources={NEXT_TEXT_SOURCES}
+                                    alt=""
+                                    aria-hidden="true"
+                                />
+                            </button>
+                        </div>
             </div>
         );
     }
@@ -1193,38 +1197,40 @@ export default function App() {
                     </button>
                 </>,
                 (
-                    <button
-                        className="img-btn page3-next-btn"
-                        type="button"
-                        onClick={() => {
-                            if (canAdvanceFromPage3) {
-                                setPage(4);
-                            }
-                        }}
-                        aria-label="다음 페이지"
-                        title={
-                            canAdvanceFromPage3
-                                ? "다음 페이지로 이동"
-                                : "만족도를 선택하면 다음으로 이동할 수 있습니다"
-                        }
-                        disabled={!canAdvanceFromPage3}
-                    >
-                        <ImgWithFallback
-                            className="page3-next-btn-img"
-                            sources={
+                    <div className="page-bottom-nav">
+                        <button
+                            className="img-btn page3-next-btn"
+                            type="button"
+                            onClick={() => {
+                                if (canAdvanceFromPage3) {
+                                    setPage(4);
+                                }
+                            }}
+                            aria-label="다음 페이지"
+                            title={
                                 canAdvanceFromPage3
-                                    ? NEXT_ON_BUTTON_SOURCES
-                                    : NEXT_OFF_BUTTON_SOURCES
+                                    ? "다음 페이지로 이동"
+                                    : "만족도를 선택하면 다음으로 이동할 수 있습니다"
                             }
-                            alt="다음"
-                        />
-                        <ImgWithFallback
-                            className="page3-next-text"
-                            sources={NEXT_TEXT_SOURCES}
-                            alt=""
-                            aria-hidden="true"
-                        />
-                    </button>
+                            disabled={!canAdvanceFromPage3}
+                        >
+                            <ImgWithFallback
+                                className="page3-next-btn-img"
+                                sources={
+                                    canAdvanceFromPage3
+                                        ? NEXT_ON_BUTTON_SOURCES
+                                        : NEXT_OFF_BUTTON_SOURCES
+                                }
+                                alt="다음"
+                            />
+                            <ImgWithFallback
+                                className="page3-next-text"
+                                sources={NEXT_TEXT_SOURCES}
+                                alt=""
+                                aria-hidden="true"
+                            />
+                        </button>
+                    </div>
                 )
             )
         );
@@ -1379,38 +1385,40 @@ export default function App() {
                     </button>
                 </>,
                 (
-                    <button
-                        className="img-btn page4-next-btn"
-                        type="button"
-                        onClick={() => {
-                            if (canAdvanceFromPage4) {
-                                setPage(5);
-                            }
-                        }}
-                        aria-label="다음 페이지"
-                        title={
-                            canAdvanceFromPage4
-                                ? "다음 페이지로 이동"
-                                : "선택지를 고르면 다음으로 이동할 수 있습니다"
-                        }
-                        disabled={!canAdvanceFromPage4}
-                    >
-                        <ImgWithFallback
-                            className="page4-next-btn-img"
-                            sources={
+                    <div className="page-bottom-nav">
+                        <button
+                            className="img-btn page4-next-btn"
+                            type="button"
+                            onClick={() => {
+                                if (canAdvanceFromPage4) {
+                                    setPage(5);
+                                }
+                            }}
+                            aria-label="다음 페이지"
+                            title={
                                 canAdvanceFromPage4
                                     ? NEXT_ON_BUTTON_SOURCES
                                     : NEXT_OFF_BUTTON_SOURCES
                             }
-                            alt="다음"
-                        />
-                        <ImgWithFallback
-                            className="page4-next-text"
-                            sources={NEXT_TEXT_SOURCES}
-                            alt=""
-                            aria-hidden="true"
-                        />
-                    </button>
+                            disabled={!canAdvanceFromPage4}
+                        >
+                            <ImgWithFallback
+                                className="page4-next-btn-img"
+                                sources={
+                                    canAdvanceFromPage4
+                                        ? NEXT_ON_BUTTON_SOURCES
+                                        : NEXT_OFF_BUTTON_SOURCES
+                                }
+                                alt="다음"
+                            />
+                            <ImgWithFallback
+                                className="page4-next-text"
+                                sources={NEXT_TEXT_SOURCES}
+                                alt=""
+                                aria-hidden="true"
+                            />
+                        </button>
+                    </div>
                 )
             )
         );
@@ -1550,38 +1558,40 @@ export default function App() {
                     </button>
                 </>,
                 (
-                    <button
-                        className="img-btn page5-next-btn"
-                        type="button"
-                        onClick={() => {
-                            if (canAdvanceFromPage5) {
-                                setPage(6);
-                            }
-                        }}
-                        aria-label="다음 페이지"
-                        title={
-                            canAdvanceFromPage5
-                                ? "다음 페이지로 이동"
-                                : "선택지를 고르면 다음으로 이동할 수 있습니다"
-                        }
-                        disabled={!canAdvanceFromPage5}
-                    >
-                        <ImgWithFallback
-                            className="page5-next-btn-img"
-                            sources={
+                    <div className="page-bottom-nav">
+                        <button
+                            className="img-btn page5-next-btn"
+                            type="button"
+                            onClick={() => {
+                                if (canAdvanceFromPage5) {
+                                    setPage(6);
+                                }
+                            }}
+                            aria-label="다음 페이지"
+                            title={
                                 canAdvanceFromPage5
-                                    ? NEXT_ON_BUTTON_SOURCES
-                                    : NEXT_OFF_BUTTON_SOURCES
+                                    ? "다음 페이지로 이동"
+                                    : "선택지를 고르면 다음으로 이동할 수 있습니다"
                             }
-                            alt="다음"
-                        />
-                        <ImgWithFallback
-                            className="page5-next-text"
-                            sources={NEXT_TEXT_SOURCES}
-                            alt=""
-                            aria-hidden="true"
-                        />
-                    </button>
+                            disabled={!canAdvanceFromPage5}
+                        >
+                            <ImgWithFallback
+                                className="page5-next-btn-img"
+                                sources={
+                                    canAdvanceFromPage5
+                                        ? NEXT_ON_BUTTON_SOURCES
+                                        : NEXT_OFF_BUTTON_SOURCES
+                                }
+                                alt="다음"
+                            />
+                            <ImgWithFallback
+                                className="page5-next-text"
+                                sources={NEXT_TEXT_SOURCES}
+                                alt=""
+                                aria-hidden="true"
+                            />
+                        </button>
+                    </div>
                 )
             )
         );
@@ -1678,38 +1688,40 @@ export default function App() {
                     </button>
                 </>,
                 (
-                    <button
-                        className="img-btn page6-next-btn"
-                        type="button"
-                        onClick={() => {
-                            if (canAdvanceFromPage6) {
-                                setPage(7);
-                            }
-                        }}
-                        aria-label="다음 페이지"
-                        title={
-                            canAdvanceFromPage6
-                                ? "다음 페이지로 이동"
-                                : "선택지를 고르면 다음으로 이동할 수 있습니다"
-                        }
-                        disabled={!canAdvanceFromPage6}
-                    >
-                        <ImgWithFallback
-                            className="page6-next-btn-img"
-                            sources={
+                    <div className="page-bottom-nav">
+                        <button
+                            className="img-btn page6-next-btn"
+                            type="button"
+                            onClick={() => {
+                                if (canAdvanceFromPage6) {
+                                    setPage(7);
+                                }
+                            }}
+                            aria-label="다음 페이지"
+                            title={
                                 canAdvanceFromPage6
-                                    ? NEXT_ON_BUTTON_SOURCES
-                                    : NEXT_OFF_BUTTON_SOURCES
+                                    ? "다음 페이지로 이동"
+                                    : "선택지를 고르면 다음으로 이동할 수 있습니다"
                             }
-                            alt="다음"
-                        />
-                        <ImgWithFallback
-                            className="page6-next-text"
-                            sources={NEXT_TEXT_SOURCES}
-                            alt=""
-                            aria-hidden="true"
-                        />
-                    </button>
+                            disabled={!canAdvanceFromPage6}
+                        >
+                            <ImgWithFallback
+                                className="page6-next-btn-img"
+                                sources={
+                                    canAdvanceFromPage6
+                                        ? NEXT_ON_BUTTON_SOURCES
+                                        : NEXT_OFF_BUTTON_SOURCES
+                                }
+                                alt="다음"
+                            />
+                            <ImgWithFallback
+                                className="page6-next-text"
+                                sources={NEXT_TEXT_SOURCES}
+                                alt=""
+                                aria-hidden="true"
+                            />
+                        </button>
+                    </div>
                 )
             )
         );
@@ -1864,37 +1876,39 @@ export default function App() {
                     ) : null}
                 </>,
                 <>
-                    <button
-                        className="img-btn page7-done-btn"
-                        type="button"
-                        onClick={handleSubmitSurvey}
-                        aria-label="설문 완료"
-                        title={
-                            submitting
-                                ? "설문을 저장하는 중입니다"
-                                : canAdvanceFromPage7
-                                    ? "설문을 완료합니다"
-                                    : "선택지를 고르면 설문을 완료할 수 있습니다"
-                        }
-                        aria-busy={submitting ? true : undefined}
-                        disabled={!canAdvanceFromPage7 || submitting}
-                    >
-                        <ImgWithFallback
-                            className="page7-done-btn-img"
-                            sources={
-                                canAdvanceFromPage7 && !submitting
-                                    ? DONE_BUTTON_SOURCES
-                                    : DONE_OFF_BUTTON_SOURCES
+                    <div className="page-bottom-nav">
+                        <button
+                            className="img-btn page7-done-btn"
+                            type="button"
+                            onClick={handleSubmitSurvey}
+                            aria-label="설문 완료"
+                            title={
+                                submitting
+                                    ? "설문을 저장하는 중입니다"
+                                    : canAdvanceFromPage7
+                                        ? "설문을 완료합니다"
+                                        : "선택지를 고르면 설문을 완료할 수 있습니다"
                             }
-                            alt="완료"
-                        />
-                        <ImgWithFallback
-                            className="page7-done-text"
-                            sources={DONE_TEXT_SOURCES}
-                            alt=""
-                            aria-hidden="true"
-                        />
-                    </button>
+                            aria-busy={submitting ? true : undefined}
+                            disabled={!canAdvanceFromPage7 || submitting}
+                        >
+                            <ImgWithFallback
+                                className="page7-done-btn-img"
+                                sources={
+                                    canAdvanceFromPage7 && !submitting
+                                        ? DONE_BUTTON_SOURCES
+                                        : DONE_OFF_BUTTON_SOURCES
+                                }
+                                alt="완료"
+                            />
+                            <ImgWithFallback
+                                className="page7-done-text"
+                                sources={DONE_TEXT_SOURCES}
+                                alt=""
+                                aria-hidden="true"
+                            />
+                        </button>
+                    </div>
                     {submitting ? (
                         <div className="sr-only" aria-live="polite">
                             설문을 저장하는 중입니다.
