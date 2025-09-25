@@ -1,5 +1,7 @@
 :root {
     --app-viewport-height: 100vh;
+    --phone-stage-width: 100vw;
+    --phone-stage-height: calc(100vw * 812 / 375);
 }
 
 /* 뷰포트 전체(레터박스 배경 색) */
@@ -8,27 +10,37 @@
     height: var(--app-viewport-height);
     min-height: var(--app-viewport-height);
     background: #000; /* 검정 레터박스 */
-    display: grid;
-    place-items: center; /* 중앙 정렬 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* “핸드폰 비율(9:16)” 무대 */
 .phone-stage {
-    width: 100vw;
+    width: min(var(--phone-stage-width), 100vw);
     max-width: 100%;
-    height: min(var(--app-viewport-height), calc(100vw * 812 / 375));
-    /* 배경 이미지는 JS에서 설정 */
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    /* 내부 페이지를 레이아웃하기 위한 컨테이너 */
+    height: var(--app-viewport-height);
+    min-height: var(--app-viewport-height);
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
     position: relative;
     overflow-x: hidden;
     overflow-y: auto;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
+}
+
+.phone-stage-inner {
+    width: var(--phone-stage-width);
+    max-width: 100%;
+    height: var(--phone-stage-height);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    position: relative;
 }
 
 /* 실제 페이지 콘텐츠는 phone-stage 안에서 배치 */

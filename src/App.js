@@ -16,6 +16,8 @@ const AGE_TEXT_SOURCES = ["/age_text_image.png", "/age_text_image.png"];
 const GENDER_TEXT_SOURCES = ["/gender_text_image.png", "/gender_text_image.png"];
 const SCROLL_LINE_SOURCES = ["/scroll_line_image.png", "/scroll_line.png"];
 const SCROLL_HANDLE_SOURCES = ["/scroll_handle_image.png", "/scroll_handle.png"];
+const PHONE_STAGE_DESIGN_WIDTH = 375;
+const PHONE_STAGE_DESIGN_HEIGHT = 812;
 const AGE_TRACK_LEFT_PERCENT = 7.466667;
 const AGE_TRACK_WIDTH_PERCENT = 90.4;
 const AGE_TRACK_START_OFFSET_PERCENT = (25 / 339) * AGE_TRACK_WIDTH_PERCENT;
@@ -155,7 +157,7 @@ const Q2_OPTIONS = [
         allowsCustomInput: true,
     },
 ];
-const Q2_STAGE_HEIGHT = 812;
+const Q2_STAGE_HEIGHT = PHONE_STAGE_DESIGN_HEIGHT;
 const Q2_OPTION_WIDTH = 323; // option width in the 375px design
 const Q2_TOGGLE_IMAGE_SIZE = 24;
 const Q2_LABEL_LEFT_PERCENT = (46 / Q2_OPTION_WIDTH) * 100;
@@ -215,7 +217,7 @@ const Q3_OPTIONS = [
         labelHeight: 73,
     },
 ];
-const Q3_STAGE_HEIGHT = 812;
+const Q3_STAGE_HEIGHT = PHONE_STAGE_DESIGN_HEIGHT;
 const Q3_TOGGLE_IMAGE_SIZE = Q2_TOGGLE_IMAGE_SIZE;
 const Q3_LABEL_LEFT_PERCENT = Q2_LABEL_LEFT_PERCENT;
 const Q3_LABEL_WIDTH_PERCENT = Q2_LABEL_WIDTH_PERCENT;
@@ -708,8 +710,42 @@ export default function App() {
         }
 
         const updateViewportHeight = () => {
-            const { innerHeight, visualViewport } = window;
-            const { clientHeight } = rootElement;
+            const { innerHeight, innerWidth, visualViewport } = window;
+            const { clientHeight, clientWidth } = rootElement;
+
+            const candidateWidths = [];
+
+            if (innerWidth > 0 && Number.isFinite(innerWidth)) {
+                candidateWidths.push(innerWidth);
+            }
+
+            if (clientWidth > 0 && Number.isFinite(clientWidth)) {
+                candidateWidths.push(clientWidth);
+            }
+
+            if (visualViewport) {
+                const { width } = visualViewport;
+                if (width > 0 && Number.isFinite(width)) {
+                    candidateWidths.push(width);
+                }
+            }
+
+            if (candidateWidths.length > 0) {
+                const layoutViewportWidth = Math.max(...candidateWidths);
+                const phoneStageWidth = layoutViewportWidth;
+                const phoneStageHeight =
+                    (phoneStageWidth / PHONE_STAGE_DESIGN_WIDTH) *
+                    PHONE_STAGE_DESIGN_HEIGHT;
+
+                rootElement.style.setProperty(
+                    "--phone-stage-width",
+                    `${phoneStageWidth}px`
+                );
+                rootElement.style.setProperty(
+                    "--phone-stage-height",
+                    `${phoneStageHeight}px`
+                );
+            }
 
             const candidateHeights = [];
 
@@ -966,102 +1002,109 @@ export default function App() {
     }, [bg0, bg1, bg2, bg3, bg4, page]);
     const page0StateClass = expanded ? "is-expanded" : "is-collapsed";
 
-    // ----- PAGE 1 (임시) -----
-    if (page === 1) {
-        return (
-            <div className="app-root">
-                <div
-                    className="phone-stage"
-                    ref={phoneStageRef}
-                    style={{
-                        backgroundImage: `url(${bgUrl})`,
-                    }}
-                >
-                    <div className="page page1">
-                        <ImgWithFallback
-                            className="page1-basic-info"
-                            sources={BASIC_INFO_SOURCES}
-                            alt="기본 정보"
-                        />
-                        <ImgWithFallback
-                            className="page1-email-image"
-                            sources={EMAIL_IMAGE_SOURCES}
-                            alt="이메일 안내"
-                        />
-                        <label className="page1-email-input">
-                            <span className="sr-only">이메일 주소 입력</span>
-                            <ImgWithFallback
-                                className="page1-email-input-bg"
-                                sources={EMAIL_TEXT_BOX_SOURCES}
-                                alt=""
-                                aria-hidden="true"
-                            />
-                            <input
-                                type="email"
-                                value={email}
-                                onChange={(event) => setEmail(event.target.value)}
-                                placeholder="이메일을 입력하세요"
-                                autoComplete="email"
-                            />
-                        </label>
-                        <button
-                            className="img-btn page1-before-btn"
-                            type="button"
-                            onClick={() => setPage(0)}
-                            aria-label="이전 페이지"
-                            title="이전 페이지로 돌아가기"
+    const renderPhoneStage = useCallback(
+        (content, { innerClassName } = {}) => {
+            const innerClasses = ["phone-stage-inner"];
+            if (innerClassName) {
+                innerClasses.push(innerClassName);
+            }
+
+            return (
+                <div className="app-root">
+                    <div className="phone-stage" ref={phoneStageRef}>
+                        <div
+                            className={innerClasses.join(" ")}
+                            style={{
+                                backgroundImage: `url(${bgUrl})`,
+                            }}
                         >
-                            <ImgWithFallback
-                                className="page1-before-btn-img"
-                                sources={BEFORE_BUTTON_SOURCES}
-                                alt="이전"
-                            />
-                        </button>
-                        <button
-                            className="img-btn page1-next-btn"
-                            type="button"
-                            onClick={handleAdvanceFromPage1}
-                            aria-label="다음 페이지"
-                            title={
-                                canAdvanceFromPage1
-                                    ? "다음 페이지로 이동"
-                                    : "이메일을 입력하면 다음 페이지로 이동할 수 있습니다"
-                            }
-                            disabled={!canAdvanceFromPage1}
-                        >
-                            <ImgWithFallback
-                                className="page1-next-btn-img"
-                                sources={
-                                    canAdvanceFromPage1
-                                        ? NEXT_ON_BUTTON_SOURCES
-                                        : NEXT_OFF_BUTTON_SOURCES
-                                }
-                                alt="다음"
-                            />
-                            <ImgWithFallback
-                                className="page1-next-text"
-                                sources={NEXT_TEXT_SOURCES}
-                                alt=""
-                                aria-hidden="true"
-                            />
-                        </button>
+                            {content}
+                        </div>
                     </div>
                 </div>
+            );
+        },
+        [bgUrl]
+    );
+
+    // ----- PAGE 1 (임시) -----
+    if (page === 1) {
+        return renderPhoneStage(
+            <div className="page page1">
+                <ImgWithFallback
+                    className="page1-basic-info"
+                    sources={BASIC_INFO_SOURCES}
+                    alt="기본 정보"
+                />
+                <ImgWithFallback
+                    className="page1-email-image"
+                    sources={EMAIL_IMAGE_SOURCES}
+                    alt="이메일 안내"
+                />
+                <label className="page1-email-input">
+                    <span className="sr-only">이메일 주소 입력</span>
+                    <ImgWithFallback
+                        className="page1-email-input-bg"
+                        sources={EMAIL_TEXT_BOX_SOURCES}
+                        alt=""
+                        aria-hidden="true"
+                    />
+                    <input
+                        type="email"
+                        value={email}
+                        onChange={(event) => setEmail(event.target.value)}
+                        placeholder="이메일을 입력하세요"
+                        autoComplete="email"
+                    />
+                </label>
+                <button
+                    className="img-btn page1-before-btn"
+                    type="button"
+                    onClick={() => setPage(0)}
+                    aria-label="이전 페이지"
+                    title="이전 페이지로 돌아가기"
+                >
+                    <ImgWithFallback
+                        className="page1-before-btn-img"
+                        sources={BEFORE_BUTTON_SOURCES}
+                        alt="이전"
+                    />
+                </button>
+                <button
+                    className="img-btn page1-next-btn"
+                    type="button"
+                    onClick={handleAdvanceFromPage1}
+                    aria-label="다음 페이지"
+                    title={
+                        canAdvanceFromPage1
+                            ? "다음 페이지로 이동"
+                            : "이메일을 입력하면 다음 페이지로 이동할 수 있습니다"
+                    }
+                    disabled={!canAdvanceFromPage1}
+                >
+                    <ImgWithFallback
+                        className="page1-next-btn-img"
+                        sources={
+                            canAdvanceFromPage1
+                                ? NEXT_ON_BUTTON_SOURCES
+                                : NEXT_OFF_BUTTON_SOURCES
+                        }
+                        alt="다음"
+                    />
+                    <ImgWithFallback
+                        className="page1-next-text"
+                        sources={NEXT_TEXT_SOURCES}
+                        alt=""
+                        aria-hidden="true"
+                    />
+                </button>
             </div>
         );
     }
 
     if (page === 2) {
-        return (
-            <div className="app-root">
-                <div
-                    className="phone-stage"
-                    ref={phoneStageRef}
-                    style={{
-                        backgroundImage: `url(${bgUrl})`,
-                    }}
-                >
-                    <div className="page page2">
+        return renderPhoneStage(
+            <div className="page page2">
                         <ImgWithFallback
                             className="page2-basic-info"
                             sources={BASIC_INFO_SOURCES}
@@ -1204,23 +1247,13 @@ export default function App() {
                                 aria-hidden="true"
                             />
                         </button>
-                    </div>
-                </div>
             </div>
         );
     }
 
     if (page === 3) {
-        return (
-            <div className="app-root">
-                <div
-                    className="phone-stage"
-                    ref={phoneStageRef}
-                    style={{
-                        backgroundImage: `url(${bgUrl})`,
-                    }}
-                >
-                    <div className="page page3">
+        return renderPhoneStage(
+            <div className="page page3">
                         <ImgWithFallback
                             className="page3-q1-title"
                             sources={Q1_TITLE_SOURCES}
@@ -1331,23 +1364,13 @@ export default function App() {
                                 aria-hidden="true"
                             />
                         </button>
-                    </div>
-                </div>
             </div>
         );
     }
 
     if (page === 4) {
-        return (
-            <div className="app-root">
-                <div
-                    className="phone-stage"
-                    ref={phoneStageRef}
-                    style={{
-                        backgroundImage: `url(${bgUrl})`,
-                    }}
-                >
-                    <div className="page page4">
+        return renderPhoneStage(
+            <div className="page page4">
                         <ImgWithFallback
                             className="page4-q2-title"
                             sources={Q2_TITLE_SOURCES}
@@ -1522,23 +1545,13 @@ export default function App() {
                                 aria-hidden="true"
                             />
                         </button>
-                    </div>
-                </div>
             </div>
         );
     }
 
     if (page === 5) {
-        return (
-            <div className="app-root">
-                <div
-                    className="phone-stage"
-                    ref={phoneStageRef}
-                    style={{
-                        backgroundImage: `url(${bgUrl})`,
-                    }}
-                >
-                    <div className="page page5">
+        return renderPhoneStage(
+            <div className="page page5">
                         <ImgWithFallback
                             className="page5-q3-title"
                             sources={Q3_TITLE_SOURCES}
@@ -1698,23 +1711,13 @@ export default function App() {
                                 aria-hidden="true"
                             />
                         </button>
-                    </div>
-                </div>
             </div>
         );
     }
 
     if (page === 6) {
-        return (
-            <div className="app-root">
-                <div
-                    className="phone-stage"
-                    ref={phoneStageRef}
-                    style={{
-                        backgroundImage: `url(${bgUrl})`,
-                    }}
-                >
-                    <div className="page page6">
+        return renderPhoneStage(
+            <div className="page page6">
                         <ImgWithFallback
                             className="page6-q4-title"
                             sources={Q4_TITLE_SOURCES}
@@ -1831,23 +1834,13 @@ export default function App() {
                                 aria-hidden="true"
                             />
                         </button>
-                    </div>
-                </div>
             </div>
         );
     }
 
     if (page === 7) {
-        return (
-            <div className="app-root">
-                <div
-                    className="phone-stage"
-                    ref={phoneStageRef}
-                    style={{
-                        backgroundImage: `url(${bgUrl})`,
-                    }}
-                >
-                    <div className="page page7">
+        return renderPhoneStage(
+            <div className="page page7">
                         <ImgWithFallback
                             className="page7-q5-title"
                             sources={Q5_TITLE_SOURCES}
@@ -1981,45 +1974,25 @@ export default function App() {
                                 설문을 저장하는 중입니다.
                             </div>
                         ) : null}
-                    </div>
-                </div>
             </div>
         );
     }
 
     if (page === 8) {
-        return (
-            <div className="app-root">
-                <div
-                    className="phone-stage"
-                    ref={phoneStageRef}
-                    style={{
-                        backgroundImage: `url(${bgUrl})`,
-                    }}
-                >
-                    <div className="page page8">
+        return renderPhoneStage(
+            <div className="page page8">
                         <ImgWithFallback
                             className="page8-ending-image"
                             sources={ENDING_IMAGE_SOURCES}
                             alt="설문이 완료되었습니다"
                         />
-                    </div>
-                </div>
             </div>
         );
     }
 
     // ----- PAGE 0 -----
-    return (
-        <div className="app-root">
-            <div
-                className="phone-stage"
-                ref={phoneStageRef}
-                style={{
-                    backgroundImage: `url(${bgUrl})`,
-                }}
-            >
-                <div className={`page page0 ${page0StateClass}`}>
+    return renderPhoneStage(
+        <div className={`page page0 ${page0StateClass}`}>
                     {/* 1) EntryText 이미지 */}
                     <img
                         className="page0-entry-img page0-entry-img-top"
@@ -2081,8 +2054,6 @@ export default function App() {
                             <img src="/start_off_button.png" alt="START 비활성" />
                         </button>
                     )}
-                </div>
-            </div>
         </div>
     );
 }
