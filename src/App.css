@@ -1,27 +1,64 @@
+:root {
+    --app-viewport-height: 100vh;
+    --phone-stage-width: 100vw;
+    --phone-stage-height: calc(var(--phone-stage-width) * 812 / 375);
+    --phone-stage-scale: 1;
+}
+
 /* 뷰포트 전체(레터박스 배경 색) */
 .app-root {
     width: 100vw;
-    height: 100vh;
+    min-height: max(var(--app-viewport-height), var(--phone-stage-height));
     background: #000; /* 검정 레터박스 */
-    display: grid;
-    place-items: center; /* 중앙 정렬 */
 }
 
 /* “핸드폰 비율(9:16)” 무대 */
 .phone-stage {
-    /* 디자인 해상도(375x812)에 맞춘 고정 비율 */
-    aspect-ratio: 375 / 812;
-    width: min(100vw, calc(100vh * 375 / 812));
-    height: min(100vh, calc(100vw * 812 / 375));
-    /* 배경 이미지는 JS에서 설정 */
-    background-position: center;
+    width: var(--phone-stage-width);
+    height: var(--phone-stage-height);
+    max-width: 100%;
+    display: block;
+    position: relative;
+    overflow: hidden;
+}
+
+.phone-stage-inner {
+    width: calc(var(--phone-stage-width) / var(--phone-stage-scale));
+    height: calc(var(--phone-stage-height) / var(--phone-stage-scale));
+    background-position: top center;
     background-repeat: no-repeat;
-    background-size: cover;
-    /* 내부 페이지를 레이아웃하기 위한 컨테이너 */
+    background-size: 100% auto;
     display: flex;
     flex-direction: column;
     position: relative;
     overflow: hidden;
+    transform: scale(var(--phone-stage-scale));
+    transform-origin: top center;
+}
+
+.phone-stage-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    animation: phone-stage-slide-in 420ms ease;
+}
+
+.phone-stage-content.is-initial {
+    animation: none;
+}
+
+@keyframes phone-stage-slide-in {
+    from {
+        opacity: 0;
+        transform: translateX(24px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 /* 실제 페이지 콘텐츠는 phone-stage 안에서 배치 */
@@ -54,23 +91,23 @@
 
 .page0-entry-img-bottom {
     left: 3.2%;
-    width: 93.3333%;
+    width: 99.7333%;
 }
 
 .page0.is-collapsed .page0-entry-img-top {
-    top: 72.3005%;
+    top: 73.7685%;
 }
 
 .page0.is-expanded .page0-entry-img-top {
-    top: 63.5468%;
+    top: 64.6552%;
 }
 
 .page0.is-collapsed .page0-entry-img-bottom {
-    top: 81.2805%;
+    top: 84.9754%;
 }
 
 .page0.is-expanded .page0-entry-img-bottom {
-    top: 72.6601%;
+    top: 75.9852%;
 }
 
 .page0-entry-fade {
@@ -89,11 +126,11 @@
 }
 
 .page0.is-collapsed .page0-entry-fade {
-    top: 81.2805%;
+    top: 84.9754%;
 }
 
 .page0.is-expanded .page0-entry-fade {
-    top: 72.6601%;
+    top: 75.9852%;
     opacity: 0;
 }
 
@@ -105,7 +142,7 @@
 
 .page0 .arrow-button {
     left: 47.7333%;
-    top: 83.2512%;
+    top: 88.0542%;
     width: 4%;
     transition: opacity 220ms ease;
 }
@@ -116,15 +153,15 @@
 }
 
 .page0 .agree-btn {
-    left: 39.2%;
-    top: 85.3448%;
-    width: 21.6%;
+    left: 36.5333%;
+    top: 90.1478%;
+    width: 26.6667%;
 }
 
 .page0 .start-btn {
-    left: 35.4667%;
-    top: 89.0394%;
-    width: 30.1333%;
+    left: 28%;
+    top: 48.2759%;
+    width: 44%;
 }
 
 .page0 .img-btn img {
@@ -233,16 +270,60 @@
     display: block;
 }
 
+.page1-next-btn-img,
+.page2-next-btn-img,
+.page3-next-btn-img,
+.page4-next-btn-img,
+.page5-next-btn-img,
+.page6-next-btn-img,
+.page7-done-btn-img,
+.page-nav .next-btn img {
+    object-fit: fill;
+}
+
 .page1-next-text,
 .page2-next-text,
 .page3-next-text,
 .page4-next-text,
 .page5-next-text,
-.page6-next-text,
-.page7-done-text {
+.page6-next-text {
     position: absolute;
     left: 42.133333%;
+    top: 14.084507%;
+    max-width: none;
+    pointer-events: none;
+    z-index: 1;
+    display: block;
+}
+
+.page7-done-text {
+    position: absolute;
+    left: 40%;
+    top: 14.084507%;
+    max-width: none;
+    pointer-events: none;
+    z-index: 1;
+    display: block;
+}
+
+.page7-done-text {
+    position: absolute;
+    left: 40%;
     top: 8.450704%;
+    width: 15.466667%;
+    height: auto;
+    max-width: none;
+    pointer-events: none;
+    z-index: 1;
+    display: block;
+}
+
+.page7-done-text {
+    position: absolute;
+    left: 40%;
+    top: 8.450704%;
+    width: 19.733333%;
+    height: auto;
     max-width: none;
     pointer-events: none;
     z-index: 1;
@@ -664,22 +745,36 @@
 .page4-q2-other-input {
     position: absolute;
     z-index: 2;
-    background: rgba(255, 255, 255, 0.92);
+    display: block;
+}
+.page4-q2-other-input-bg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    max-width: none;
+    pointer-events: none;
+}
+.page4-q2-other-input-field {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 81.25%;
+    height: 50%;
+    background: transparent;
     border: none;
     border-radius: 999px;
     color: #1f2937;
     font-size: clamp(16px, 3.5vw, 18px);
     font-family: inherit;
     font-weight: 500;
-    padding: 0 5.5%;
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
+    padding: 0 4.375%;
+    text-align: left;
 }
 .page4-q2-other-input::placeholder {
     color: rgba(31, 41, 55, 0.6);
 }
-.page4-q2-other-input:focus-visible {
+.page4-q2-other-input-field:focus-visible {
     outline: none;
     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.9);
     border-radius: 999px;
@@ -932,7 +1027,7 @@
     position: absolute;
     left: 8.266667%;
     top: 20.935961%;
-    width: 85.066667%;
+    width: 75.2%;
     height: auto;
     max-width: none;
     display: block;
@@ -941,9 +1036,9 @@
 .page7-q5-options {
     position: absolute;
     left: 6.133333%;
-    top: 32.512315%;
+    top: 33.251231%;
     width: 86.133333%;
-    height: 47.842365%;
+    height: 47.573792%;
 }
 
 .page7-q5-option {
@@ -977,7 +1072,6 @@
 .page7-q5-toggle {
     position: absolute;
     left: 0;
-    top: 30%;
     width: 7.430341%;
     height: auto;
     max-width: none;
@@ -1053,11 +1147,11 @@
 
 .page8-ending-image {
     position: absolute;
-    left: 16.533333%;
+    left: 0;
+    right: 0;
     top: 16.009852%;
-    height: 60.757389%;
-    width: auto;
-    max-width: none;
+    width: 100%;
+    height: auto;
     display: block;
 }
 
