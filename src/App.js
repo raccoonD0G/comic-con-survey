@@ -20,7 +20,6 @@ import {
     DONE_TEXT_SOURCES,
     EMAIL_IMAGE_SOURCES,
     EMAIL_TEXT_BOX_SOURCES,
-    ENDING_IMAGE_SOURCES,
     GENDER_OPTIONS,
     GENDER_TEXT_SOURCES,
     KEYBOARD_VISUAL_VIEWPORT_GAP,
@@ -53,7 +52,6 @@ import {
     Q3_OPTIONS_CONTAINER_STAGE_HEIGHT,
     Q3_OPTIONS_CONTAINER_STAGE_TOP,
     Q3_OPTIONS_CONTAINER_TOP_PERCENT,
-    Q3_STAGE_HEIGHT,
     Q3_TEXT_SOURCES,
     Q3_TITLE_SOURCES,
     Q3_TOGGLE_IMAGE_SIZE,
@@ -82,11 +80,15 @@ export default function App() {
     const [ageInteracted, setAgeInteracted] = useState(false);
     const [gender, setGender] = useState(null);
     const [q1Answer, setQ1Answer] = useState(null);
+    const [q1OtherText, setQ1OtherText] = useState("");
     const [q2Answer, setQ2Answer] = useState(null);
     const [q2OtherText, setQ2OtherText] = useState("");
     const [q3Answer, setQ3Answer] = useState(null);
+    const [q3OtherText, setQ3OtherText] = useState("");
     const [q4Answer, setQ4Answer] = useState(null);
+    const [q4OtherText, setQ4OtherText] = useState("");
     const [q5Answer, setQ5Answer] = useState(null);
+    const [q5OtherText, setQ5OtherText] = useState("");
     const [submitting, setSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState(null);
     const [transitionClass, setTransitionClass] = useState("");
@@ -105,7 +107,11 @@ export default function App() {
     const q5OptionRefs = useRef([]);
     const hasMountedTransitionRef = useRef(false);
     const wasKeyboardOpenRef = useRef(false);
+    const q1OtherInputRef = useRef(null);
     const q2OtherInputRef = useRef(null);
+    const q3OtherInputRef = useRef(null);
+    const q4OtherInputRef = useRef(null);
+    const q5OtherInputRef = useRef(null);
     const initialEmailRef = useRef("");
     const [phoneStageElement, setPhoneStageElement] = useState(null);
     const [questionLayoutScale, setQuestionLayoutScale] = useState(1);
@@ -197,6 +203,25 @@ export default function App() {
         },
         [focusGenderOption, genderOptionCount]
     );
+    const handleSelectQ1Option = useCallback(
+        (optionId, focusInput = false) => {
+            setQ1Answer(optionId);
+            if (optionId === "other") {
+                if (focusInput) {
+                    setTimeout(() => {
+                        const input = q1OtherInputRef.current;
+                        if (input) {
+                            input.focus();
+                            input.select();
+                        }
+                    }, 0);
+                }
+            } else {
+                setQ1OtherText("");
+            }
+        },
+        []
+    );
     const handleQ1KeyDown = useCallback(
         (event, optionIndex) => {
             if (q1OptionCount <= 0) {
@@ -206,26 +231,26 @@ export default function App() {
             if (event.key === "ArrowRight" || event.key === "ArrowDown") {
                 event.preventDefault();
                 const nextIndex = (optionIndex + 1) % q1OptionCount;
-                setQ1Answer(Q1_OPTIONS[nextIndex].id);
+                handleSelectQ1Option(Q1_OPTIONS[nextIndex].id);
                 focusQ1Option(nextIndex);
             } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
                 event.preventDefault();
                 const previousIndex =
                     (optionIndex - 1 + q1OptionCount) % q1OptionCount;
-                setQ1Answer(Q1_OPTIONS[previousIndex].id);
+                handleSelectQ1Option(Q1_OPTIONS[previousIndex].id);
                 focusQ1Option(previousIndex);
             } else if (event.key === "Home") {
                 event.preventDefault();
-                setQ1Answer(Q1_OPTIONS[0].id);
+                handleSelectQ1Option(Q1_OPTIONS[0].id);
                 focusQ1Option(0);
             } else if (event.key === "End") {
                 event.preventDefault();
                 const lastIndex = q1OptionCount - 1;
-                setQ1Answer(Q1_OPTIONS[lastIndex].id);
+                handleSelectQ1Option(Q1_OPTIONS[lastIndex].id);
                 focusQ1Option(lastIndex);
             }
         },
-        [focusQ1Option, q1OptionCount]
+        [focusQ1Option, handleSelectQ1Option, q1OptionCount]
     );
     const handleSelectQ2Option = useCallback((optionId, focusInput = false) => {
         setQ2Answer(optionId);
@@ -273,6 +298,25 @@ export default function App() {
         },
         [focusQ2Option, handleSelectQ2Option, q2OptionCount]
     );
+    const handleSelectQ3Option = useCallback(
+        (optionId, focusInput = false) => {
+            setQ3Answer(optionId);
+            if (optionId === "other") {
+                if (focusInput) {
+                    setTimeout(() => {
+                        const input = q3OtherInputRef.current;
+                        if (input) {
+                            input.focus();
+                            input.select();
+                        }
+                    }, 0);
+                }
+            } else {
+                setQ3OtherText("");
+            }
+        },
+        []
+    );
     const handleQ3KeyDown = useCallback(
         (event, optionIndex) => {
             if (q3OptionCount <= 0) {
@@ -282,26 +326,45 @@ export default function App() {
             if (event.key === "ArrowRight" || event.key === "ArrowDown") {
                 event.preventDefault();
                 const nextIndex = (optionIndex + 1) % q3OptionCount;
-                setQ3Answer(Q3_OPTIONS[nextIndex].id);
+                handleSelectQ3Option(Q3_OPTIONS[nextIndex].id);
                 focusQ3Option(nextIndex);
             } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
                 event.preventDefault();
                 const previousIndex =
                     (optionIndex - 1 + q3OptionCount) % q3OptionCount;
-                setQ3Answer(Q3_OPTIONS[previousIndex].id);
+                handleSelectQ3Option(Q3_OPTIONS[previousIndex].id);
                 focusQ3Option(previousIndex);
             } else if (event.key === "Home") {
                 event.preventDefault();
-                setQ3Answer(Q3_OPTIONS[0].id);
+                handleSelectQ3Option(Q3_OPTIONS[0].id);
                 focusQ3Option(0);
             } else if (event.key === "End") {
                 event.preventDefault();
                 const lastIndex = q3OptionCount - 1;
-                setQ3Answer(Q3_OPTIONS[lastIndex].id);
+                handleSelectQ3Option(Q3_OPTIONS[lastIndex].id);
                 focusQ3Option(lastIndex);
             }
         },
-        [focusQ3Option, q3OptionCount]
+        [focusQ3Option, handleSelectQ3Option, q3OptionCount]
+    );
+    const handleSelectQ4Option = useCallback(
+        (optionId, focusInput = false) => {
+            setQ4Answer(optionId);
+            if (optionId === "other") {
+                if (focusInput) {
+                    setTimeout(() => {
+                        const input = q4OtherInputRef.current;
+                        if (input) {
+                            input.focus();
+                            input.select();
+                        }
+                    }, 0);
+                }
+            } else {
+                setQ4OtherText("");
+            }
+        },
+        []
     );
     const handleQ4KeyDown = useCallback(
         (event, optionIndex) => {
@@ -312,26 +375,45 @@ export default function App() {
             if (event.key === "ArrowRight" || event.key === "ArrowDown") {
                 event.preventDefault();
                 const nextIndex = (optionIndex + 1) % q4OptionCount;
-                setQ4Answer(Q4_OPTIONS[nextIndex].id);
+                handleSelectQ4Option(Q4_OPTIONS[nextIndex].id);
                 focusQ4Option(nextIndex);
             } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
                 event.preventDefault();
                 const previousIndex =
                     (optionIndex - 1 + q4OptionCount) % q4OptionCount;
-                setQ4Answer(Q4_OPTIONS[previousIndex].id);
+                handleSelectQ4Option(Q4_OPTIONS[previousIndex].id);
                 focusQ4Option(previousIndex);
             } else if (event.key === "Home") {
                 event.preventDefault();
-                setQ4Answer(Q4_OPTIONS[0].id);
+                handleSelectQ4Option(Q4_OPTIONS[0].id);
                 focusQ4Option(0);
             } else if (event.key === "End") {
                 event.preventDefault();
                 const lastIndex = q4OptionCount - 1;
-                setQ4Answer(Q4_OPTIONS[lastIndex].id);
+                handleSelectQ4Option(Q4_OPTIONS[lastIndex].id);
                 focusQ4Option(lastIndex);
             }
         },
-        [focusQ4Option, q4OptionCount]
+        [focusQ4Option, handleSelectQ4Option, q4OptionCount]
+    );
+    const handleSelectQ5Option = useCallback(
+        (optionId, focusInput = false) => {
+            setQ5Answer(optionId);
+            if (optionId === "other") {
+                if (focusInput) {
+                    setTimeout(() => {
+                        const input = q5OtherInputRef.current;
+                        if (input) {
+                            input.focus();
+                            input.select();
+                        }
+                    }, 0);
+                }
+            } else {
+                setQ5OtherText("");
+            }
+        },
+        []
     );
     const handleQ5KeyDown = useCallback(
         (event, optionIndex) => {
@@ -342,26 +424,26 @@ export default function App() {
             if (event.key === "ArrowRight" || event.key === "ArrowDown") {
                 event.preventDefault();
                 const nextIndex = (optionIndex + 1) % q5OptionCount;
-                setQ5Answer(Q5_OPTIONS[nextIndex].id);
+                handleSelectQ5Option(Q5_OPTIONS[nextIndex].id);
                 focusQ5Option(nextIndex);
             } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
                 event.preventDefault();
                 const previousIndex =
                     (optionIndex - 1 + q5OptionCount) % q5OptionCount;
-                setQ5Answer(Q5_OPTIONS[previousIndex].id);
+                handleSelectQ5Option(Q5_OPTIONS[previousIndex].id);
                 focusQ5Option(previousIndex);
             } else if (event.key === "Home") {
                 event.preventDefault();
-                setQ5Answer(Q5_OPTIONS[0].id);
+                handleSelectQ5Option(Q5_OPTIONS[0].id);
                 focusQ5Option(0);
             } else if (event.key === "End") {
                 event.preventDefault();
                 const lastIndex = q5OptionCount - 1;
-                setQ5Answer(Q5_OPTIONS[lastIndex].id);
+                handleSelectQ5Option(Q5_OPTIONS[lastIndex].id);
                 focusQ5Option(lastIndex);
             }
         },
-        [focusQ5Option, q5OptionCount]
+        [focusQ5Option, handleSelectQ5Option, q5OptionCount]
     );
     const ageStopCount = AGE_STOPS.length;
     const canAdvanceFromPage1 = email.trim().length > 0;
@@ -691,8 +773,16 @@ export default function App() {
         setSubmitting(true);
         setSubmitError(null);
 
-        const trimmedOtherText =
+        const trimmedQ1OtherText =
+            q1Answer === "other" ? q1OtherText.trim() : "";
+        const trimmedQ2OtherText =
             q2Answer === "other" ? q2OtherText.trim() : "";
+        const trimmedQ3OtherText =
+            q3Answer === "other" ? q3OtherText.trim() : "";
+        const trimmedQ4OtherText =
+            q4Answer === "other" ? q4OtherText.trim() : "";
+        const trimmedQ5OtherText =
+            q5Answer === "other" ? q5OtherText.trim() : "";
 
         const payload = {
             email: capturedEmail,
@@ -706,14 +796,30 @@ export default function App() {
                 ageLabel: selectedAgeStop ? selectedAgeStop.label : null,
                 gender,
                 q1: q1Answer,
+                q1OtherText:
+                    q1Answer === "other" && trimmedQ1OtherText.length > 0
+                        ? trimmedQ1OtherText
+                        : null,
                 q2: q2Answer,
                 q2OtherText:
-                    q2Answer === "other" && trimmedOtherText.length > 0
-                        ? trimmedOtherText
+                    q2Answer === "other" && trimmedQ2OtherText.length > 0
+                        ? trimmedQ2OtherText
                         : null,
                 q3: q3Answer,
+                q3OtherText:
+                    q3Answer === "other" && trimmedQ3OtherText.length > 0
+                        ? trimmedQ3OtherText
+                        : null,
                 q4: q4Answer,
+                q4OtherText:
+                    q4Answer === "other" && trimmedQ4OtherText.length > 0
+                        ? trimmedQ4OtherText
+                        : null,
                 q5: q5Answer,
+                q5OtherText:
+                    q5Answer === "other" && trimmedQ5OtherText.length > 0
+                        ? trimmedQ5OtherText
+                        : null,
             },
         };
 
@@ -753,11 +859,15 @@ export default function App() {
         email,
         gender,
         q1Answer,
+        q1OtherText,
         q2Answer,
         q2OtherText,
         q3Answer,
+        q3OtherText,
         q4Answer,
+        q4OtherText,
         q5Answer,
+        q5OtherText,
         selectedAgeStop,
         submitting,
     ]);
@@ -862,7 +972,7 @@ export default function App() {
                 </div>
             );
         },
-        [bgUrl, transitionClass]
+        [bgUrl, phoneStageRefCallback, transitionClass]
     );
     const renderQuestionLayout = useCallback(
         (pageClassName, content, navSection = null) => ({
@@ -1154,36 +1264,74 @@ export default function App() {
                                 Q1_OPTION_STEP_PERCENT * index;
 
                             return (
-                                <button
+                                <div
                                     key={option.id}
-                                    type="button"
-                                    className="page3-q1-option"
+                                    className="page3-q1-option-wrapper"
                                     style={{ top: `${topPercent}%` }}
-                                    onClick={() => setQ1Answer(option.id)}
-                                    onKeyDown={(event) =>
-                                        handleQ1KeyDown(event, index)
-                                    }
-                                    role="radio"
-                                    aria-checked={isSelected}
-                                    tabIndex={isTabStop ? 0 : -1}
-                                    ref={(element) => {
-                                        q1OptionRefs.current[index] = element;
-                                    }}
                                 >
-                                    <span className="sr-only">{option.label}</span>
-                                    <ImgWithFallback
-                                        className="page3-q1-toggle"
-                                        sources={toggleSources}
-                                        alt=""
-                                        aria-hidden="true"
-                                    />
-                                    <ImgWithFallback
-                                        className="page3-q1-label"
-                                        sources={option.imageSources}
-                                        alt=""
-                                        aria-hidden="true"
-                                    />
-                                </button>
+                                    <button
+                                        type="button"
+                                        className="page3-q1-option-button"
+                                        onClick={() =>
+                                            handleSelectQ1Option(
+                                                option.id,
+                                                option.allowsCustomInput ?? false
+                                            )
+                                        }
+                                        onKeyDown={(event) =>
+                                            handleQ1KeyDown(event, index)
+                                        }
+                                        role="radio"
+                                        aria-checked={isSelected}
+                                        tabIndex={isTabStop ? 0 : -1}
+                                        ref={(element) => {
+                                            q1OptionRefs.current[index] = element;
+                                        }}
+                                    >
+                                        <span className="sr-only">{option.label}</span>
+                                        <ImgWithFallback
+                                            className="page3-q1-toggle"
+                                            sources={toggleSources}
+                                            alt=""
+                                            aria-hidden="true"
+                                        />
+                                        <ImgWithFallback
+                                            className="page3-q1-label"
+                                            sources={option.imageSources}
+                                            alt=""
+                                            aria-hidden="true"
+                                        />
+                                    </button>
+                                    {option.allowsCustomInput && isSelected ? (
+                                        <label
+                                            className="option-other-input page3-q1-other-input"
+                                            htmlFor="page3-q1-other"
+                                        >
+                                            <span className="sr-only">
+                                                기타 의견 입력
+                                            </span>
+                                            <ImgWithFallback
+                                                className="option-other-input-bg"
+                                                sources={EMAIL_TEXT_BOX_SOURCES}
+                                                alt=""
+                                                aria-hidden="true"
+                                            />
+                                            <input
+                                                id="page3-q1-other"
+                                                ref={q1OtherInputRef}
+                                                className="option-other-input-field"
+                                                type="text"
+                                                value={q1OtherText}
+                                                onChange={(event) =>
+                                                    setQ1OtherText(
+                                                        event.target.value
+                                                    )
+                                                }
+                                                placeholder="직접 입력"
+                                            />
+                                        </label>
+                                    ) : null}
+                                </div>
                             );
                         })}
                     </div>
@@ -1339,7 +1487,7 @@ export default function App() {
                                     </button>
                                     {option.allowsCustomInput && isSelected ? (
                                         <label
-                                            className="page4-q2-other-input"
+                                            className="option-other-input page4-q2-other-input"
                                             style={{
                                                 top: `${labelTopPercent}%`,
                                                 height: `${labelHeightPercent}%`,
@@ -1351,14 +1499,14 @@ export default function App() {
                                                 기타 의견 입력
                                             </span>
                                             <ImgWithFallback
-                                                className="page4-q2-other-input-bg"
+                                                className="option-other-input-bg"
                                                 sources={EMAIL_TEXT_BOX_SOURCES}
                                                 alt=""
                                                 aria-hidden="true"
                                             />
                                             <input
                                                 ref={q2OtherInputRef}
-                                                className="page4-q2-other-input-field"
+                                                className="option-other-input-field"
                                                 type="text"
                                                 value={q2OtherText}
                                                 onChange={(event) =>
@@ -1506,7 +1654,12 @@ export default function App() {
                                     <button
                                         type="button"
                                         className="page5-q3-option-button"
-                                        onClick={() => setQ3Answer(option.id)}
+                                        onClick={() =>
+                                            handleSelectQ3Option(
+                                                option.id,
+                                                option.allowsCustomInput ?? false
+                                            )
+                                        }
                                         onKeyDown={(event) =>
                                             handleQ3KeyDown(event, index)
                                         }
@@ -1542,6 +1695,39 @@ export default function App() {
                                             }}
                                         />
                                     </button>
+                                    {option.allowsCustomInput && isSelected ? (
+                                        <label
+                                            className="option-other-input page5-q3-other-input"
+                                            style={{
+                                                top: `${labelTopPercent}%`,
+                                                height: `${labelHeightPercent}%`,
+                                                left: `${Q3_LABEL_LEFT_PERCENT}%`,
+                                                width: `${Q3_LABEL_WIDTH_PERCENT}%`,
+                                            }}
+                                        >
+                                            <span className="sr-only">
+                                                기타 의견 입력
+                                            </span>
+                                            <ImgWithFallback
+                                                className="option-other-input-bg"
+                                                sources={EMAIL_TEXT_BOX_SOURCES}
+                                                alt=""
+                                                aria-hidden="true"
+                                            />
+                                            <input
+                                                ref={q3OtherInputRef}
+                                                className="option-other-input-field"
+                                                type="text"
+                                                value={q3OtherText}
+                                                onChange={(event) =>
+                                                    setQ3OtherText(
+                                                        event.target.value
+                                                    )
+                                                }
+                                                placeholder="직접 입력"
+                                            />
+                                        </label>
+                                    ) : null}
                                 </div>
                             );
                         })}
@@ -1646,7 +1832,12 @@ export default function App() {
                                     <button
                                         type="button"
                                         className="page6-q4-option-button"
-                                        onClick={() => setQ4Answer(option.id)}
+                                        onClick={() =>
+                                            handleSelectQ4Option(
+                                                option.id,
+                                                option.allowsCustomInput ?? false
+                                            )
+                                        }
                                         onKeyDown={(event) =>
                                             handleQ4KeyDown(event, index)
                                         }
@@ -1671,6 +1862,35 @@ export default function App() {
                                             aria-hidden="true"
                                         />
                                     </button>
+                                    {option.allowsCustomInput && isSelected ? (
+                                        <label
+                                            className="option-other-input page6-q4-other-input"
+                                            htmlFor="page6-q4-other"
+                                        >
+                                            <span className="sr-only">
+                                                기타 의견 입력
+                                            </span>
+                                            <ImgWithFallback
+                                                className="option-other-input-bg"
+                                                sources={EMAIL_TEXT_BOX_SOURCES}
+                                                alt=""
+                                                aria-hidden="true"
+                                            />
+                                            <input
+                                                id="page6-q4-other"
+                                                ref={q4OtherInputRef}
+                                                className="option-other-input-field"
+                                                type="text"
+                                                value={q4OtherText}
+                                                onChange={(event) =>
+                                                    setQ4OtherText(
+                                                        event.target.value
+                                                    )
+                                                }
+                                                placeholder="직접 입력"
+                                            />
+                                        </label>
+                                    ) : null}
                                 </div>
                             );
                         })}
@@ -1814,6 +2034,8 @@ export default function App() {
                                 }%`;
                             }
 
+                            const otherInputStyle = { ...labelStyle };
+
                             return (
                                 <div
                                     key={option.id}
@@ -1826,7 +2048,12 @@ export default function App() {
                                     <button
                                         type="button"
                                         className="page7-q5-option-button"
-                                        onClick={() => setQ5Answer(option.id)}
+                                        onClick={() =>
+                                            handleSelectQ5Option(
+                                                option.id,
+                                                option.allowsCustomInput ?? false
+                                            )
+                                        }
                                         onKeyDown={(event) =>
                                             handleQ5KeyDown(event, index)
                                         }
@@ -1853,6 +2080,36 @@ export default function App() {
                                             style={labelStyle}
                                         />
                                     </button>
+                                    {option.allowsCustomInput && isSelected ? (
+                                        <label
+                                            className="option-other-input page7-q5-other-input"
+                                            style={otherInputStyle}
+                                            htmlFor="page7-q5-other"
+                                        >
+                                            <span className="sr-only">
+                                                기타 의견 입력
+                                            </span>
+                                            <ImgWithFallback
+                                                className="option-other-input-bg"
+                                                sources={EMAIL_TEXT_BOX_SOURCES}
+                                                alt=""
+                                                aria-hidden="true"
+                                            />
+                                            <input
+                                                id="page7-q5-other"
+                                                ref={q5OtherInputRef}
+                                                className="option-other-input-field"
+                                                type="text"
+                                                value={q5OtherText}
+                                                onChange={(event) =>
+                                                    setQ5OtherText(
+                                                        event.target.value
+                                                    )
+                                                }
+                                                placeholder="직접 입력"
+                                            />
+                                        </label>
+                                    ) : null}
                                 </div>
                             );
                         })}
@@ -1928,11 +2185,7 @@ export default function App() {
     if (page === 8) {
         return renderPhoneStage(
             <div className="page page8">
-                        <ImgWithFallback
-                            className="page8-ending-image"
-                            sources={ENDING_IMAGE_SOURCES}
-                            alt="설문이 완료되었습니다"
-                        />
+                <span className="sr-only">설문이 완료되었습니다</span>
             </div>
         );
     }
