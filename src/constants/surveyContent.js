@@ -28,6 +28,7 @@ export const ENDING_IMAGE_SOURCES = ["/ending.png"];
 
 export const PHONE_STAGE_DESIGN_WIDTH = 375;
 export const PHONE_STAGE_DESIGN_HEIGHT = 812;
+export const PAGE_NAV_DESIGN_HEIGHT = 71;
 export const AGE_TRACK_LEFT_PERCENT = 7.466667;
 export const AGE_TRACK_WIDTH_PERCENT = 90.4;
 export const AGE_TRACK_START_OFFSET_PERCENT = (25 / 339) * AGE_TRACK_WIDTH_PERCENT;
