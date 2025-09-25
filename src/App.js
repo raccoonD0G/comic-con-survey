@@ -1,7 +1,6 @@
 // App.js
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "./App.css";
-
 import ImgWithFallback from "./components/ImgWithFallback";
 import PhoneStage from "./components/PhoneStage";
 import {

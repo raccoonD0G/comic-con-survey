@@ -41,7 +41,6 @@
     display: flex;
     flex-direction: column;
     position: relative;
-    overflow: hidden;
 }
 
 .phone-stage-content {
@@ -266,7 +265,7 @@
 .page1-next-btn {
     position: absolute;
     left: 0;
-    top: 91.256158%;
+    top: 92.364532%;
     width: 100%;
     height: 8.743842%;
     display: block;
@@ -287,6 +286,26 @@
 .page6-next-text {
     position: absolute;
     left: 42.133333%;
+    top: 14.084507%;
+    max-width: none;
+    pointer-events: none;
+    z-index: 1;
+    display: block;
+}
+
+.page7-done-text {
+    position: absolute;
+    left: 40%;
+    top: 14.084507%;
+    max-width: none;
+    pointer-events: none;
+    z-index: 1;
+    display: block;
+}
+
+.page7-done-text {
+    position: absolute;
+    left: 40%;
     top: 8.450704%;
     width: 15.466667%;
     height: auto;
@@ -524,7 +543,7 @@
 .page2-next-btn {
     position: absolute;
     left: 0;
-    top: 91.256158%;
+    top: 92.364532%;
     width: 100%;
     height: 8.743842%;
     display: block;
@@ -649,7 +668,7 @@
 .page3-next-btn {
     position: absolute;
     left: 0;
-    top: 91.256158%;
+    top: 92.364532%;
     width: 100%;
     height: 8.743842%;
     display: block;
@@ -784,7 +803,7 @@
 .page4-next-btn {
     position: absolute;
     left: 0;
-    top: 91.256158%;
+    top: 92.364532%;
     width: 100%;
     height: 8.743842%;
     display: block;
@@ -880,7 +899,7 @@
 .page5-next-btn {
     position: absolute;
     left: 0;
-    top: 91.256158%;
+    top: 92.364532%;
     width: 100%;
     height: 8.743842%;
     display: block;
@@ -983,7 +1002,7 @@
 .page6-next-btn {
     position: absolute;
     left: 0;
-    top: 91.256158%;
+    top: 92.364532%;
     width: 100%;
     height: 8.743842%;
     display: block;
@@ -1097,7 +1116,7 @@
 .page7-done-btn {
     position: absolute;
     left: 0;
-    top: 91.256158%;
+    top: 92.364532%;
     width: 100%;
     height: 8.743842%;
     display: block;
