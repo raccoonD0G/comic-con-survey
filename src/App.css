@@ -314,11 +314,10 @@
 
 .page-bottom-nav {
     position: fixed;
-    left: 50%;
+    left: 0;
+    right: 0;
     bottom: 0;
-    width: min(var(--phone-stage-width), 100vw);
     height: var(--page-nav-height);
-    transform: translateX(-50%);
     display: flex;
     z-index: 100;
 }
