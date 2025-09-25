@@ -123,7 +123,7 @@ export const Q2_OPTIONS = [
         top: 219,
         height: 84,
         toggleTop: 30,
-        labelTop: 30,
+        labelTop: 0,
         labelHeight: 84,
     },
     {
