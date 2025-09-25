@@ -350,6 +350,7 @@ const Q5_OPTIONS_CONTAINER_HEIGHT = Q5_OPTIONS.reduce((maxBottom, option) => {
     return bottom > maxBottom ? bottom : maxBottom;
 }, 0);
 const ENDING_IMAGE_SOURCES = ["/ending.png"];
+const VIEWPORT_HEIGHT_EPSILON = 1;
 
 function ImgWithFallback({ sources = [], alt, ...imgProps }) {
     const [activeIndex, setActiveIndex] = useState(0);
@@ -413,6 +414,7 @@ export default function App() {
     const q4OptionRefs = useRef([]);
     const q5OptionCount = Q5_OPTIONS.length;
     const q5OptionRefs = useRef([]);
+    const lastViewportHeightRef = useRef(null);
     const q2OtherInputRef = useRef(null);
     const initialEmailRef = useRef("");
     const focusGenderOption = useCallback(
@@ -704,13 +706,41 @@ export default function App() {
         }
 
         const updateViewportHeight = () => {
-            const viewportHeight = window.innerHeight;
-            if (viewportHeight > 0 && Number.isFinite(viewportHeight)) {
-                rootElement.style.setProperty(
-                    "--app-viewport-height",
-                    `${viewportHeight}px`
-                );
+            const { innerHeight, visualViewport } = window;
+            const candidateHeights = [];
+
+            if (innerHeight > 0 && Number.isFinite(innerHeight)) {
+                candidateHeights.push(innerHeight);
             }
+
+            if (visualViewport) {
+                const { height } = visualViewport;
+                if (height > 0 && Number.isFinite(height)) {
+                    candidateHeights.push(height);
+                }
+            }
+
+            if (candidateHeights.length === 0) {
+                return;
+            }
+
+            const viewportHeight = Math.min(...candidateHeights);
+
+            rootElement.style.setProperty(
+                "--app-viewport-height",
+                `${viewportHeight}px`
+            );
+
+            const lastViewportHeight = lastViewportHeightRef.current;
+            if (
+                lastViewportHeight !== null &&
+                viewportHeight > lastViewportHeight + VIEWPORT_HEIGHT_EPSILON &&
+                Math.abs(window.scrollY) > VIEWPORT_HEIGHT_EPSILON
+            ) {
+                window.scrollTo(0, 0);
+            }
+
+            lastViewportHeightRef.current = viewportHeight;
         };
 
         updateViewportHeight();
@@ -739,7 +769,7 @@ export default function App() {
                 );
             }
         };
-    }, []);
+    }, [lastViewportHeightRef]);
     useEffect(() => {
         genderOptionRefs.current = genderOptionRefs.current.slice(0, genderOptionCount);
     }, [genderOptionCount]);
