@@ -294,6 +294,7 @@ const Q4_OPTIONS = [
 const Q4_OPTIONS_CONTAINER_HEIGHT = 376;
 const Q5_TITLE_SOURCES = ["/q5_title_image.png"];
 const Q5_TEXT_SOURCES = ["/q5_text_image.png"];
+const Q5_OPTION_WIDTH = 323;
 const Q5_OPTIONS = [
     {
         id: "expensiveEquipment",
@@ -310,6 +311,10 @@ const Q5_OPTIONS = [
         top: 74,
         height: 84,
         toggleTop: 30,
+        labelLeft: 46,
+        labelTop: 0,
+        labelWidth: 277,
+        labelHeight: 84,
     },
     {
         id: "lackOfTechnicalSkills",
@@ -343,6 +348,7 @@ const Q5_OPTIONS_CONTAINER_HEIGHT = Q5_OPTIONS.reduce((maxBottom, option) => {
 const ENDING_IMAGE_SOURCES = ["/ending.png"];
 const VIEWPORT_HEIGHT_EPSILON = 1;
 const KEYBOARD_VISUAL_VIEWPORT_GAP = 120;
+const SLIDE_TRANSITION_DURATION_MS = 450;
 
 function ImgWithFallback({ sources = [], alt, ...imgProps }) {
     const [activeIndex, setActiveIndex] = useState(0);
@@ -394,6 +400,7 @@ export default function App() {
     const [q5Answer, setQ5Answer] = useState(null);
     const [submitting, setSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState(null);
+    const [transitionClass, setTransitionClass] = useState("");
     const genderOptionCount = GENDER_OPTIONS.length;
     const phoneStageRef = useRef(null);
     const genderOptionRefs = useRef([]);
@@ -407,6 +414,7 @@ export default function App() {
     const q4OptionRefs = useRef([]);
     const q5OptionCount = Q5_OPTIONS.length;
     const q5OptionRefs = useRef([]);
+    const hasMountedTransitionRef = useRef(false);
     const wasKeyboardOpenRef = useRef(false);
     const q2OtherInputRef = useRef(null);
     const initialEmailRef = useRef("");
@@ -1004,13 +1012,86 @@ export default function App() {
         []
     );
 
-    // 프리로드
+    const preloadedImageSources = useMemo(() => {
+        const collected = new Set(bgSources);
+
+        const addSources = (sources = []) => {
+            sources.forEach((src) => {
+                if (typeof src === "string" && src.length > 0) {
+                    collected.add(src);
+                }
+            });
+        };
+
+        const addOptionSources = (options = []) => {
+            options.forEach((option) => {
+                if (Array.isArray(option.imageSources)) {
+                    addSources(option.imageSources);
+                }
+            });
+        };
+
+        addSources(BASIC_INFO_SOURCES);
+        addSources(BEFORE_BUTTON_SOURCES);
+        addSources(NEXT_ON_BUTTON_SOURCES);
+        addSources(NEXT_OFF_BUTTON_SOURCES);
+        addSources(NEXT_TEXT_SOURCES);
+        addSources(DONE_BUTTON_SOURCES);
+        addSources(DONE_OFF_BUTTON_SOURCES);
+        addSources(DONE_TEXT_SOURCES);
+        addSources(EMAIL_IMAGE_SOURCES);
+        addSources(EMAIL_TEXT_BOX_SOURCES);
+        addSources(AGE_TEXT_SOURCES);
+        addSources(GENDER_TEXT_SOURCES);
+        addSources(SCROLL_LINE_SOURCES);
+        addSources(SCROLL_HANDLE_SOURCES);
+        addSources(OFF_TOGGLE_SOURCES);
+        addSources(ON_TOGGLE_SOURCES);
+        addSources(Q1_TITLE_SOURCES);
+        addSources(Q1_TEXT_SOURCES);
+        addSources(Q2_TITLE_SOURCES);
+        addSources(Q2_TEXT_SOURCES);
+        addSources(Q3_TITLE_SOURCES);
+        addSources(Q3_TEXT_SOURCES);
+        addSources(Q4_TITLE_SOURCES);
+        addSources(Q4_TEXT_SOURCES);
+        addSources(Q5_TITLE_SOURCES);
+        addSources(Q5_TEXT_SOURCES);
+        addSources(ENDING_IMAGE_SOURCES);
+        addOptionSources(GENDER_OPTIONS);
+        addOptionSources(Q1_OPTIONS);
+        addOptionSources(Q2_OPTIONS);
+        addOptionSources(Q3_OPTIONS);
+        addOptionSources(Q4_OPTIONS);
+        addOptionSources(Q5_OPTIONS);
+        addSources([
+            "/entry_text_image0.png",
+            "/entry_text_image1.png",
+            "/arrow_button.png",
+            "/i_agree_on_button.png",
+            "/i_agree_off_button.png",
+            "/start_on_button.png",
+            "/start_off_button.png",
+            "/progress_1.png",
+            "/progress_2.png",
+            "/progress_3.png",
+            "/progress_4.png",
+            "/progress_5.png",
+        ]);
+
+        return Array.from(collected);
+    }, [bgSources]);
+
     useEffect(() => {
-        bgSources.forEach((src) => {
-            const img = new Image();
+        if (typeof window === "undefined") {
+            return;
+        }
+
+        preloadedImageSources.forEach((src) => {
+            const img = new window.Image();
             img.src = src;
         });
-    }, [bgSources]);
+    }, [preloadedImageSources]);
 
     // 현재 페이지 배경
     const bgUrl = useMemo(() => {
@@ -1020,6 +1101,22 @@ export default function App() {
         return bgSources[0]; // 기본값 (안전용)
     }, [bgSources, page]);
 
+    useEffect(() => {
+        if (!hasMountedTransitionRef.current) {
+            hasMountedTransitionRef.current = true;
+            return;
+        }
+
+        setTransitionClass("phone-stage-slide-in");
+        const timeoutId = setTimeout(() => {
+            setTransitionClass("");
+        }, SLIDE_TRANSITION_DURATION_MS);
+
+        return () => {
+            clearTimeout(timeoutId);
+        };
+    }, [page]);
+
     // 상태 클래스
     const page0StateClass = expanded ? "is-expanded" : "is-collapsed";
 
@@ -1028,6 +1125,9 @@ export default function App() {
             const innerClasses = ["phone-stage-inner"];
             if (innerClassName) {
                 innerClasses.push(innerClassName);
+            }
+            if (transitionClass) {
+                innerClasses.push(transitionClass);
             }
 
             return (
@@ -1045,7 +1145,7 @@ export default function App() {
                 </div>
             );
         },
-        [bgUrl]
+        [bgUrl, transitionClass]
     );
 
     // ----- PAGE 1 (임시) -----
@@ -1898,6 +1998,45 @@ export default function App() {
                                     option.height > 0
                                         ? (option.toggleTop / option.height) * 100
                                         : 0;
+                                const labelStyle = {};
+
+                                if (
+                                    typeof option.labelLeft === "number" &&
+                                    Number.isFinite(option.labelLeft)
+                                ) {
+                                    labelStyle.left = `${
+                                        (option.labelLeft / Q5_OPTION_WIDTH) * 100
+                                    }%`;
+                                }
+
+                                if (
+                                    typeof option.labelTop === "number" &&
+                                    Number.isFinite(option.labelTop) &&
+                                    option.height > 0
+                                ) {
+                                    labelStyle.top = `${
+                                        (option.labelTop / option.height) * 100
+                                    }%`;
+                                }
+
+                                if (
+                                    typeof option.labelWidth === "number" &&
+                                    Number.isFinite(option.labelWidth)
+                                ) {
+                                    labelStyle.width = `${
+                                        (option.labelWidth / Q5_OPTION_WIDTH) * 100
+                                    }%`;
+                                }
+
+                                if (
+                                    typeof option.labelHeight === "number" &&
+                                    Number.isFinite(option.labelHeight) &&
+                                    option.height > 0
+                                ) {
+                                    labelStyle.height = `${
+                                        (option.labelHeight / option.height) * 100
+                                    }%`;
+                                }
 
                                 return (
                                     <div
@@ -1935,6 +2074,7 @@ export default function App() {
                                                 sources={option.imageSources}
                                                 alt=""
                                                 aria-hidden="true"
+                                                style={labelStyle}
                                             />
                                         </button>
                                     </div>
