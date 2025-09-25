@@ -702,9 +702,7 @@
 .page4-q2-options {
     position: absolute;
     left: 0;
-    top: 0;
     width: 100%;
-    height: 100%;
 }
 .page4-q2-option-wrapper {
     position: absolute;
@@ -916,10 +914,11 @@
     position: absolute;
     left: 0;
     width: 100%;
-    height: 20%;
 }
 .page6-q4-option-button {
-    position: relative;
+    position: absolute;
+    left: 0;
+    top: 0;
     width: 100%;
     height: 100%;
     background: none;
@@ -939,9 +938,7 @@
 .page6-q4-toggle {
     position: absolute;
     left: 0;
-    top: 30%;
     width: 7.430341%;
-    height: auto;
     max-width: none;
     display: block;
     pointer-events: none;
@@ -949,18 +946,16 @@
 .page6-q4-label {
     position: absolute;
     left: 14.241486%;
-    top: 0;
     width: 85.758514%;
-    height: 100%;
     max-width: none;
     display: block;
     pointer-events: none;
 }
 .page6-q4-other-input {
+    position: absolute;
     left: 14.241486%;
-    top: 0;
     width: 85.758514%;
-    height: 100%;
+    display: block;
 }
 .page6-before-btn {
     position: absolute;

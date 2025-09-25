@@ -176,6 +176,40 @@ export const Q2_LABEL_LEFT_PERCENT = (46 / Q2_OPTION_WIDTH) * 100;
 export const Q2_LABEL_WIDTH_PERCENT = (277 / Q2_OPTION_WIDTH) * 100;
 export const Q2_TOGGLE_WIDTH_PERCENT = (Q2_TOGGLE_IMAGE_SIZE / Q2_OPTION_WIDTH) * 100;
 
+const Q2_OPTIONS_BOUNDARIES = (() => {
+    if (Q2_OPTIONS.length === 0) {
+        return { top: 0, height: Q2_STAGE_HEIGHT };
+    }
+
+    let minTop = Q2_OPTIONS[0].top;
+    let maxBottom = Q2_OPTIONS[0].top + Q2_OPTIONS[0].height;
+
+    for (const option of Q2_OPTIONS) {
+        if (option.top < minTop) {
+            minTop = option.top;
+        }
+        const optionBottom = option.top + option.height;
+        if (optionBottom > maxBottom) {
+            maxBottom = optionBottom;
+        }
+    }
+
+    const computedHeight = maxBottom - minTop;
+
+    if (computedHeight <= 0) {
+        return { top: 0, height: Q2_STAGE_HEIGHT };
+    }
+
+    return { top: minTop, height: computedHeight };
+})();
+
+export const Q2_OPTIONS_CONTAINER_STAGE_TOP = Q2_OPTIONS_BOUNDARIES.top;
+export const Q2_OPTIONS_CONTAINER_STAGE_HEIGHT = Q2_OPTIONS_BOUNDARIES.height;
+export const Q2_OPTIONS_CONTAINER_TOP_PERCENT =
+    (Q2_OPTIONS_CONTAINER_STAGE_TOP / Q2_STAGE_HEIGHT) * 100;
+export const Q2_OPTIONS_CONTAINER_HEIGHT_PERCENT =
+    (Q2_OPTIONS_CONTAINER_STAGE_HEIGHT / Q2_STAGE_HEIGHT) * 100;
+
 export const Q3_OPTIONS = [
     {
         id: "anime",
@@ -279,35 +313,57 @@ export const Q4_OPTIONS = [
         label: "Definitely yes",
         imageSources: ["/definitely_yes.png"],
         top: 0,
+        height: 60,
+        toggleTop: 18,
+        labelTop: 0,
+        labelHeight: 60,
     },
     {
         id: "probablyWilling",
         label: "Probably willing",
         imageSources: ["/probably_willing.png"],
         top: 82,
+        height: 60,
+        toggleTop: 18,
+        labelTop: 0,
+        labelHeight: 60,
     },
     {
         id: "notSure",
         label: "Not sure",
         imageSources: ["/not_sure.png"],
         top: 164,
+        height: 60,
+        toggleTop: 18,
+        labelTop: 0,
+        labelHeight: 60,
     },
     {
         id: "no",
         label: "No",
         imageSources: ["/no.png"],
         top: 246,
+        height: 60,
+        toggleTop: 18,
+        labelTop: 0,
+        labelHeight: 60,
     },
     {
         id: "other",
         label: "Other",
         imageSources: ["/other_text_image.png"],
         top: 328,
+        height: 60,
+        toggleTop: 30,
+        labelTop: 0,
+        labelHeight: 60,
         allowsCustomInput: true,
     },
 ];
 
 export const Q4_OPTIONS_CONTAINER_HEIGHT = 410;
+export const Q4_TOGGLE_IMAGE_SIZE = Q2_TOGGLE_IMAGE_SIZE;
+
 
 export const Q5_OPTION_WIDTH = 323;
 export const Q5_OPTIONS = [
