@@ -139,26 +139,6 @@
     transform: translateY(0);
 }
 
-.page0-entry-fade {
-    position: absolute;
-    left: 4%;
-    top: 77.9635%;
-    width: 93.3333%;
-    height: 10.591133%;
-    background: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0),
-        rgba(0, 0, 0, 0.85)
-    );
-    opacity: 0;
-    transition: opacity 600ms ease;
-    pointer-events: none;
-}
-
-.page0.is-expanded .page0-entry-fade {
-    opacity: 1;
-}
-
 .page0 .arrow-button,
 .page0 .img-btn {
     position: absolute;
@@ -1001,9 +981,9 @@
 .page7-q5-options {
     position: absolute;
     left: 6.133333%;
-    top: 33.251231%;
+    top: 26.973891%;
     width: 86.133333%;
-    height: 47.573792%;
+    height: 47.536946%;
 }
 
 .page7-q5-option {

@@ -2263,7 +2263,6 @@ export default function App() {
                         src="/entry_text_image1.png"
                         alt="EntryText1"
                     />
-                    <div className="page0-entry-fade" aria-hidden="true" />
 
                     {/* 2) 화살표 버튼 */}
                     <button
