@@ -1103,9 +1103,9 @@ export default function App() {
                             <ImgWithFallback
                                 className="page2-next-btn-img"
                                 sources={
-                                    canAdvanceFromPage2
-                                        ? "다음 페이지로 이동"
-                                        : "성별을 선택하면 다음으로 이동할 수 있습니다"
+                                    canAdvanceFromPage3
+                                        ? NEXT_ON_BUTTON_SOURCES
+                                        : NEXT_OFF_BUTTON_SOURCES
                                 }
                                 alt="다음"
                             />
