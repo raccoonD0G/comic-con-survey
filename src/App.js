@@ -1397,8 +1397,8 @@ export default function App() {
                             aria-label="다음 페이지"
                             title={
                                 canAdvanceFromPage4
-                                    ? "다음 페이지로 이동"
-                                    : "선택지를 고르면 다음으로 이동할 수 있습니다"
+                                    ? NEXT_ON_BUTTON_SOURCES
+                                    : NEXT_OFF_BUTTON_SOURCES
                             }
                             disabled={!canAdvanceFromPage4}
                         >
