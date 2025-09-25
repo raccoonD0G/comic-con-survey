@@ -1,7 +1,12 @@
+:root {
+    --app-viewport-height: 100vh;
+}
+
 /* 뷰포트 전체(레터박스 배경 색) */
 .app-root {
     width: 100vw;
-    height: 100vh;
+    height: var(--app-viewport-height);
+    min-height: var(--app-viewport-height);
     background: #000; /* 검정 레터박스 */
     display: grid;
     place-items: center; /* 중앙 정렬 */
@@ -11,8 +16,11 @@
 .phone-stage {
     /* 디자인 해상도(375x812)에 맞춘 고정 비율 */
     aspect-ratio: 375 / 812;
-    width: min(100vw, calc(100vh * 375 / 812));
-    height: min(100vh, calc(100vw * 812 / 375));
+    width: min(
+        100vw,
+        calc(var(--app-viewport-height) * 375 / 812)
+    );
+    height: min(var(--app-viewport-height), calc(100vw * 812 / 375));
     /* 배경 이미지는 JS에서 설정 */
     background-position: center;
     background-repeat: no-repeat;
@@ -21,7 +29,10 @@
     display: flex;
     flex-direction: column;
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
 }
 
 /* 실제 페이지 콘텐츠는 phone-stage 안에서 배치 */
