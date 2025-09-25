@@ -24,7 +24,7 @@ export const Q4_TITLE_SOURCES = ["/q4_title_image.png"];
 export const Q4_TEXT_SOURCES = ["/q4_text_image.png"];
 export const Q5_TITLE_SOURCES = ["/q5_title_image.png"];
 export const Q5_TEXT_SOURCES = ["/q5_text_image.png"];
-export const ENDING_IMAGE_SOURCES = ["/ending.png"];
+export const ENDING_IMAGE_SOURCES = ["/B8.png"];
 
 export const PHONE_STAGE_DESIGN_WIDTH = 375;
 export const PHONE_STAGE_DESIGN_HEIGHT = 812;
@@ -105,13 +105,14 @@ export const Q1_OPTIONS = [
         imageSources: ["/could_be_better_image.png"],
     },
     {
-        id: "notMyThing",
-        label: "Not my thing",
-        imageSources: ["/not_my_thing_image.png"],
+        id: "other",
+        label: "Other",
+        imageSources: ["/other_text_image.png"],
+        allowsCustomInput: true,
     },
 ];
 
-export const Q1_OPTION_BASE_TOP_PERCENT = (265 / 812) * 100;
+export const Q1_OPTION_BASE_TOP_PERCENT = (219 / 812) * 100;
 export const Q1_OPTION_STEP_PERCENT = (82 / 812) * 100;
 
 export const Q2_OPTIONS = [
@@ -119,8 +120,8 @@ export const Q2_OPTIONS = [
         id: "interactivity",
         label: "The interactivity",
         imageSources: ["/the_interactivity_image.png"],
-        top: 268,
-        height: 100,
+        top: 219,
+        height: 84,
         toggleTop: 30,
         labelTop: 0,
         labelHeight: 84,
@@ -129,8 +130,8 @@ export const Q2_OPTIONS = [
         id: "awesomeGraphics",
         label: "The awesome graphics",
         imageSources: ["/the_awesome_graphics_image.png"],
-        top: 368,
-        height: 76,
+        top: 319,
+        height: 60,
         toggleTop: 18,
         labelTop: 0,
         labelHeight: 60,
@@ -139,8 +140,8 @@ export const Q2_OPTIONS = [
         id: "funStorytelling",
         label: "The fun storytelling",
         imageSources: ["/the_fun_storytelling_image.png"],
-        top: 444,
-        height: 76,
+        top: 395,
+        height: 60,
         toggleTop: 18,
         labelTop: 0,
         labelHeight: 60,
@@ -149,8 +150,8 @@ export const Q2_OPTIONS = [
         id: "koreanBackstreet",
         label: "Korean backstreet",
         imageSources: ["/korean_backstreet_image.png"],
-        top: 520,
-        height: 76,
+        top: 471,
+        height: 60,
         toggleTop: 18,
         labelTop: 0,
         labelHeight: 60,
@@ -159,8 +160,8 @@ export const Q2_OPTIONS = [
         id: "other",
         label: "Other",
         imageSources: ["/other_text_image.png"],
-        top: 596,
-        height: 76,
+        top: 547,
+        height: 60,
         toggleTop: 18,
         labelTop: 0,
         labelHeight: 60,
@@ -175,34 +176,48 @@ export const Q2_LABEL_LEFT_PERCENT = (46 / Q2_OPTION_WIDTH) * 100;
 export const Q2_LABEL_WIDTH_PERCENT = (277 / Q2_OPTION_WIDTH) * 100;
 export const Q2_TOGGLE_WIDTH_PERCENT = (Q2_TOGGLE_IMAGE_SIZE / Q2_OPTION_WIDTH) * 100;
 
+const Q2_OPTIONS_BOUNDARIES = (() => {
+    if (Q2_OPTIONS.length === 0) {
+        return { top: 0, height: Q2_STAGE_HEIGHT };
+    }
+
+    let minTop = Q2_OPTIONS[0].top;
+    let maxBottom = Q2_OPTIONS[0].top + Q2_OPTIONS[0].height;
+
+    for (const option of Q2_OPTIONS) {
+        if (option.top < minTop) {
+            minTop = option.top;
+        }
+        const optionBottom = option.top + option.height;
+        if (optionBottom > maxBottom) {
+            maxBottom = optionBottom;
+        }
+    }
+
+    const computedHeight = maxBottom - minTop;
+
+    if (computedHeight <= 0) {
+        return { top: 0, height: Q2_STAGE_HEIGHT };
+    }
+
+    return { top: minTop, height: computedHeight };
+})();
+
+export const Q2_OPTIONS_CONTAINER_STAGE_TOP = Q2_OPTIONS_BOUNDARIES.top;
+export const Q2_OPTIONS_CONTAINER_STAGE_HEIGHT = Q2_OPTIONS_BOUNDARIES.height;
+export const Q2_OPTIONS_CONTAINER_TOP_PERCENT =
+    (Q2_OPTIONS_CONTAINER_STAGE_TOP / Q2_STAGE_HEIGHT) * 100;
+export const Q2_OPTIONS_CONTAINER_HEIGHT_PERCENT =
+    (Q2_OPTIONS_CONTAINER_STAGE_HEIGHT / Q2_STAGE_HEIGHT) * 100;
+
 export const Q3_OPTIONS = [
-    {
-        id: "fashion",
-        label: "Fashion",
-        imageSources: ["/Fashion_image.png"],
-        top: 264,
-        height: 74,
-        toggleTop: 30,
-        labelTop: 0,
-        labelHeight: 60,
-    },
-    {
-        id: "sports",
-        label: "Sports",
-        imageSources: ["/sports_image.png"],
-        top: 338,
-        height: 74,
-        toggleTop: 30,
-        labelTop: 0,
-        labelHeight: 60,
-    },
     {
         id: "anime",
         label: "Anime",
         imageSources: ["/anime_image.png"],
-        top: 412,
+        top: 219,
         height: 94,
-        toggleTop: 30,
+        toggleTop: 38,
         labelTop: 0,
         labelHeight: 80,
     },
@@ -210,9 +225,9 @@ export const Q3_OPTIONS = [
         id: "movie",
         label: "Movie",
         imageSources: ["/movie_image.png"],
-        top: 506,
+        top: 313,
         height: 74,
-        toggleTop: 30,
+        toggleTop: 18,
         labelTop: 0,
         labelHeight: 60,
     },
@@ -220,11 +235,32 @@ export const Q3_OPTIONS = [
         id: "education",
         label: "Education",
         imageSources: ["/education_image.png"],
-        top: 580,
-        height: 73,
-        toggleTop: 30,
+        top: 387,
+        height: 87,
+        toggleTop: 24.5,
         labelTop: 0,
         labelHeight: 73,
+    },
+    {
+        id: "sports",
+        label: "Sports",
+        imageSources: ["/sports_image.png"],
+        top: 474,
+        height: 74,
+        toggleTop: 30,
+        labelTop: 0,
+        labelHeight: 60,
+    },
+    {
+        id: "other",
+        label: "Other",
+        imageSources: ["/other_text_image.png"],
+        top: 548,
+        height: 74,
+        toggleTop: 30,
+        labelTop: 0,
+        labelHeight: 60,
+        allowsCustomInput: true,
     },
 ];
 
@@ -277,34 +313,56 @@ export const Q4_OPTIONS = [
         label: "Definitely yes",
         imageSources: ["/definitely_yes.png"],
         top: 0,
+        height: 60,
+        toggleTop: 18,
+        labelTop: 0,
+        labelHeight: 60,
     },
     {
         id: "probablyWilling",
         label: "Probably willing",
         imageSources: ["/probably_willing.png"],
         top: 82,
+        height: 60,
+        toggleTop: 18,
+        labelTop: 0,
+        labelHeight: 60,
     },
     {
         id: "notSure",
         label: "Not sure",
         imageSources: ["/not_sure.png"],
         top: 164,
+        height: 60,
+        toggleTop: 18,
+        labelTop: 0,
+        labelHeight: 60,
     },
     {
         id: "no",
         label: "No",
         imageSources: ["/no.png"],
         top: 246,
+        height: 60,
+        toggleTop: 18,
+        labelTop: 0,
+        labelHeight: 60,
     },
     {
-        id: "iDontKnow",
-        label: "I don't know",
-        imageSources: ["/i_dont.png"],
+        id: "other",
+        label: "Other",
+        imageSources: ["/other_text_image.png"],
         top: 328,
+        height: 60,
+        toggleTop: 30,
+        labelTop: 0,
+        labelHeight: 60,
+        allowsCustomInput: true,
     },
 ];
 
-export const Q4_OPTIONS_CONTAINER_HEIGHT = 376;
+export const Q4_OPTIONS_CONTAINER_HEIGHT = 410;
+export const Q4_TOGGLE_IMAGE_SIZE = Q2_TOGGLE_IMAGE_SIZE;
 
 export const Q5_OPTION_WIDTH = 323;
 export const Q5_OPTIONS = [
@@ -345,12 +403,13 @@ export const Q5_OPTIONS = [
         toggleTop: 18,
     },
     {
-        id: "tooMuchEffort",
-        label: "Too much effort",
-        imageSources: ["/too_much_effort.png"],
+        id: "other",
+        label: "Other",
+        imageSources: ["/other_text_image.png"],
         top: 326,
         height: 60,
         toggleTop: 18,
+        allowsCustomInput: true,
     },
 ];
 
@@ -372,6 +431,7 @@ export const BACKGROUND_IMAGE_PATHS = [
     "/B5.png",
     "/B6.png",
     "/B7.png",
+    "/B8.png",
 ];
 
 const STATIC_PRELOAD_SOURCES = [
