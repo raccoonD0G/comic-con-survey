@@ -1,12 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 
-export default function ImgWithFallback({
-    sources = [],
-    alt,
-    preserveAspect = true,
-    className,
-    ...imgProps
-}) {
+export default function ImgWithFallback({ sources = [], alt, ...imgProps }) {
     const [activeIndex, setActiveIndex] = useState(0);
 
     useEffect(() => {
@@ -30,16 +24,11 @@ export default function ImgWithFallback({
     const canAdvance = currentIndex < lastIndex;
     const currentSrc = sourceList[currentIndex];
 
-    const mergedClassName = [className, preserveAspect ? "img-preserve-aspect" : null]
-        .filter(Boolean)
-        .join(" ");
-
     return (
         <img
             src={currentSrc}
             alt={alt}
             onError={canAdvance ? handleError : undefined}
-            className={mergedClassName || undefined}
             {...imgProps}
         />
     );
