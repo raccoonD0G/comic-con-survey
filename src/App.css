@@ -41,6 +41,29 @@
     display: flex;
     flex-direction: column;
     position: relative;
+    will-change: transform;
+}
+
+.phone-stage-inner.phone-stage-slide-in {
+    animation: phone-stage-slide-in-from-right 450ms ease both;
+}
+
+@keyframes phone-stage-slide-in-from-right {
+    from {
+        transform: translateX(20%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .phone-stage-inner.phone-stage-slide-in {
+        animation: none;
+    }
 }
 
 /* 실제 페이지 콘텐츠는 phone-stage 안에서 배치 */
