@@ -14,7 +14,9 @@ import {
     AGE_TRACK_WIDTH_PERCENT,
     BACKGROUND_IMAGE_PATHS,
     BASIC_INFO_SOURCES,
+    BEFORE_BUTTON_BOTTOM_PERCENT,
     BEFORE_BUTTON_SOURCES,
+    BEFORE_BUTTON_TARGET_GAP_PX,
     DONE_BUTTON_SOURCES,
     DONE_OFF_BUTTON_SOURCES,
     DONE_TEXT_SOURCES,
@@ -645,6 +647,24 @@ export default function App() {
 
         const widthScale = availableWidth / PHONE_STAGE_DESIGN_WIDTH;
         let heightScale = availableHeight / PHONE_STAGE_DESIGN_HEIGHT;
+
+        const beforeButtonBottomPx =
+            (BEFORE_BUTTON_BOTTOM_PERCENT / 100) * PHONE_STAGE_DESIGN_HEIGHT;
+        const beforeButtonTargetHeight =
+            availableHeight - BEFORE_BUTTON_TARGET_GAP_PX;
+
+        if (
+            Number.isFinite(beforeButtonBottomPx) &&
+            beforeButtonBottomPx > 0 &&
+            Number.isFinite(beforeButtonTargetHeight)
+        ) {
+            const beforeButtonScale =
+                beforeButtonTargetHeight / beforeButtonBottomPx;
+
+            if (Number.isFinite(beforeButtonScale) && beforeButtonScale > 0) {
+                heightScale = Math.max(heightScale, beforeButtonScale);
+            }
+        }
 
         if (!Number.isFinite(heightScale) || heightScale <= 0) {
             heightScale = widthScale;
