@@ -2,388 +2,75 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "./App.css";
 
-const BASIC_INFO_SOURCES = ["/basic_Information_image.png", "/basic_Information_image.png"];
-const BEFORE_BUTTON_SOURCES = ["/before.png", "/before_button.png"];
-const NEXT_ON_BUTTON_SOURCES = ["/next_on_button.png", "/next.png"];
-const NEXT_OFF_BUTTON_SOURCES = ["/next_off_button.png", "/next.png"];
-const NEXT_TEXT_SOURCES = ["/next_text_image.png"];
-const DONE_BUTTON_SOURCES = ["/done_button.png"];
-const DONE_OFF_BUTTON_SOURCES = ["/done_off_button.png"];
-const DONE_TEXT_SOURCES = ["/done_text_image.png"];
-const EMAIL_IMAGE_SOURCES = ["/email_text_image.png", "/email_text_image.png"];
-const EMAIL_TEXT_BOX_SOURCES = ["/email_text_box.png", "/emil_text_box.png"];
-const AGE_TEXT_SOURCES = ["/age_text_image.png", "/age_text_image.png"];
-const GENDER_TEXT_SOURCES = ["/gender_text_image.png", "/gender_text_image.png"];
-const SCROLL_LINE_SOURCES = ["/scroll_line_image.png", "/scroll_line.png"];
-const SCROLL_HANDLE_SOURCES = ["/scroll_handle_image.png", "/scroll_handle.png"];
-const AGE_TRACK_LEFT_PERCENT = 7.466667;
-const AGE_TRACK_WIDTH_PERCENT = 90.4;
-const AGE_TRACK_START_OFFSET_PERCENT = (25 / 339) * AGE_TRACK_WIDTH_PERCENT;
-const AGE_TRACK_END_OFFSET_PERCENT = (25 / 339) * AGE_TRACK_WIDTH_PERCENT;
-const AGE_HANDLE_TOP_PERCENT = 33.251232;
-const AGE_STOPS = [
-    {
-        id: "10s",
-        label: "10대",
-    },
-    {
-        id: "20s",
-        label: "20대",
-    },
-    {
-        id: "30s",
-        label: "30대",
-    },
-    {
-        id: "40s",
-        label: "40대",
-    },
-    {
-        id: "50s",
-        label: "50대",
-    },
-    {
-        id: "60s",
-        label: "60대 이상",
-    },
-];
-const OFF_TOGGLE_SOURCES = ["/off_toggle.png"];
-const ON_TOGGLE_SOURCES = ["/on_toggle.png"];
-const GENDER_OPTIONS = [
-    {
-        id: "male",
-        label: "남성",
-        imageSources: ["/male_image.png"],
-        topPercent: 53.817734,
-    },
-    {
-        id: "female",
-        label: "여성",
-        imageSources: ["/female_image.png"],
-        topPercent: 61.206897,
-    },
-    {
-        id: "other",
-        label: "기타",
-        imageSources: ["/other_image.png"],
-        topPercent: 68.596059,
-    },
-];
-const Q1_TITLE_SOURCES = ["/q1_title_image.png"];
-const Q1_TEXT_SOURCES = ["/q1_text_image.png"];
-const Q1_OPTIONS = [
-    {
-        id: "absolutelyAmazing",
-        label: "Absolutely amazing",
-        imageSources: ["/absolutely_amazing_image.png"],
-    },
-    {
-        id: "superFun",
-        label: "Super fun",
-        imageSources: ["/super_fun_image.png"],
-    },
-    {
-        id: "itWasOkay",
-        label: "It was okay",
-        imageSources: ["/it_was_okay_image.png"],
-    },
-    {
-        id: "couldBeBetter",
-        label: "Could be better",
-        imageSources: ["/could_be_better_image.png"],
-    },
-    {
-        id: "notMyThing",
-        label: "Not my thing",
-        imageSources: ["/not_my_thing_image.png"],
-    },
-];
-const Q1_OPTION_BASE_TOP_PERCENT = (265 / 812) * 100;
-const Q1_OPTION_STEP_PERCENT = (82 / 812) * 100;
-const Q2_TITLE_SOURCES = ["/q2_title_image.png"];
-const Q2_TEXT_SOURCES = ["/q2_text_image.png"];
-const Q2_OPTIONS = [
-    {
-        id: "interactivity",
-        label: "The interactivity",
-        imageSources: ["/the_interactivity_image.png"],
-        top: 268,
-        height: 100,
-        toggleTop: 30,
-        labelTop: 0,
-        labelHeight: 84,
-    },
-    {
-        id: "awesomeGraphics",
-        label: "The awesome graphics",
-        imageSources: ["/the_awesome_graphics_image.png"],
-        top: 368,
-        height: 76,
-        toggleTop: 18,
-        labelTop: 0,
-        labelHeight: 60,
-    },
-    {
-        id: "funStorytelling",
-        label: "The fun storytelling",
-        imageSources: ["/the_fun_storytelling_image.png"],
-        top: 444,
-        height: 76,
-        toggleTop: 18,
-        labelTop: 0,
-        labelHeight: 60,
-    },
-    {
-        id: "koreanBackstreet",
-        label: "Korean backstreet",
-        imageSources: ["/korean_backstreet_image.png"],
-        top: 520,
-        height: 76,
-        toggleTop: 18,
-        labelTop: 0,
-        labelHeight: 60,
-    },
-    {
-        id: "other",
-        label: "Other",
-        imageSources: ["/other_text_image.png"],
-        top: 596,
-        height: 76,
-        toggleTop: 18,
-        labelTop: 0,
-        labelHeight: 60,
-        allowsCustomInput: true,
-    },
-];
-const Q2_STAGE_HEIGHT = 812;
-const Q2_OPTION_WIDTH = 323; // option width in the 375px design
-const Q2_TOGGLE_IMAGE_SIZE = 24;
-const Q2_LABEL_LEFT_PERCENT = (46 / Q2_OPTION_WIDTH) * 100;
-const Q2_LABEL_WIDTH_PERCENT = (277 / Q2_OPTION_WIDTH) * 100;
-const Q2_TOGGLE_WIDTH_PERCENT = (Q2_TOGGLE_IMAGE_SIZE / Q2_OPTION_WIDTH) * 100;
-const Q3_TITLE_SOURCES = ["/q3_title_image.png"];
-const Q3_TEXT_SOURCES = ["/q3_text_image.png"];
-const Q3_OPTIONS = [
-    {
-        id: "fashion",
-        label: "Fashion",
-        imageSources: ["/Fashion_image.png"],
-        top: 264,
-        height: 74,
-        toggleTop: 30,
-        labelTop: 0,
-        labelHeight: 60,
-    },
-    {
-        id: "sports",
-        label: "Sports",
-        imageSources: ["/sports_image.png"],
-        top: 338,
-        height: 74,
-        toggleTop: 30,
-        labelTop: 0,
-        labelHeight: 60,
-    },
-    {
-        id: "anime",
-        label: "Anime",
-        imageSources: ["/anime_image.png"],
-        top: 412,
-        height: 94,
-        toggleTop: 30,
-        labelTop: 0,
-        labelHeight: 80,
-    },
-    {
-        id: "movie",
-        label: "Movie",
-        imageSources: ["/movie_image.png"],
-        top: 506,
-        height: 74,
-        toggleTop: 30,
-        labelTop: 0,
-        labelHeight: 60,
-    },
-    {
-        id: "education",
-        label: "Education",
-        imageSources: ["/education_image.png"],
-        top: 580,
-        height: 73,
-        toggleTop: 30,
-        labelTop: 0,
-        labelHeight: 73,
-    },
-];
-const Q3_STAGE_HEIGHT = 812;
-const Q3_TOGGLE_IMAGE_SIZE = Q2_TOGGLE_IMAGE_SIZE;
-const Q3_LABEL_LEFT_PERCENT = Q2_LABEL_LEFT_PERCENT;
-const Q3_LABEL_WIDTH_PERCENT = Q2_LABEL_WIDTH_PERCENT;
-const Q3_TOGGLE_WIDTH_PERCENT = Q2_TOGGLE_WIDTH_PERCENT;
-const Q3_OPTIONS_BOUNDARIES = (() => {
-    if (Q3_OPTIONS.length === 0) {
-        return {
-            top: 0,
-            height: Q3_STAGE_HEIGHT,
-        };
-    }
-
-    let minTop = Q3_OPTIONS[0].top;
-    let maxBottom = Q3_OPTIONS[0].top + Q3_OPTIONS[0].height;
-
-    for (const option of Q3_OPTIONS) {
-        if (option.top < minTop) {
-            minTop = option.top;
-        }
-        const optionBottom = option.top + option.height;
-        if (optionBottom > maxBottom) {
-            maxBottom = optionBottom;
-        }
-    }
-
-    const computedHeight = maxBottom - minTop;
-
-    if (computedHeight <= 0) {
-        return { top: 0, height: Q3_STAGE_HEIGHT };
-    }
-
-    return { top: minTop, height: computedHeight };
-})();
-const Q3_OPTIONS_CONTAINER_STAGE_TOP = Q3_OPTIONS_BOUNDARIES.top;
-const Q3_OPTIONS_CONTAINER_STAGE_HEIGHT = Q3_OPTIONS_BOUNDARIES.height;
-const Q3_OPTIONS_CONTAINER_TOP_PERCENT =
-    (Q3_OPTIONS_CONTAINER_STAGE_TOP / Q3_STAGE_HEIGHT) * 100;
-const Q3_OPTIONS_CONTAINER_HEIGHT_PERCENT =
-    (Q3_OPTIONS_CONTAINER_STAGE_HEIGHT / Q3_STAGE_HEIGHT) * 100;
-const Q4_TITLE_SOURCES = ["/q4_title_image.png"];
-const Q4_TEXT_SOURCES = ["/q4_text_image.png"];
-const Q4_OPTIONS = [
-    {
-        id: "definitelyYes",
-        label: "Definitely yes",
-        imageSources: ["/definitely_yes.png"],
-        top: 0,
-    },
-    {
-        id: "probablyWilling",
-        label: "Probably willing",
-        imageSources: ["/probably_willing.png"],
-        top: 82,
-    },
-    {
-        id: "notSure",
-        label: "Not sure",
-        imageSources: ["/not_sure.png"],
-        top: 164,
-    },
-    {
-        id: "no",
-        label: "No",
-        imageSources: ["/no.png"],
-        top: 246,
-    },
-    {
-        id: "iDontKnow",
-        label: "I don't know",
-        imageSources: ["/i_dont.png"],
-        top: 328,
-    },
-];
-const Q4_OPTIONS_CONTAINER_HEIGHT = 376;
-const Q5_TITLE_SOURCES = ["/q5_title_image.png"];
-const Q5_TEXT_SOURCES = ["/q5_text_image.png"];
-const Q5_OPTION_BASE_HEIGHT = 48;
-const Q5_OPTION_GAP = 22;
-const Q5_DOUBLE_LINE_MULTIPLIER = 1.26;
-const Q5_OPTIONS_WITH_LAYOUT = [
-    {
-        id: "expensiveEquipment",
-        label: "Expensive equipment",
-        imageSources: ["/expensive_equipment.png"],
-        heightMultiplier: 1,
-    },
-    {
-        id: "complicatedProductionProcess",
-        label: "Complicated production process",
-        imageSources: ["/complicated_production_process.png"],
-        heightMultiplier: Q5_DOUBLE_LINE_MULTIPLIER,
-    },
-    {
-        id: "lackOfTechnicalSkills",
-        label: "Lack of technical skills",
-        imageSources: ["/lack_of_technical_skills.png"],
-        heightMultiplier: 1,
-    },
-    {
-        id: "makingItUnique",
-        label: "Making it unique",
-        imageSources: ["/making_it_unique.png"],
-        heightMultiplier: 1,
-    },
-    {
-        id: "tooMuchEffort",
-        label: "Too much effort",
-        imageSources: ["/too_much_effort.png"],
-        heightMultiplier: 1,
-    },
-];
-const Q5_OPTIONS = (() => {
-    let runningTop = 0;
-    return Q5_OPTIONS_WITH_LAYOUT.map((option, index) => {
-        const { heightMultiplier = 1, ...rest } = option;
-        const height = Q5_OPTION_BASE_HEIGHT * heightMultiplier;
-        const optionWithMetrics = {
-            ...rest,
-            top: runningTop,
-            height,
-        };
-
-        if (index < Q5_OPTIONS_WITH_LAYOUT.length - 1) {
-            runningTop += height + Q5_OPTION_GAP;
-        }
-
-        return optionWithMetrics;
-    });
-})();
-const Q5_OPTIONS_CONTAINER_HEIGHT = Q5_OPTIONS.reduce((maxBottom, option) => {
-    const bottom = option.top + option.height;
-    return bottom > maxBottom ? bottom : maxBottom;
-}, 0);
-const ENDING_IMAGE_SOURCES = ["/ending.png"];
-
-function ImgWithFallback({ sources = [], alt, ...imgProps }) {
-    const [activeIndex, setActiveIndex] = useState(0);
-
-    useEffect(() => {
-        setActiveIndex(0);
-    }, [sources]);
-
-    const sourceList = sources.length > 0 ? sources : [""];
-    const lastIndex = sourceList.length - 1;
-
-    const handleError = useCallback(() => {
-        setActiveIndex((previous) => {
-            const nextIndex = previous + 1;
-            if (nextIndex <= lastIndex) {
-                return nextIndex;
-            }
-            return previous;
-        });
-    }, [lastIndex]);
-
-    const currentIndex = activeIndex > lastIndex ? lastIndex : activeIndex;
-    const canAdvance = currentIndex < lastIndex;
-    const currentSrc = sourceList[currentIndex];
-
-    return (
-        <img
-            src={currentSrc}
-            alt={alt}
-            onError={canAdvance ? handleError : undefined}
-            {...imgProps}
-        />
-    );
-}
+import ImgWithFallback from "./components/ImgWithFallback";
+import PhoneStage from "./components/PhoneStage";
+import {
+    BASIC_INFO_SOURCES,
+    BEFORE_BUTTON_SOURCES,
+    DONE_BUTTON_SOURCES,
+    DONE_OFF_BUTTON_SOURCES,
+    DONE_TEXT_SOURCES,
+    EMAIL_IMAGE_SOURCES,
+    EMAIL_TEXT_BOX_SOURCES,
+    GENDER_TEXT_SOURCES,
+    NEXT_OFF_BUTTON_SOURCES,
+    NEXT_ON_BUTTON_SOURCES,
+    NEXT_TEXT_SOURCES,
+    Q1_TEXT_SOURCES,
+    Q1_TITLE_SOURCES,
+    Q2_TEXT_SOURCES,
+    Q2_TITLE_SOURCES,
+    Q3_TEXT_SOURCES,
+    Q3_TITLE_SOURCES,
+    Q4_TEXT_SOURCES,
+    Q4_TITLE_SOURCES,
+    Q5_TEXT_SOURCES,
+    Q5_TITLE_SOURCES,
+    SCROLL_HANDLE_SOURCES,
+    SCROLL_LINE_SOURCES,
+    ENDING_IMAGE_SOURCES,
+    AGE_TEXT_SOURCES,
+    OFF_TOGGLE_SOURCES,
+    ON_TOGGLE_SOURCES,
+} from "./constants/assets";
+import {
+    PHONE_STAGE_DESIGN_HEIGHT,
+    PHONE_STAGE_DESIGN_WIDTH,
+    AGE_TRACK_LEFT_PERCENT,
+    AGE_TRACK_WIDTH_PERCENT,
+    AGE_TRACK_START_OFFSET_PERCENT,
+    AGE_TRACK_END_OFFSET_PERCENT,
+    AGE_HANDLE_TOP_PERCENT,
+    VIEWPORT_HEIGHT_EPSILON,
+    KEYBOARD_VISUAL_VIEWPORT_GAP,
+} from "./constants/layout";
+import {
+    AGE_STOPS,
+    GENDER_OPTIONS,
+    Q1_OPTIONS,
+    Q1_OPTION_BASE_TOP_PERCENT,
+    Q1_OPTION_STEP_PERCENT,
+    Q2_OPTIONS,
+    Q2_STAGE_HEIGHT,
+    Q2_TOGGLE_IMAGE_SIZE,
+    Q2_LABEL_LEFT_PERCENT,
+    Q2_LABEL_WIDTH_PERCENT,
+    Q2_TOGGLE_WIDTH_PERCENT,
+    Q3_OPTIONS,
+    Q3_STAGE_HEIGHT,
+    Q3_TOGGLE_IMAGE_SIZE,
+    Q3_LABEL_LEFT_PERCENT,
+    Q3_LABEL_WIDTH_PERCENT,
+    Q3_TOGGLE_WIDTH_PERCENT,
+    Q3_OPTIONS_CONTAINER_STAGE_TOP,
+    Q3_OPTIONS_CONTAINER_STAGE_HEIGHT,
+    Q3_OPTIONS_CONTAINER_TOP_PERCENT,
+    Q3_OPTIONS_CONTAINER_HEIGHT_PERCENT,
+    Q4_OPTIONS,
+    Q4_OPTIONS_CONTAINER_HEIGHT,
+    Q5_OPTIONS,
+    Q5_OPTIONS_CONTAINER_HEIGHT,
+} from "./constants/options";
 
 export default function App() {
     const [page, setPage] = useState(0);
@@ -402,6 +89,7 @@ export default function App() {
     const [submitting, setSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState(null);
     const genderOptionCount = GENDER_OPTIONS.length;
+    const phoneStageRef = useRef(null);
     const genderOptionRefs = useRef([]);
     const q1OptionCount = Q1_OPTIONS.length;
     const q1OptionRefs = useRef([]);
@@ -413,6 +101,7 @@ export default function App() {
     const q4OptionRefs = useRef([]);
     const q5OptionCount = Q5_OPTIONS.length;
     const q5OptionRefs = useRef([]);
+    const wasKeyboardOpenRef = useRef(false);
     const q2OtherInputRef = useRef(null);
     const initialEmailRef = useRef("");
     const focusGenderOption = useCallback(
@@ -694,6 +383,167 @@ export default function App() {
         setAgeInteracted(true);
     }, []);
     useEffect(() => {
+        if (typeof window === "undefined") {
+            return;
+        }
+
+        const rootElement = document.documentElement;
+        if (!rootElement) {
+            return;
+        }
+
+        const updateViewportHeight = () => {
+            const { innerHeight, innerWidth, visualViewport } = window;
+            const { clientHeight, clientWidth } = rootElement;
+
+            const candidateWidths = [];
+
+            if (innerWidth > 0 && Number.isFinite(innerWidth)) {
+                candidateWidths.push(innerWidth);
+            }
+
+            if (clientWidth > 0 && Number.isFinite(clientWidth)) {
+                candidateWidths.push(clientWidth);
+            }
+
+            if (visualViewport) {
+                const { width } = visualViewport;
+                if (width > 0 && Number.isFinite(width)) {
+                    candidateWidths.push(width);
+                }
+            }
+
+            const candidateHeights = [];
+
+            if (innerHeight > 0 && Number.isFinite(innerHeight)) {
+                candidateHeights.push(innerHeight);
+            }
+
+            if (clientHeight > 0 && Number.isFinite(clientHeight)) {
+                candidateHeights.push(clientHeight);
+            }
+
+            if (candidateHeights.length === 0) {
+                return;
+            }
+
+            const layoutViewportHeight = Math.max(...candidateHeights);
+
+            let visualViewportHeight = null;
+            if (visualViewport) {
+                const { height } = visualViewport;
+                if (height > 0 && Number.isFinite(height)) {
+                    visualViewportHeight = height;
+                }
+
+                if (
+                    visualViewportHeight !== null &&
+                    layoutViewportHeight - visualViewportHeight >
+                        KEYBOARD_VISUAL_VIEWPORT_GAP
+                ) {
+                    wasKeyboardOpenRef.current = true;
+                    return;
+                }
+            }
+
+            const nextViewportHeight = Math.max(
+                layoutViewportHeight,
+                visualViewportHeight ?? 0
+            );
+
+            if (nextViewportHeight <= 0) {
+                return;
+            }
+
+            rootElement.style.setProperty(
+                "--app-viewport-height",
+                `${nextViewportHeight}px`
+            );
+
+            const viewportWidth =
+                candidateWidths.length > 0
+                    ? Math.max(...candidateWidths)
+                    : (nextViewportHeight * PHONE_STAGE_DESIGN_WIDTH) /
+                      PHONE_STAGE_DESIGN_HEIGHT;
+
+            if (viewportWidth <= 0 || !Number.isFinite(viewportWidth)) {
+                return;
+            }
+
+            const widthScale =
+                viewportWidth / PHONE_STAGE_DESIGN_WIDTH;
+            const naturalPhoneStageHeight =
+                PHONE_STAGE_DESIGN_HEIGHT * widthScale;
+
+            let phoneStageScale = 1;
+            let phoneStageHeight = naturalPhoneStageHeight;
+
+            if (naturalPhoneStageHeight > nextViewportHeight) {
+                phoneStageScale =
+                    nextViewportHeight / naturalPhoneStageHeight;
+                phoneStageHeight = nextViewportHeight;
+            }
+
+            const phoneStageWidth = viewportWidth;
+
+            rootElement.style.setProperty(
+                "--phone-stage-width",
+                `${phoneStageWidth}px`
+            );
+            rootElement.style.setProperty(
+                "--phone-stage-height",
+                `${phoneStageHeight}px`
+            );
+            rootElement.style.setProperty(
+                "--phone-stage-scale",
+                `${phoneStageScale}`
+            );
+
+            if (wasKeyboardOpenRef.current) {
+                if (Math.abs(window.scrollY) > VIEWPORT_HEIGHT_EPSILON) {
+                    window.scrollTo(0, 0);
+                }
+
+                const phoneStage = phoneStageRef.current;
+                if (
+                    phoneStage &&
+                    Math.abs(phoneStage.scrollTop) > VIEWPORT_HEIGHT_EPSILON
+                ) {
+                    phoneStage.scrollTop = 0;
+                }
+            }
+
+            wasKeyboardOpenRef.current = false;
+        };
+
+        updateViewportHeight();
+
+        window.addEventListener("resize", updateViewportHeight);
+        window.addEventListener("orientationchange", updateViewportHeight);
+
+        const visualViewport = window.visualViewport;
+        if (visualViewport) {
+            visualViewport.addEventListener("resize", updateViewportHeight);
+            visualViewport.addEventListener("scroll", updateViewportHeight);
+        }
+
+        return () => {
+            window.removeEventListener("resize", updateViewportHeight);
+            window.removeEventListener("orientationchange", updateViewportHeight);
+
+            if (visualViewport) {
+                visualViewport.removeEventListener(
+                    "resize",
+                    updateViewportHeight
+                );
+                visualViewport.removeEventListener(
+                    "scroll",
+                    updateViewportHeight
+                );
+            }
+        };
+    }, []);
+    useEffect(() => {
         genderOptionRefs.current = genderOptionRefs.current.slice(0, genderOptionCount);
     }, [genderOptionCount]);
     useEffect(() => {
@@ -711,6 +561,42 @@ export default function App() {
     useEffect(() => {
         q5OptionRefs.current = q5OptionRefs.current.slice(0, q5OptionCount);
     }, [q5OptionCount]);
+    useEffect(() => {
+        const phoneStage = phoneStageRef.current;
+        if (phoneStage) {
+            phoneStage.scrollTop = 0;
+        }
+    }, [page]);
+    useEffect(() => {
+        if (page !== 0 || expanded) {
+            return;
+        }
+
+        const phoneStage = phoneStageRef.current;
+        if (!phoneStage) {
+            return;
+        }
+
+        const ensureExpanded = () => {
+            setExpanded((previous) => (previous ? previous : true));
+        };
+
+        const handleScroll = () => {
+            if (phoneStage.scrollTop > 0) {
+                ensureExpanded();
+            }
+        };
+
+        phoneStage.addEventListener("scroll", handleScroll);
+        phoneStage.addEventListener("wheel", ensureExpanded, { passive: true });
+        phoneStage.addEventListener("touchmove", ensureExpanded, { passive: true });
+
+        return () => {
+            phoneStage.removeEventListener("scroll", handleScroll);
+            phoneStage.removeEventListener("wheel", ensureExpanded);
+            phoneStage.removeEventListener("touchmove", ensureExpanded);
+        };
+    }, [expanded, page]);
     useEffect(() => {
         if (page !== 7) {
             setSubmitError(null);
@@ -855,100 +741,99 @@ export default function App() {
     }, [bg0, bg1, bg2, bg3, bg4, page]);
     const page0StateClass = expanded ? "is-expanded" : "is-collapsed";
 
+    const renderPhoneStage = useCallback(
+        (content, { innerClassName } = {}) => (
+            <PhoneStage
+                ref={phoneStageRef}
+                backgroundUrl={bgUrl}
+                innerClassName={innerClassName}
+                page={page}
+            >
+                {content}
+            </PhoneStage>
+        ),
+        [bgUrl, page]
+    );
+
     // ----- PAGE 1 (임시) -----
     if (page === 1) {
-        return (
-            <div className="app-root">
-                <div
-                    className="phone-stage"
-                    style={{
-                        backgroundImage: `url(${bgUrl})`,
-                    }}
+        return renderPhoneStage(
+            <div className="page page1">
+                <ImgWithFallback
+                    className="page1-basic-info"
+                    sources={BASIC_INFO_SOURCES}
+                    alt="기본 정보"
+                />
+                <ImgWithFallback
+                    className="page1-email-image"
+                    sources={EMAIL_IMAGE_SOURCES}
+                    alt="이메일 안내"
+                />
+                <label className="page1-email-input">
+                    <span className="sr-only">이메일 주소 입력</span>
+                    <ImgWithFallback
+                        className="page1-email-input-bg"
+                        sources={EMAIL_TEXT_BOX_SOURCES}
+                        alt=""
+                        aria-hidden="true"
+                    />
+                    <input
+                        type="email"
+                        value={email}
+                        onChange={(event) => setEmail(event.target.value)}
+                        placeholder="이메일을 입력하세요"
+                        autoComplete="email"
+                    />
+                </label>
+                <button
+                    className="img-btn page1-before-btn"
+                    type="button"
+                    onClick={() => setPage(0)}
+                    aria-label="이전 페이지"
+                    title="이전 페이지로 돌아가기"
                 >
-                    <div className="page page1">
-                        <ImgWithFallback
-                            className="page1-basic-info"
-                            sources={BASIC_INFO_SOURCES}
-                            alt="기본 정보"
-                        />
-                        <ImgWithFallback
-                            className="page1-email-image"
-                            sources={EMAIL_IMAGE_SOURCES}
-                            alt="이메일 안내"
-                        />
-                        <label className="page1-email-input">
-                            <span className="sr-only">이메일 주소 입력</span>
-                            <ImgWithFallback
-                                className="page1-email-input-bg"
-                                sources={EMAIL_TEXT_BOX_SOURCES}
-                                alt=""
-                                aria-hidden="true"
-                            />
-                            <input
-                                type="email"
-                                value={email}
-                                onChange={(event) => setEmail(event.target.value)}
-                                placeholder="이메일을 입력하세요"
-                                autoComplete="email"
-                            />
-                        </label>
-                        <button
-                            className="img-btn page1-before-btn"
-                            type="button"
-                            onClick={() => setPage(0)}
-                            aria-label="이전 페이지"
-                            title="이전 페이지로 돌아가기"
-                        >
-                            <ImgWithFallback
-                                className="page1-before-btn-img"
-                                sources={BEFORE_BUTTON_SOURCES}
-                                alt="이전"
-                            />
-                        </button>
-                        <button
-                            className="img-btn page1-next-btn"
-                            type="button"
-                            onClick={handleAdvanceFromPage1}
-                            aria-label="다음 페이지"
-                            title={
-                                canAdvanceFromPage1
-                                    ? "다음 페이지로 이동"
-                                    : "이메일을 입력하면 다음 페이지로 이동할 수 있습니다"
-                            }
-                            disabled={!canAdvanceFromPage1}
-                        >
-                            <ImgWithFallback
-                                className="page1-next-btn-img"
-                                sources={
-                                    canAdvanceFromPage1
-                                        ? NEXT_ON_BUTTON_SOURCES
-                                        : NEXT_OFF_BUTTON_SOURCES
-                                }
-                                alt="다음"
-                            />
-                            <ImgWithFallback
-                                className="page1-next-text"
-                                sources={NEXT_TEXT_SOURCES}
-                                alt=""
-                                aria-hidden="true"
-                            />
-                        </button>
-                    </div>
-                </div>
+                    <ImgWithFallback
+                        className="page1-before-btn-img"
+                        sources={BEFORE_BUTTON_SOURCES}
+                        alt="이전"
+                    />
+                </button>
+                <button
+                    className="img-btn page1-next-btn"
+                    type="button"
+                    onClick={handleAdvanceFromPage1}
+                    aria-label="다음 페이지"
+                    title={
+                        canAdvanceFromPage1
+                            ? "다음 페이지로 이동"
+                            : "이메일을 입력하면 다음 페이지로 이동할 수 있습니다"
+                    }
+                    disabled={!canAdvanceFromPage1}
+                >
+                    <ImgWithFallback
+                        className="page1-next-btn-img"
+                        sources={
+                            canAdvanceFromPage1
+                                ? NEXT_ON_BUTTON_SOURCES
+                                : NEXT_OFF_BUTTON_SOURCES
+                        }
+                        alt="다음"
+                        preserveAspect={false}
+                    />
+                    <ImgWithFallback
+                        className="page1-next-text"
+                        sources={NEXT_TEXT_SOURCES}
+                        alt=""
+                        aria-hidden="true"
+                    />
+                </button>
             </div>
         );
     }
 
     if (page === 2) {
-        return (
-            <div className="app-root">
-                <div
-                    className="phone-stage"
-                    style={{
-                        backgroundImage: `url(${bgUrl})`,
-                    }}
-                >
-                    <div className="page page2">
+        return renderPhoneStage(
+            <div className="page page2">
                         <ImgWithFallback
                             className="page2-basic-info"
                             sources={BASIC_INFO_SOURCES}
@@ -1083,6 +968,7 @@ export default function App() {
                                         : NEXT_OFF_BUTTON_SOURCES
                                 }
                                 alt="다음"
+                                preserveAspect={false}
                             />
                             <ImgWithFallback
                                 className="page2-next-text"
@@ -1091,22 +977,13 @@ export default function App() {
                                 aria-hidden="true"
                             />
                         </button>
-                    </div>
-                </div>
             </div>
         );
     }
 
     if (page === 3) {
-        return (
-            <div className="app-root">
-                <div
-                    className="phone-stage"
-                    style={{
-                        backgroundImage: `url(${bgUrl})`,
-                    }}
-                >
-                    <div className="page page3">
+        return renderPhoneStage(
+            <div className="page page3">
                         <ImgWithFallback
                             className="page3-q1-title"
                             sources={Q1_TITLE_SOURCES}
@@ -1209,6 +1086,7 @@ export default function App() {
                                         : NEXT_OFF_BUTTON_SOURCES
                                 }
                                 alt="다음"
+                                preserveAspect={false}
                             />
                             <ImgWithFallback
                                 className="page3-next-text"
@@ -1217,22 +1095,13 @@ export default function App() {
                                 aria-hidden="true"
                             />
                         </button>
-                    </div>
-                </div>
             </div>
         );
     }
 
     if (page === 4) {
-        return (
-            <div className="app-root">
-                <div
-                    className="phone-stage"
-                    style={{
-                        backgroundImage: `url(${bgUrl})`,
-                    }}
-                >
-                    <div className="page page4">
+        return renderPhoneStage(
+            <div className="page page4">
                         <ImgWithFallback
                             className="page4-q2-title"
                             sources={Q2_TITLE_SOURCES}
@@ -1321,23 +1190,37 @@ export default function App() {
                                             />
                                         </button>
                                         {option.allowsCustomInput && isSelected ? (
-                                            <input
-                                                ref={q2OtherInputRef}
+                                            <label
                                                 className="page4-q2-other-input"
-                                                type="text"
-                                                value={q2OtherText}
-                                                onChange={(event) =>
-                                                    setQ2OtherText(event.target.value)
-                                                }
-                                                placeholder="직접 입력"
-                                                aria-label="기타 의견 입력"
                                                 style={{
                                                     top: `${labelTopPercent}%`,
                                                     height: `${labelHeightPercent}%`,
                                                     left: `${Q2_LABEL_LEFT_PERCENT}%`,
                                                     width: `${Q2_LABEL_WIDTH_PERCENT}%`,
                                                 }}
-                                            />
+                                            >
+                                                <span className="sr-only">
+                                                    기타 의견 입력
+                                                </span>
+                                                <ImgWithFallback
+                                                    className="page4-q2-other-input-bg"
+                                                    sources={EMAIL_TEXT_BOX_SOURCES}
+                                                    alt=""
+                                                    aria-hidden="true"
+                                                />
+                                                <input
+                                                    ref={q2OtherInputRef}
+                                                    className="page4-q2-other-input-field"
+                                                    type="text"
+                                                    value={q2OtherText}
+                                                    onChange={(event) =>
+                                                        setQ2OtherText(
+                                                            event.target.value
+                                                        )
+                                                    }
+                                                    placeholder="직접 입력"
+                                                />
+                                            </label>
                                         ) : null}
                                     </div>
                                 );
@@ -1385,6 +1268,7 @@ export default function App() {
                                         : NEXT_OFF_BUTTON_SOURCES
                                 }
                                 alt="다음"
+                                preserveAspect={false}
                             />
                             <ImgWithFallback
                                 className="page4-next-text"
@@ -1393,22 +1277,13 @@ export default function App() {
                                 aria-hidden="true"
                             />
                         </button>
-                    </div>
-                </div>
             </div>
         );
     }
 
     if (page === 5) {
-        return (
-            <div className="app-root">
-                <div
-                    className="phone-stage"
-                    style={{
-                        backgroundImage: `url(${bgUrl})`,
-                    }}
-                >
-                    <div className="page page5">
+        return renderPhoneStage(
+            <div className="page page5">
                         <ImgWithFallback
                             className="page5-q3-title"
                             sources={Q3_TITLE_SOURCES}
@@ -1560,6 +1435,7 @@ export default function App() {
                                         : NEXT_OFF_BUTTON_SOURCES
                                 }
                                 alt="다음"
+                                preserveAspect={false}
                             />
                             <ImgWithFallback
                                 className="page5-next-text"
@@ -1568,22 +1444,13 @@ export default function App() {
                                 aria-hidden="true"
                             />
                         </button>
-                    </div>
-                </div>
             </div>
         );
     }
 
     if (page === 6) {
-        return (
-            <div className="app-root">
-                <div
-                    className="phone-stage"
-                    style={{
-                        backgroundImage: `url(${bgUrl})`,
-                    }}
-                >
-                    <div className="page page6">
+        return renderPhoneStage(
+            <div className="page page6">
                         <ImgWithFallback
                             className="page6-q4-title"
                             sources={Q4_TITLE_SOURCES}
@@ -1692,6 +1559,7 @@ export default function App() {
                                         : NEXT_OFF_BUTTON_SOURCES
                                 }
                                 alt="다음"
+                                preserveAspect={false}
                             />
                             <ImgWithFallback
                                 className="page6-next-text"
@@ -1700,22 +1568,13 @@ export default function App() {
                                 aria-hidden="true"
                             />
                         </button>
-                    </div>
-                </div>
             </div>
         );
     }
 
     if (page === 7) {
-        return (
-            <div className="app-root">
-                <div
-                    className="phone-stage"
-                    style={{
-                        backgroundImage: `url(${bgUrl})`,
-                    }}
-                >
-                    <div className="page page7">
+        return renderPhoneStage(
+            <div className="page page7">
                         <ImgWithFallback
                             className="page7-q5-title"
                             sources={Q5_TITLE_SOURCES}
@@ -1748,6 +1607,10 @@ export default function App() {
                                               Q5_OPTIONS_CONTAINER_HEIGHT) *
                                           100
                                         : 0;
+                                const toggleTopPercent =
+                                    option.height > 0
+                                        ? (option.toggleTop / option.height) * 100
+                                        : 0;
 
                                 return (
                                     <div
@@ -1778,6 +1641,7 @@ export default function App() {
                                                 sources={toggleSources}
                                                 alt=""
                                                 aria-hidden="true"
+                                                style={{ top: `${toggleTopPercent}%` }}
                                             />
                                             <ImgWithFallback
                                                 className="page7-q5-label"
@@ -1831,6 +1695,7 @@ export default function App() {
                                         : DONE_OFF_BUTTON_SOURCES
                                 }
                                 alt="완료"
+                                preserveAspect={false}
                             />
                             <ImgWithFallback
                                 className="page7-done-text"
@@ -1849,43 +1714,25 @@ export default function App() {
                                 설문을 저장하는 중입니다.
                             </div>
                         ) : null}
-                    </div>
-                </div>
             </div>
         );
     }
 
     if (page === 8) {
-        return (
-            <div className="app-root">
-                <div
-                    className="phone-stage"
-                    style={{
-                        backgroundImage: `url(${bgUrl})`,
-                    }}
-                >
-                    <div className="page page8">
+        return renderPhoneStage(
+            <div className="page page8">
                         <ImgWithFallback
                             className="page8-ending-image"
                             sources={ENDING_IMAGE_SOURCES}
                             alt="설문이 완료되었습니다"
                         />
-                    </div>
-                </div>
             </div>
         );
     }
 
     // ----- PAGE 0 -----
-    return (
-        <div className="app-root">
-            <div
-                className="phone-stage"
-                style={{
-                    backgroundImage: `url(${bgUrl})`,
-                }}
-            >
-                <div className={`page page0 ${page0StateClass}`}>
+    return renderPhoneStage(
+        <div className={`page page0 ${page0StateClass}`}>
                     {/* 1) EntryText 이미지 */}
                     <img
                         className="page0-entry-img page0-entry-img-top"
@@ -1947,8 +1794,6 @@ export default function App() {
                             <img src="/start_off_button.png" alt="START 비활성" />
                         </button>
                     )}
-                </div>
-            </div>
         </div>
     );
 }
