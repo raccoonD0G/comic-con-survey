@@ -2,6 +2,7 @@
     --app-viewport-height: 100vh;
     --phone-stage-width: 100vw;
     --phone-stage-height: calc(100vw * 812 / 375);
+    --page-nav-height: 71px;
 }
 
 /* 뷰포트 전체(레터박스 배경 색) */
@@ -75,6 +76,31 @@
     justify-content: flex-start;
     padding-top: 40px;
     box-sizing: border-box;
+}
+
+.page-question-area {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: var(--page-nav-height);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.page-question-scale {
+    transform-origin: top center;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.page-question-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    pointer-events: auto;
 }
 
 .page0 {
@@ -260,17 +286,44 @@
     display: block;
 }
 
-.page1-next-btn {
-    position: absolute;
-    left: 0;
-    top: 92.364532%;
+.page1-next-btn,
+.page2-next-btn,
+.page3-next-btn,
+.page4-next-btn,
+.page5-next-btn,
+.page6-next-btn,
+.page7-done-btn {
+    position: relative;
     width: 100%;
-    height: 8.743842%;
+    height: 100%;
     display: block;
     margin: 0;
 }
 
-.page1-next-btn-img {
+.page1-next-btn-img,
+.page2-next-btn-img,
+.page3-next-btn-img,
+.page4-next-btn-img,
+.page5-next-btn-img,
+.page6-next-btn-img,
+.page7-done-btn-img {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.page-bottom-nav {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: var(--page-nav-height);
+    display: flex;
+    z-index: 10;
+}
+
+.page-bottom-nav .img-btn {
+    flex: 1;
     width: 100%;
     height: 100%;
     display: block;
@@ -281,30 +334,12 @@
 .page3-next-text,
 .page4-next-text,
 .page5-next-text,
-.page6-next-text {
-    position: absolute;
-    left: 42.133333%;
-    top: 14.084507%;
-    max-width: none;
-    pointer-events: none;
-    z-index: 1;
-    display: block;
-}
-
+.page6-next-text,
 .page7-done-text {
     position: absolute;
-    left: 40%;
-    top: 14.084507%;
-    max-width: none;
-    pointer-events: none;
-    z-index: 1;
-    display: block;
-}
-
-.page7-done-text {
-    position: absolute;
-    left: 40%;
-    top: 8.450704%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     max-width: none;
     pointer-events: none;
     z-index: 1;
@@ -524,21 +559,6 @@
     display: block;
 }
 
-.page2-next-btn {
-    position: absolute;
-    left: 0;
-    top: 92.364532%;
-    width: 100%;
-    height: 8.743842%;
-    display: block;
-}
-
-.page2-next-btn-img {
-    width: 100%;
-    height: 100%;
-    display: block;
-}
-
 
 
 .page2-gender-toggle-btn:focus-visible {
@@ -649,21 +669,6 @@
     height: 100%;
     display: block;
 }
-.page3-next-btn {
-    position: absolute;
-    left: 0;
-    top: 92.364532%;
-    width: 100%;
-    height: 8.743842%;
-    display: block;
-}
-.page3-next-btn-img {
-    width: 100%;
-    height: 100%;
-    display: block;
-}
-
-
 .page4 {
     position: relative;
     width: 100%;
@@ -784,21 +789,6 @@
     height: 100%;
     display: block;
 }
-.page4-next-btn {
-    position: absolute;
-    left: 0;
-    top: 92.364532%;
-    width: 100%;
-    height: 8.743842%;
-    display: block;
-}
-.page4-next-btn-img {
-    width: 100%;
-    height: 100%;
-    display: block;
-}
-
-
 .page5 {
     position: relative;
     width: 100%;
@@ -880,20 +870,6 @@
     height: 100%;
     display: block;
 }
-.page5-next-btn {
-    position: absolute;
-    left: 0;
-    top: 92.364532%;
-    width: 100%;
-    height: 8.743842%;
-    display: block;
-}
-.page5-next-btn-img {
-    width: 100%;
-    height: 100%;
-    display: block;
-}
-
 .page6 {
     position: relative;
     width: 100%;
@@ -983,20 +959,6 @@
     height: 100%;
     display: block;
 }
-.page6-next-btn {
-    position: absolute;
-    left: 0;
-    top: 92.364532%;
-    width: 100%;
-    height: 8.743842%;
-    display: block;
-}
-.page6-next-btn-img {
-    width: 100%;
-    height: 100%;
-    display: block;
-}
-
 .page7 {
     position: relative;
     width: 100%;
@@ -1092,21 +1054,6 @@
 }
 
 .page7-before-btn-img {
-    width: 100%;
-    height: 100%;
-    display: block;
-}
-
-.page7-done-btn {
-    position: absolute;
-    left: 0;
-    top: 92.364532%;
-    width: 100%;
-    height: 8.743842%;
-    display: block;
-}
-
-.page7-done-btn-img {
     width: 100%;
     height: 100%;
     display: block;
