@@ -467,16 +467,15 @@ export default function App() {
                     : (nextViewportHeight * PHONE_STAGE_DESIGN_WIDTH) /
                       PHONE_STAGE_DESIGN_HEIGHT;
 
+            if (viewportWidth <= 0 || !Number.isFinite(viewportWidth)) {
+                return;
+            }
+
             const widthScale =
                 viewportWidth / PHONE_STAGE_DESIGN_WIDTH;
-            const heightScale =
-                nextViewportHeight / PHONE_STAGE_DESIGN_HEIGHT;
-            const stageScale = Math.min(widthScale, heightScale);
-
-            const phoneStageWidth =
-                PHONE_STAGE_DESIGN_WIDTH * stageScale;
+            const phoneStageWidth = viewportWidth;
             const phoneStageHeight =
-                PHONE_STAGE_DESIGN_HEIGHT * stageScale;
+                PHONE_STAGE_DESIGN_HEIGHT * widthScale;
 
             rootElement.style.setProperty(
                 "--phone-stage-width",
