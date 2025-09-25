@@ -1103,7 +1103,7 @@ export default function App() {
                             <ImgWithFallback
                                 className="page2-next-btn-img"
                                 sources={
-                                    canAdvanceFromPage3
+                                    canAdvanceFromPage2
                                         ? NEXT_ON_BUTTON_SOURCES
                                         : NEXT_OFF_BUTTON_SOURCES
                                 }
