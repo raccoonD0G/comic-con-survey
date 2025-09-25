@@ -73,23 +73,23 @@
 
 .page0-entry-img-bottom {
     left: 3.2%;
-    width: 93.3333%;
+    width: 99.7333%;
 }
 
 .page0.is-collapsed .page0-entry-img-top {
-    top: 72.3005%;
+    top: 73.7685%;
 }
 
 .page0.is-expanded .page0-entry-img-top {
-    top: 63.5468%;
+    top: 64.6552%;
 }
 
 .page0.is-collapsed .page0-entry-img-bottom {
-    top: 81.2805%;
+    top: 84.9754%;
 }
 
 .page0.is-expanded .page0-entry-img-bottom {
-    top: 72.6601%;
+    top: 75.9852%;
 }
 
 .page0-entry-fade {
@@ -108,11 +108,11 @@
 }
 
 .page0.is-collapsed .page0-entry-fade {
-    top: 81.2805%;
+    top: 84.9754%;
 }
 
 .page0.is-expanded .page0-entry-fade {
-    top: 72.6601%;
+    top: 75.9852%;
     opacity: 0;
 }
 
@@ -124,7 +124,7 @@
 
 .page0 .arrow-button {
     left: 47.7333%;
-    top: 83.2512%;
+    top: 88.0542%;
     width: 4%;
     transition: opacity 220ms ease;
 }
@@ -136,14 +136,14 @@
 
 .page0 .agree-btn {
     left: 39.2%;
-    top: 85.3448%;
+    top: 90.5172%;
     width: 21.6%;
 }
 
 .page0 .start-btn {
-    left: 35.4667%;
-    top: 89.0394%;
-    width: 30.1333%;
+    left: 28%;
+    top: 48.2759%;
+    width: 44%;
 }
 
 .page0 .img-btn img {

@@ -859,6 +859,36 @@ export default function App() {
         }
     }, [page]);
     useEffect(() => {
+        if (page !== 0 || expanded) {
+            return;
+        }
+
+        const phoneStage = phoneStageRef.current;
+        if (!phoneStage) {
+            return;
+        }
+
+        const ensureExpanded = () => {
+            setExpanded((previous) => (previous ? previous : true));
+        };
+
+        const handleScroll = () => {
+            if (phoneStage.scrollTop > 0) {
+                ensureExpanded();
+            }
+        };
+
+        phoneStage.addEventListener("scroll", handleScroll);
+        phoneStage.addEventListener("wheel", ensureExpanded, { passive: true });
+        phoneStage.addEventListener("touchmove", ensureExpanded, { passive: true });
+
+        return () => {
+            phoneStage.removeEventListener("scroll", handleScroll);
+            phoneStage.removeEventListener("wheel", ensureExpanded);
+            phoneStage.removeEventListener("touchmove", ensureExpanded);
+        };
+    }, [expanded, page]);
+    useEffect(() => {
         if (page !== 7) {
             setSubmitError(null);
             setSubmitting(false);
