@@ -40,7 +40,10 @@ import {
     Q2_LABEL_LEFT_PERCENT,
     Q2_LABEL_WIDTH_PERCENT,
     Q2_OPTIONS,
-    Q2_STAGE_HEIGHT,
+    Q2_OPTIONS_CONTAINER_HEIGHT_PERCENT,
+    Q2_OPTIONS_CONTAINER_STAGE_HEIGHT,
+    Q2_OPTIONS_CONTAINER_STAGE_TOP,
+    Q2_OPTIONS_CONTAINER_TOP_PERCENT,
     Q2_TEXT_SOURCES,
     Q2_TITLE_SOURCES,
     Q2_TOGGLE_IMAGE_SIZE,
@@ -58,6 +61,7 @@ import {
     Q3_TOGGLE_WIDTH_PERCENT,
     Q4_OPTIONS,
     Q4_OPTIONS_CONTAINER_HEIGHT,
+    Q4_TOGGLE_IMAGE_SIZE,
     Q4_TEXT_SOURCES,
     Q4_TITLE_SOURCES,
     Q5_OPTION_WIDTH,
@@ -1412,6 +1416,10 @@ export default function App() {
                         className="page4-q2-options"
                         role="radiogroup"
                         aria-label="행사에서 가장 좋았던 점 선택"
+                        style={{
+                            top: `${Q2_OPTIONS_CONTAINER_TOP_PERCENT}%`,
+                            height: `${Q2_OPTIONS_CONTAINER_HEIGHT_PERCENT}%`,
+                        }}
                     >
                         {Q2_OPTIONS.map((option, index) => {
                             const isSelected = q2Answer === option.id;
@@ -1420,9 +1428,19 @@ export default function App() {
                                 : OFF_TOGGLE_SOURCES;
                             const isTabStop =
                                 q2Answer === null ? index === 0 : isSelected;
-                            const topPercent = (option.top / Q2_STAGE_HEIGHT) * 100;
+                            const topPercent =
+                                Q2_OPTIONS_CONTAINER_STAGE_HEIGHT > 0
+                                    ? ((option.top -
+                                          Q2_OPTIONS_CONTAINER_STAGE_TOP) /
+                                          Q2_OPTIONS_CONTAINER_STAGE_HEIGHT) *
+                                      100
+                                    : 0;
                             const heightPercent =
-                                (option.height / Q2_STAGE_HEIGHT) * 100;
+                                Q2_OPTIONS_CONTAINER_STAGE_HEIGHT > 0
+                                    ? (option.height /
+                                          Q2_OPTIONS_CONTAINER_STAGE_HEIGHT) *
+                                      100
+                                    : 0;
                             const toggleTopPercent =
                                 (option.toggleTop / option.height) * 100;
                             const toggleHeightPercent =
@@ -1822,12 +1840,36 @@ export default function App() {
                                     ? (option.top / Q4_OPTIONS_CONTAINER_HEIGHT) *
                                       100
                                     : 0;
+                            const heightPercent =
+                                Q4_OPTIONS_CONTAINER_HEIGHT > 0
+                                    ? (option.height /
+                                          Q4_OPTIONS_CONTAINER_HEIGHT) * 100
+                                    : 0;
+                            const toggleTopPercent =
+                                option.height > 0
+                                    ? (option.toggleTop / option.height) * 100
+                                    : 0;
+                            const toggleHeightPercent =
+                                option.height > 0
+                                    ? (Q4_TOGGLE_IMAGE_SIZE / option.height) * 100
+                                    : 0;
+                            const labelTopPercent =
+                                option.height > 0
+                                    ? (option.labelTop / option.height) * 100
+                                    : 0;
+                            const labelHeightPercent =
+                                option.height > 0
+                                    ? (option.labelHeight / option.height) * 100
+                                    : 0;
 
                             return (
                                 <div
                                     key={option.id}
                                     className="page6-q4-option"
-                                    style={{ top: `${topPercent}%` }}
+                                    style={{
+                                        top: `${topPercent}%`,
+                                        height: `${heightPercent}%`,
+                                    }}
                                 >
                                     <button
                                         type="button"
@@ -1854,18 +1896,35 @@ export default function App() {
                                             sources={toggleSources}
                                             alt=""
                                             aria-hidden="true"
+                                            style={{
+                                                top: `${toggleTopPercent}%`,
+                                                height: `${toggleHeightPercent}%`,
+                                                width: `${Q2_TOGGLE_WIDTH_PERCENT}%`,
+                                            }}
                                         />
                                         <ImgWithFallback
                                             className="page6-q4-label"
                                             sources={option.imageSources}
                                             alt=""
                                             aria-hidden="true"
+                                            style={{
+                                                top: `${labelTopPercent}%`,
+                                                height: `${labelHeightPercent}%`,
+                                                left: `${Q2_LABEL_LEFT_PERCENT}%`,
+                                                width: `${Q2_LABEL_WIDTH_PERCENT}%`,
+                                            }}
                                         />
                                     </button>
                                     {option.allowsCustomInput && isSelected ? (
                                         <label
                                             className="option-other-input page6-q4-other-input"
                                             htmlFor="page6-q4-other"
+                                            style={{
+                                                top: `${labelTopPercent}%`,
+                                                height: `${labelHeightPercent}%`,
+                                                left: `${Q2_LABEL_LEFT_PERCENT}%`,
+                                                width: `${Q2_LABEL_WIDTH_PERCENT}%`,
+                                            }}
                                         >
                                             <span className="sr-only">
                                                 기타 의견 입력
