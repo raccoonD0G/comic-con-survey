@@ -990,11 +990,14 @@ export default function App() {
     ]);
 
     // public/ 경로
-    const bg0 = useMemo(() => process.env.PUBLIC_URL + "/background0.png", []);
-    const bg1 = useMemo(() => process.env.PUBLIC_URL + "/background1.png", []); // 페이지1 배경
-    const bg2 = useMemo(() => process.env.PUBLIC_URL + "/background2.png", []);
-    const bg3 = useMemo(() => process.env.PUBLIC_URL + "/background3.png", []);
-    const bg4 = useMemo(() => process.env.PUBLIC_URL + "/background4.png", []);
+    const bg0 = useMemo(() => process.env.PUBLIC_URL + "/B0.png", []);
+    const bg1 = useMemo(() => process.env.PUBLIC_URL + "/B1.png", []);
+    const bg2 = useMemo(() => process.env.PUBLIC_URL + "/B2.png", []);
+    const bg3 = useMemo(() => process.env.PUBLIC_URL + "/B3.png", []);
+    const bg4 = useMemo(() => process.env.PUBLIC_URL + "/B4.png", []);
+    const bg5 = useMemo(() => process.env.PUBLIC_URL + "/B5.png", []);
+    const bg6 = useMemo(() => process.env.PUBLIC_URL + "/B6.png", []);
+    const bg7 = useMemo(() => process.env.PUBLIC_URL + "/B7.png", []);
 
     // 배경 프리로드(전환 시 깜빡임 방지)
     useEffect(() => {
