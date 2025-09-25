@@ -1,5 +1,0 @@
-git pull origin main
-npm run build
-pm2 delete comic-con-survey
-PORT=3000 pm2 start server.js --name comic-con-survey
-pm2 save
