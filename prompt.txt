@@ -1,0 +1,127 @@
+start_off_button.png, start_on_button.png (105, 407) 165*54
+i_agree_off_button.png, i_agree_on_button.png (136, 482) 100*30
+arrow_button.png (178, 516) 15*7
+원래는 전혀 안보이다가 arrow_button.png 를 누르거나, 스크롤 했을 시 부드럽게 보여짐, entry_text_image0.png (22, 541) 336*86
+원래는 전혀 안보이다가 arrow_button.png 를 누르거나, 스크롤 했을 시 부드럽게 보여짐, entry_text_image1.png (15, 633) 350*77
+
+basic_Information_image.png : 좌표 (18, 55), 크기 248*68
+email_text_image.png : 좌표 (161, 295), 크기 51*26
+emil_text_box.png : 좌표 (29, 339), 크기 320*56
+
+basic_Information_image.png : 좌표 (18, 55), 크기 248*68
+age_text_image.png : 좌표 (30, 149), 크기 38*26
+scroll_line_image.png : 좌표 (17, 197), 크기 339*37
+scroll_handle_image.png : 좌표 (32, 191), 크기 18*18
+gender_text_image.png : 좌표 (30, 294), 크기 70*26
+
+좌표 (26, 337) 하위에 있음
+	male_image.png : 좌표 (42, 0), 크기 277*44
+	off_toggle.png : 좌표 (0, 10), 크기 24*24
+좌표 (26, 397) 하위에 있음
+	female_image.png : 좌표 (42, 0), 크기 277*44
+	off_toggle.png : 좌표 (0, 10), 크기 24*24
+좌표 (26, 457) 하위에 있음
+	other_image.png : 좌표 (42, 0), 크기 277*44
+	off_toggle.png : 좌표 (0, 10), 크기 24*24
+
+q1_title_image.png : 좌표 (29, 55), 크기 60*68
+q1_text_image.png : 좌표 (30, 129), 크기 292*54
+
+좌표 (23, 219) 하위에 있음
+	좌표 (0, 0) 하위에 있음
+		absolutely_amazing_image.png : 좌표 (46, 0), 크기 277*60
+		off_toggle.png : 좌표 (0, 18), 크기 24*24
+	좌표 (0, 82) 하위에 있음
+		super_fun_image.png : 좌표 (46, 0), 크기 277*60
+		off_toggle.png : 좌표 (0, 18), 크기 24*24
+	좌표 (0, 164) 하위에 있음
+		it_was_okay_image.png : 좌표 (46, 0), 크기 277*60
+		off_toggle.png : 좌표 (0, 18), 크기 24*24
+	좌표 (0, 246) 하위에 있음
+		could_be_better_image.png : 좌표 (46, 0), 크기 277*60
+		off_toggle.png : 좌표 (0, 18), 크기 24*24
+	좌표 (0, 328) 하위에 있음
+		other_text_image.png : 좌표 (46, 0), 크기 277*60
+		off_toggle.png : 좌표 (0, 18), 크기 24*24
+
+q2_title_image.png : 좌표 (29, 55), 크기 71*68
+q2_text_image.png : 좌표 (30, 129), 크기 292*29
+
+좌표 (23, 219) 하위에 있음
+	좌표 (0, 0) 하위에 있음
+		the_interactivity_image.png : 좌표 (46, 0), 크기 277*84
+		off_toggle.png : 좌표 (0, 30), 크기 24*24
+	좌표 (0, 100) 하위에 있음
+		the_awesome_graphics_image.png : 좌표 (46, 0), 크기 277*60
+		off_toggle.png : 좌표 (0, 18), 크기 24*24
+	좌표 (0, 176) 하위에 있음
+		the_fun_storytelling_image.png : 좌표 (46, 0), 크기 277*60
+		off_toggle.png : 좌표 (0, 18), 크기 24*24
+	좌표 (0, 252) 하위에 있음
+		korean_backstreet_image.png : 좌표 (46, 0), 크기 277*60
+		off_toggle.png : 좌표 (0, 18), 크기 24*24
+	좌표 (0, 328) 하위에 있음
+		other_text_image.png : 좌표 (46, 0), 크기 277*60
+		off_toggle.png : 좌표 (0, 18), 크기 24*24
+
+q3_title_image.png : 좌표 (29, 55), 크기 72*68
+q3_text_image.png : 좌표 (31, 129), 크기 319*54
+
+좌표 (23, 219) 하위에 있음
+	좌표 (0, 0) 하위에 있음
+		anime_image.png : 좌표 (46, 0), 크기 277*80
+		off_toggle.png : 좌표 (0, 38), 크기 24*24
+	좌표 (0, 94) 하위에 있음
+		movie_image.png : 좌표 (46, 0), 크기 277*60
+		off_toggle.png : 좌표 (0, 18), 크기 24*24
+	좌표 (0, 168) 하위에 있음
+		education_image.png : 좌표 (46, 0), 크기 277*73
+		off_toggle.png : 좌표 (0, 24.5), 크기 24*24
+	좌표 (0, 255) 하위에 있음
+		sports_image.png : 좌표 (46, 0), 크기 277*60
+		off_toggle.png : 좌표 (0, 30), 크기 24*24
+	좌표 (0, 329) 하위에 있음
+		other_text_image.png : 좌표 (46, 0), 크기 277*60
+		off_toggle.png : 좌표 (0, 30), 크기 24*24
+
+q4_title_image.png : 좌표 (29, 55), 크기 74*68
+q4_text_image.png : 좌표 (31, 129), 크기 283*54
+
+좌표 (23, 219) 하위에 있음
+	좌표 (0, 0) 하위에 있음
+		definitely_yes.png : 좌표 (46, 0), 크기 277*60
+		off_toggle.png : 좌표 (0, 18), 크기 24*24
+	좌표 (0, 82) 하위에 있음
+		probably_willing.png : 좌표 (46, 0), 크기 277*60
+		off_toggle.png : 좌표 (0, 18), 크기 24*24
+	좌표 (0, 164) 하위에 있음
+		not_sure.png : 좌표 (46, 0), 크기 277*60
+		off_toggle.png : 좌표 (0, 18), 크기 24*24
+	좌표 (0, 246) 하위에 있음
+		no.png : 좌표 (46, 0), 크기 277*60
+		off_toggle.png : 좌표 (0, 18), 크기 24*24
+	좌표 (0, 328) 하위에 있음
+		other_text_image.png : 좌표 (46, 0), 크기 277*60
+		off_toggle.png : 좌표 (0, 30), 크기 24*24
+
+q5_title_image.png : 좌표 (29, 55), 크기 72*68
+q5_text_image.png : 좌표 (31, 129), 크기 282*54
+
+좌표 (23, 219) 하위에 있음
+	좌표 (0, 0) 하위에 있음
+		expensive_equipment.png : 좌표 (46, 0), 크기 277*58
+		off_toggle.png : 좌표 (0, 17), 크기 24*24
+	좌표 (0, 74) 하위에 있음
+		complicated_production_process.png : 좌표 (46, 0), 크기 277*84
+		off_toggle.png : 좌표 (0, 30), 크기 24*24
+	좌표 (0, 174) 하위에 있음
+		lack_of_technical_skills.png : 좌표 (46, 0), 크기 277*60
+		off_toggle.png : 좌표 (0, 18), 크기 24*24
+	좌표 (0, 250) 하위에 있음
+		making_it_unique.png : 좌표 (46, 0), 크기 277*60
+		off_toggle.png : 좌표 (0, 18), 크기 24*24
+	좌표 (0, 326) 하위에 있음
+		other_text_image.png : 좌표 (46, 0), 크기 277*60
+		off_toggle.png : 좌표 (0, 30), 크기 24*24
+
+마지막 페이지는 그냥 아무것도 없이, B8.png 만 띄움
