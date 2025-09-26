@@ -49,6 +49,14 @@ const RESPONSE_KEYS = [
     "q5",
 ];
 
+const CSV_HEADERS = [
+    "storedAt",
+    "email",
+    "initialEmail",
+    "latestEmail",
+    ...RESPONSE_KEYS,
+];
+
 // Keep the email sanitiser deterministic so follow-up submissions map to the
 // same S3 prefix without introducing subtle differences between builds.
 function sanitizeEmailForKey(email) {
@@ -73,6 +81,11 @@ function buildSurveyObjectKey(email, prefix, date = new Date()) {
     const timestamp = date.toISOString().replace(/[:.]/g, "-");
     const normalisedPrefix = normalisePrefix(prefix);
     return `${normalisedPrefix}${safeEmail}/${timestamp}.json`;
+}
+
+function buildCsvObjectKey(prefix) {
+    const normalisedPrefix = normalisePrefix(prefix);
+    return `${normalisedPrefix}all-responses.csv`;
 }
 
 function encodeRFC3986(component) {
@@ -120,7 +133,7 @@ function buildCanonicalHeaders(headers) {
     return { canonicalHeaders, signedHeaders };
 }
 
-function uploadJsonToS3({
+function uploadTextToS3({
     bucket,
     region,
     accessKeyId,
@@ -128,6 +141,7 @@ function uploadJsonToS3({
     sessionToken,
     key,
     body,
+    contentType = "application/json",
 }) {
     return new Promise((resolve, reject) => {
         if (!bucket || !region || !accessKeyId || !secretAccessKey) {
@@ -139,7 +153,6 @@ function uploadJsonToS3({
         const encodedKey = encodeS3Key(key);
         const method = "PUT";
         const service = "s3";
-        const contentType = "application/json";
         const payloadHash = hashSha256(body);
 
         const now = new Date();
@@ -243,6 +256,235 @@ function uploadJsonToS3({
     });
 }
 
+function fetchObjectFromS3({
+    bucket,
+    region,
+    accessKeyId,
+    secretAccessKey,
+    sessionToken,
+    key,
+}) {
+    return new Promise((resolve, reject) => {
+        if (!bucket || !region || !accessKeyId || !secretAccessKey) {
+            reject(new Error("Incomplete AWS S3 configuration."));
+            return;
+        }
+
+        const host = `${bucket}.s3.${region}.amazonaws.com`;
+        const encodedKey = encodeS3Key(key);
+        const method = "GET";
+        const service = "s3";
+        const payloadHash = hashSha256("");
+
+        const now = new Date();
+        const amzDate = now
+            .toISOString()
+            .replace(/[-:]/g, "")
+            .replace(/\.\d{3}/, "");
+        const dateStamp = amzDate.slice(0, 8);
+
+        const headersForSigning = {
+            host,
+            "x-amz-content-sha256": payloadHash,
+            "x-amz-date": amzDate,
+        };
+
+        if (sessionToken) {
+            headersForSigning["x-amz-security-token"] = sessionToken;
+        }
+
+        const { canonicalHeaders, signedHeaders } = buildCanonicalHeaders(
+            headersForSigning
+        );
+
+        const canonicalRequest = [
+            method,
+            `/${encodedKey}`,
+            "",
+            canonicalHeaders,
+            signedHeaders,
+            payloadHash,
+        ].join("\n");
+
+        const credentialScope = `${dateStamp}/${region}/${service}/aws4_request`;
+        const stringToSign = [
+            "AWS4-HMAC-SHA256",
+            amzDate,
+            credentialScope,
+            hashSha256(canonicalRequest),
+        ].join("\n");
+
+        const signingKey = getSignatureKey(
+            secretAccessKey,
+            dateStamp,
+            region,
+            service
+        );
+        const signature = createHmac("sha256", signingKey)
+            .update(stringToSign, "utf8")
+            .digest("hex");
+
+        const authorizationHeader =
+            `AWS4-HMAC-SHA256 Credential=${accessKeyId}/${credentialScope}, ` +
+            `SignedHeaders=${signedHeaders}, Signature=${signature}`;
+
+        const requestHeaders = {
+            "X-Amz-Content-Sha256": payloadHash,
+            "X-Amz-Date": amzDate,
+            Authorization: authorizationHeader,
+        };
+
+        if (sessionToken) {
+            requestHeaders["X-Amz-Security-Token"] = sessionToken;
+        }
+
+        const requestOptions = {
+            method,
+            hostname: host,
+            path: `/${encodedKey}`,
+            headers: requestHeaders,
+        };
+
+        const request = https.request(requestOptions, (response) => {
+            let responseBody = "";
+            response.setEncoding("utf8");
+            response.on("data", (chunk) => {
+                responseBody += chunk;
+            });
+            response.on("end", () => {
+                if (
+                    response.statusCode &&
+                    response.statusCode >= 200 &&
+                    response.statusCode < 300
+                ) {
+                    resolve(responseBody);
+                } else if (response.statusCode === 404) {
+                    resolve(null);
+                } else {
+                    const error = new Error(
+                        `S3 download failed with status code ${response.statusCode}`
+                    );
+                    error.statusCode = response.statusCode;
+                    error.response = responseBody;
+                    reject(error);
+                }
+            });
+        });
+
+        request.on("error", (error) => {
+            reject(error);
+        });
+
+        request.end();
+    });
+}
+
+function escapeCsvValue(value) {
+    if (value === null || value === undefined) {
+        return "";
+    }
+
+    const stringValue = String(value);
+    const escapedValue = stringValue.replace(/"/g, '""');
+    const needsQuotes = /[",\n\r]/.test(escapedValue) || /^\s|\s$/.test(escapedValue);
+    return needsQuotes ? `"${escapedValue}"` : escapedValue;
+}
+
+function buildCsvRow(record) {
+    const values = [
+        record.storedAt || "",
+        record.email || "",
+        record.initialEmail || "",
+        record.latestEmail || "",
+        ...RESPONSE_KEYS.map((key) =>
+            record.responses && record.responses[key] !== undefined
+                ? record.responses[key]
+                : ""
+        ),
+    ];
+
+    return `${values.map(escapeCsvValue).join(",")}\n`;
+}
+
+function isAccessDeniedForAction(error, action) {
+    if (!error || error.statusCode !== 403 || typeof error.response !== "string") {
+        return false;
+    }
+
+    return (
+        error.response.includes("<Code>AccessDenied</Code>") &&
+        error.response.includes(action)
+    );
+}
+
+const csvContentCache = new Map();
+
+async function appendSurveyToCsv(config, record) {
+    const csvKey = buildCsvObjectKey(config.keyPrefix);
+    const headerLine = CSV_HEADERS.join(",");
+    let existingContent;
+
+    const cacheKey = `${config.bucket}/${csvKey}`;
+
+    try {
+        existingContent = await fetchObjectFromS3({
+            bucket: config.bucket,
+            region: config.region,
+            accessKeyId: config.accessKeyId,
+            secretAccessKey: config.secretAccessKey,
+            sessionToken: config.sessionToken,
+            key: csvKey,
+        });
+        csvContentCache.set(cacheKey, existingContent);
+    } catch (error) {
+        if (isAccessDeniedForAction(error, "s3:ListBucket")) {
+            existingContent = null;
+        } else if (isAccessDeniedForAction(error, "s3:GetObject")) {
+            if (csvContentCache.has(cacheKey)) {
+                existingContent = csvContentCache.get(cacheKey);
+            } else {
+                existingContent = null;
+                // eslint-disable-next-line no-console
+                console.warn(
+                    "S3 credentials cannot read existing CSV; starting a new aggregation file"
+                );
+            }
+        } else {
+            throw error;
+        }
+    }
+
+    let body;
+    const csvRow = buildCsvRow(record);
+
+    if (!existingContent) {
+        body = `${headerLine}\n${csvRow}`;
+    } else {
+        let normalisedContent = existingContent;
+        const firstLine = normalisedContent.split(/\r?\n/, 1)[0];
+        if (firstLine !== headerLine) {
+            normalisedContent = `${headerLine}\n${normalisedContent}`;
+        }
+        if (!/\r?\n$/.test(normalisedContent)) {
+            normalisedContent += "\n";
+        }
+        body = `${normalisedContent}${csvRow}`;
+    }
+
+    await uploadTextToS3({
+        bucket: config.bucket,
+        region: config.region,
+        accessKeyId: config.accessKeyId,
+        secretAccessKey: config.secretAccessKey,
+        sessionToken: config.sessionToken,
+        key: csvKey,
+        body,
+        contentType: "text/csv",
+    });
+
+    csvContentCache.set(cacheKey, body);
+}
+
 function sanitiseResponses(responses) {
     const cleaned = {};
     for (const key of RESPONSE_KEYS) {
@@ -318,7 +560,7 @@ app.post("/api/surveys", async (req, res) => {
     const body = `${JSON.stringify(record, null, 2)}\n`;
 
     try {
-        await uploadJsonToS3({
+        await uploadTextToS3({
             bucket: awsConfig.bucket,
             region: awsConfig.region,
             accessKeyId: awsConfig.accessKeyId,
@@ -326,11 +568,13 @@ app.post("/api/surveys", async (req, res) => {
             sessionToken: awsConfig.sessionToken,
             key: objectKey,
             body,
+            contentType: "application/json",
         });
+        await appendSurveyToCsv(awsConfig, record);
         res.status(201).json({ success: true });
     } catch (error) {
         // eslint-disable-next-line no-console
-        console.error("Failed to upload survey to S3", error);
+        console.error("Failed to store survey artifacts in S3", error);
         res.status(502).json({
             error: "설문 응답을 저장하는 동안 오류가 발생했습니다. 서버 로그를 확인해주세요.",
         });
