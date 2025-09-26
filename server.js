@@ -406,21 +406,26 @@ function buildCsvRow(record) {
     return `${values.map(escapeCsvValue).join(",")}\n`;
 }
 
-function isListBucketAccessDenied(error) {
+function isAccessDeniedForAction(error, action) {
     if (!error || error.statusCode !== 403 || typeof error.response !== "string") {
         return false;
     }
 
     return (
         error.response.includes("<Code>AccessDenied</Code>") &&
-        error.response.includes("s3:ListBucket")
+        error.response.includes(action)
     );
 }
+
+const csvContentCache = new Map();
 
 async function appendSurveyToCsv(config, record) {
     const csvKey = buildCsvObjectKey(config.keyPrefix);
     const headerLine = CSV_HEADERS.join(",");
     let existingContent;
+
+    const cacheKey = `${config.bucket}/${csvKey}`;
+
 
     try {
         existingContent = await fetchObjectFromS3({
@@ -431,9 +436,20 @@ async function appendSurveyToCsv(config, record) {
             sessionToken: config.sessionToken,
             key: csvKey,
         });
+        csvContentCache.set(cacheKey, existingContent);
     } catch (error) {
-        if (isListBucketAccessDenied(error)) {
+        if (isAccessDeniedForAction(error, "s3:ListBucket")) {
             existingContent = null;
+        } else if (isAccessDeniedForAction(error, "s3:GetObject")) {
+            if (csvContentCache.has(cacheKey)) {
+                existingContent = csvContentCache.get(cacheKey);
+            } else {
+                existingContent = null;
+                // eslint-disable-next-line no-console
+                console.warn(
+                    "S3 credentials cannot read existing CSV; starting a new aggregation file"
+                );
+            }
         } else {
             throw error;
         }
@@ -467,6 +483,9 @@ async function appendSurveyToCsv(config, record) {
         body,
         contentType: "text/csv",
     });
+
+    csvContentCache.set(cacheKey, body);
+
 }
 
 function sanitiseResponses(responses) {
