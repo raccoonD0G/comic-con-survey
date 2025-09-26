@@ -439,6 +439,7 @@ async function appendSurveyToCsv(config, record) {
         }
     }
 
+
     let body;
     const csvRow = buildCsvRow(record);
 
