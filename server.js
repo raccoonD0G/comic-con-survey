@@ -426,6 +426,7 @@ async function appendSurveyToCsv(config, record) {
 
     const cacheKey = `${config.bucket}/${csvKey}`;
 
+
     try {
         existingContent = await fetchObjectFromS3({
             bucket: config.bucket,
@@ -453,6 +454,7 @@ async function appendSurveyToCsv(config, record) {
             throw error;
         }
     }
+
 
     let body;
     const csvRow = buildCsvRow(record);
@@ -483,6 +485,7 @@ async function appendSurveyToCsv(config, record) {
     });
 
     csvContentCache.set(cacheKey, body);
+
 }
 
 function sanitiseResponses(responses) {
