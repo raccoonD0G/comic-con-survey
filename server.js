@@ -406,17 +406,39 @@ function buildCsvRow(record) {
     return `${values.map(escapeCsvValue).join(",")}\n`;
 }
 
+function isListBucketAccessDenied(error) {
+    if (!error || error.statusCode !== 403 || typeof error.response !== "string") {
+        return false;
+    }
+
+    return (
+        error.response.includes("<Code>AccessDenied</Code>") &&
+        error.response.includes("s3:ListBucket")
+    );
+}
+
 async function appendSurveyToCsv(config, record) {
     const csvKey = buildCsvObjectKey(config.keyPrefix);
     const headerLine = CSV_HEADERS.join(",");
-    const existingContent = await fetchObjectFromS3({
-        bucket: config.bucket,
-        region: config.region,
-        accessKeyId: config.accessKeyId,
-        secretAccessKey: config.secretAccessKey,
-        sessionToken: config.sessionToken,
-        key: csvKey,
-    });
+    let existingContent;
+
+    try {
+        existingContent = await fetchObjectFromS3({
+            bucket: config.bucket,
+            region: config.region,
+            accessKeyId: config.accessKeyId,
+            secretAccessKey: config.secretAccessKey,
+            sessionToken: config.sessionToken,
+            key: csvKey,
+        });
+    } catch (error) {
+        if (isListBucketAccessDenied(error)) {
+            existingContent = null;
+        } else {
+            throw error;
+        }
+    }
+
 
     let body;
     const csvRow = buildCsvRow(record);
